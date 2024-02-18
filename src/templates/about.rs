@@ -1,7 +1,7 @@
 use perseus::prelude::*;
 use sycamore::prelude::*;
 
-fn about_page<G: Html>(cx: Scope) -> View<G>{
+fn about_page<G: Html>(cx: Scope) -> View<G> {
     view!( cx,
         p { "About." }
     )
@@ -15,8 +15,5 @@ fn head(cx: Scope) -> View<SsrNode> {
 }
 
 pub fn get_template<G: Html>() -> Template<G> {
-    Template::build("about")
-        .view(about_page)
-        .head(head)
-        .build()
+    Template::build("about").view(about_page).head(head).build()
 }

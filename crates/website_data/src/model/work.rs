@@ -4,29 +4,28 @@ use notion_client::objects::{page, property::Color};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]
-pub struct Author{
+pub struct Author {
     pub name: String,
-    pub url: Option<String>
+    pub url: Option<String>,
 }
-
 
 #[derive(Serialize, Deserialize, Clone)]
 pub enum PlatformType {
     Itch,
     Steam,
     GameCore,
-    Homepage
+    Homepage,
 }
 #[derive(Serialize, Deserialize, Clone)]
-pub struct Platform{
+pub struct Platform {
     pub platform_type: PlatformType,
-    pub url: String
+    pub url: String,
 }
 
 
 
 #[derive(Serialize, Deserialize, Clone)]
-pub struct Work{
+pub struct Work {
     pub id: String,
     pub name: String,
     pub sub_name: Option<String>,

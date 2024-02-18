@@ -92,3 +92,4 @@ mod test {
         assert_eq!(info.path, "https://github.com/tokio-rs/tokio/workflows/CI")
     }
 }
+

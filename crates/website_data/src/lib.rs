@@ -131,6 +131,7 @@ pub async fn collect_database_to_file(
                 nova_gamejams,
                 cover,
                 screenshots,
+                screenshots,
             }
         })
         .collect();
@@ -166,6 +167,8 @@ fn parse_authors(author: &PageProperty, author_link: &PageProperty) -> Vec<Autho
     let authors_string = get_plain_text_or_none(author).unwrap_or_default();
     let authors_links_string = get_plain_text_or_none(author_link).unwrap_or_default();
     let au_silices = authors_string.split(',').collect::<Vec<_>>();
+    let binding = authors_links_string.replace(" ", "");
+    let al_silices = binding.split(',').collect::<Vec<_>>();
     let binding = authors_links_string.replace(" ", "");
     let al_silices = binding.split(',').collect::<Vec<_>>();
 
@@ -231,10 +234,12 @@ pub fn get_plain_text_or_none(prop: &PageProperty) -> Option<String> {
 }
 
 pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String> {
+pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String> {
     // collect to /assets/works/{id}/cover.xxx
     todo!()
 }
 
+pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<String>> {
 pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<String>> {
     // collect to /assets/works/{id}/screenshots/screenshot_0.xxx
     todo!()
