@@ -1,5 +1,6 @@
 
-use notion::{chrono::NaiveDate, models::{properties::SelectedValue, DateTime, Utc}};
+use chrono::{DateTime, Utc};
+use notion_client::objects::{page, property::Color};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -23,15 +24,16 @@ pub struct Platform{
 }
 
 
+
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Work{
     pub id: String,
     pub name: String,
     pub sub_name: Option<String>,
     pub introduce: String,
-    pub tags:  Vec<SelectedValue>,
-    pub gamejams: Vec<SelectedValue>,
-    pub nova_gamejams: Vec<SelectedValue>,
+    pub tags:  Vec<page::SelectPropertyValue>,
+    pub gamejams: Vec<page::SelectPropertyValue>,
+    pub nova_gamejams: Vec<page::SelectPropertyValue>,
     pub platforms: Vec<Platform>, 
     pub authors: Vec<Author>,
     pub submission_date: DateTime<Utc>,
