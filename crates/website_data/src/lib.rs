@@ -131,7 +131,6 @@ pub async fn collect_database_to_file(
                 nova_gamejams,
                 cover,
                 screenshots,
-                screenshots,
             }
         })
         .collect();
@@ -234,12 +233,10 @@ pub fn get_plain_text_or_none(prop: &PageProperty) -> Option<String> {
 }
 
 pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String> {
-pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String> {
     // collect to /assets/works/{id}/cover.xxx
     todo!()
 }
 
-pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<String>> {
 pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<String>> {
     // collect to /assets/works/{id}/screenshots/screenshot_0.xxx
     todo!()
