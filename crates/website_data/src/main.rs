@@ -1,4 +1,4 @@
-use notion_data_collection::*;
+use website_data::*;
 
 #[tokio::main]
 async fn main() {

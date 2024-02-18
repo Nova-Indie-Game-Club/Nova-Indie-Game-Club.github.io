@@ -1,5 +1,5 @@
 [package]
-name = "notion_data_collection"
+name = "website_data"
 version = "0.1.0"
 edition = "2021"
 

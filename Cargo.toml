@@ -1,4 +1,4 @@
-workspace = { members = ["notion_data_collection"] }
+workspace = { members = ["crates/website_data"] }
 [package]
 name = "nova_website"
 version = "0.1.0"
