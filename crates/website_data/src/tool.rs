@@ -1,4 +1,4 @@
-use notion::models::search::DatabaseQuery;
+use rusticnotion::models::search::DatabaseQuery;
 
 pub trait Empty {
     fn empty() -> Self;

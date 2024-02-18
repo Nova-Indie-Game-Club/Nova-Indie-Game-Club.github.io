@@ -1,4 +1,4 @@
-use notion::{
+use rusticnotion::{
     chrono::NaiveDate,
     models::{properties::SelectedValue, DateTime, Utc},
 };

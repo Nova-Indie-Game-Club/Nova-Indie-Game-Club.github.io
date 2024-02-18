@@ -8,7 +8,7 @@ use std::{
 };
 use tool::Empty;
 
-use notion::{
+use rusticnotion::{
     chrono::NaiveWeek,
     ids::{AsIdentifier, DatabaseId},
     models::{
