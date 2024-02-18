@@ -237,3 +237,13 @@ pub fn get_plain_text_or_none(prop: &PropertyValue) -> Option<String> {
         None
     }
 }
+
+pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String>{
+    // collect to /assets/works/{id}/cover.xxx
+    todo!()
+}
+
+pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<String>>{
+    // collect to /assets/works/{id}/screenshots/screenshot_0.xxx
+    todo!()
+}
