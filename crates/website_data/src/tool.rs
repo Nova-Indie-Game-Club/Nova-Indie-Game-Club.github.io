@@ -1,7 +1,5 @@
 use notion::models::search::DatabaseQuery;
 
-
-
 pub trait Empty {
     fn empty() -> Self;
 }

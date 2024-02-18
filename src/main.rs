@@ -2,7 +2,6 @@ mod templates;
 
 use perseus::prelude::*;
 
-
 #[perseus::main(perseus_axum::dflt_server)]
 pub fn perseus<G: Html>() -> PerseusApp<G> {
     PerseusApp::new()

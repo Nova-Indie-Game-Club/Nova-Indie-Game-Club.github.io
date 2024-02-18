@@ -1,6 +1,11 @@
 use anyhow::*;
 use model::work::{Author, Platform, PlatformType, Work};
-use std::{collections::HashMap, fs::{self, File}, io::Write, str::FromStr};
+use std::{
+    collections::HashMap,
+    fs::{self, File},
+    io::Write,
+    str::FromStr,
+};
 use tool::Empty;
 
 use notion::{
@@ -44,7 +49,8 @@ pub async fn collect_database_to_file(
         .expect("Getting works database failed!");
     let works_pages = notion_api
         .query_database(works_database.id.clone(), DatabaseQuery::empty())
-        .await.unwrap()
+        .await
+        .unwrap()
         .results;
 
     //(url, native_position)
@@ -138,7 +144,7 @@ pub async fn collect_database_to_file(
                 gamejams,
                 nova_gamejams,
                 cover,
-                screenshots
+                screenshots,
             }
         })
         .collect();
@@ -148,7 +154,7 @@ pub async fn collect_database_to_file(
         let url = target.0;
         let response = reqwest::get(url.clone()).await?;
         let download_path = target.1;
-        
+
         let pos = download_path.rfind('/').unwrap();
         let split = download_path.split_at(pos);
 
@@ -175,11 +181,8 @@ fn parse_authors(author: &PropertyValue, author_link: &PropertyValue) -> Vec<Aut
     let authors_string = get_plain_text_or_none(author).unwrap_or_default();
     let authors_links_string = get_plain_text_or_none(author_link).unwrap_or_default();
     let au_silices = authors_string.split(',').collect::<Vec<_>>();
-    let binding = authors_links_string
-        .replace(" ", "");
-    let al_silices = binding
-        .split(',')
-        .collect::<Vec<_>>();
+    let binding = authors_links_string.replace(" ", "");
+    let al_silices = binding.split(',').collect::<Vec<_>>();
 
     let mut authors = Vec::<Author>::new();
     if au_silices.len() == al_silices.len() {
@@ -238,12 +241,12 @@ pub fn get_plain_text_or_none(prop: &PropertyValue) -> Option<String> {
     }
 }
 
-pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String>{
+pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String> {
     // collect to /assets/works/{id}/cover.xxx
     todo!()
 }
 
-pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<String>>{
+pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<String>> {
     // collect to /assets/works/{id}/screenshots/screenshot_0.xxx
     todo!()
 }
