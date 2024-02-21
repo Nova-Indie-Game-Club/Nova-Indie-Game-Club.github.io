@@ -8,3 +8,7 @@ pub fn perseus<G: Html>() -> PerseusApp<G> {
         .template(templates::index::get_template())
         .template(templates::about::get_template())
 }
+
+pub fn statics(path: &str) -> String{
+    format!(".perseus/static/{}", path)
+}

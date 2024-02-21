@@ -1226,6 +1226,7 @@ dependencies = [
  "serde_json",
  "sycamore",
  "tokio",
+ "website_data",
 ]
 
 [[package]]

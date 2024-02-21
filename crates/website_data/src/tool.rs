@@ -1,5 +1,5 @@
-
 use anyhow::*;
+use std::{fs::{self, File}, io::Write};
 use notion_client::objects::{file, rich_text::RichText};
 use serde::{Deserialize, Serialize};
 
@@ -32,7 +32,7 @@ pub struct FileInfo {
 }
 
 impl FileInfo {
-    pub fn file_name_with_ext(&self) -> String{
+    pub fn file_name_with_ext(&self) -> String {
         format!("{}.{}", self.file_name, self.file_ext)
     }
 }
@@ -46,7 +46,7 @@ pub fn parse_file_url(it: &file::File) -> String {
 
 pub fn parse_url_to_file_info(raw_url: &String) -> Result<FileInfo> {
     let mut url = raw_url.clone();
-    if let Some(it) = url.rfind("?"){
+    if let Some(it) = url.rfind("?") {
         url = url.split_at(it).0.to_string();
     }
 
@@ -66,8 +66,20 @@ pub fn parse_url_to_file_info(raw_url: &String) -> Result<FileInfo> {
         },
         url: raw_url.clone(),
         cleaned_url: url.clone(),
-        path: split0.0.to_string()
+        path: split0.0.to_string(),
     })
+}
+
+pub fn serialize_to_json_file<T>(obj: &T, path: String) -> Result<()>
+where
+    T: ?Sized + Serialize,
+{
+    let json = serde_json::to_string(obj)?;
+    let info = parse_url_to_file_info(&path)?;
+    fs::create_dir_all(info.path.clone())?;
+    File::create(path)?.write(json.as_bytes())?;
+
+    Ok(())
 }
 
 #[cfg(test)]
@@ -77,14 +89,16 @@ mod test {
     #[test]
     fn test_parse_url() {
         let info = parse_url_to_file_info(
-            &"https://github.com/tokio-rs/tokio/workflows/CI/badge.svg?3123124scxsdge32f".to_string(),
+            &"https://github.com/tokio-rs/tokio/workflows/CI/badge.svg?3123124scxsdge32f"
+                .to_string(),
         )
         .unwrap();
         assert_eq!(
             info.url,
             "https://github.com/tokio-rs/tokio/workflows/CI/badge.svg?3123124scxsdge32f"
         );
-        assert_eq!(info.cleaned_url,
+        assert_eq!(
+            info.cleaned_url,
             "https://github.com/tokio-rs/tokio/workflows/CI/badge.svg"
         );
         assert_eq!(info.file_name, "badge");

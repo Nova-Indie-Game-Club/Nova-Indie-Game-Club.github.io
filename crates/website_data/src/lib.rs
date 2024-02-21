@@ -1,3 +1,4 @@
+use anyhow::*;
 use chrono::{DateTime, Utc};
 use model::work::{Author, Platform, PlatformType, Work};
 use notion_client::{
@@ -8,8 +9,8 @@ use std::{
     collections::HashMap,
     fs::{self, File},
     io::Write,
+    vec,
 };
-use anyhow::*;
 use tool::{parse_file_url, parse_url_to_file_info};
 
 pub mod model;
@@ -19,7 +20,7 @@ const WORKS_DATABASE_ID: &str = "9ff4f3a98e8343acb33defe8f82804bd";
 
 const WORKS_DATA_PATH: &str = "works/";
 
-pub async fn run() -> Result<()> {
+pub async fn run_notion_data_collection() -> Result<()> {
     let notion_api = Client::new(std::env::var("NOVA_WEBSITE_NOTION_TOKEN")?)?;
 
     collect_database_to_file(&notion_api, WORKS_DATABASE_ID, WORKS_DATA_PATH).await?;
@@ -85,7 +86,7 @@ pub async fn collect_database_to_file(
                 if let Some(it) = files.get(0) {
                     let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
                     let pos = format!(
-                        "assets/works/{}/cover.{}",
+                        "static/assets/works/{}/cover.{}",
                         page.id.to_string(),
                         file_info.file_ext,
                     );
@@ -105,7 +106,7 @@ pub async fn collect_database_to_file(
                         let it = files[i].clone();
                         let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
                         let pos = format!(
-                            "assets/works/{}/screenshot_{}.{}",
+                            "static/assets/works/{}/screenshot_{}.{}",
                             page.id.to_string(),
                             i,
                             file_info.file_ext
@@ -131,6 +132,7 @@ pub async fn collect_database_to_file(
                 nova_gamejams,
                 cover,
                 screenshots,
+                last_edited_date: page.last_edited_time.clone(),
             }
         })
         .collect();
@@ -143,21 +145,24 @@ pub async fn collect_database_to_file(
 
         let file_info = parse_url_to_file_info(&download_path).unwrap();
 
-        println!("downloading file: '{}' to '{}'", file_info.cleaned_url, download_path);
+        println!(
+            "downloading file: '{}' to '{}'",
+            file_info.cleaned_url, download_path
+        );
 
         fs::create_dir_all(file_info.path.clone())?;
         let mut file = File::create(download_path.to_string())?;
         file.write(&response.bytes().await?)?;
 
-        println!("download successfully! filename: '{}'", file_info.file_name_with_ext());
+        println!(
+            "download successfully! filename: '{}'",
+            file_info.file_name_with_ext()
+        );
     }
 
     // Write json files
     for work in works_objects {
-        let json = serde_json::to_string(&work)?;
-        fs::create_dir_all(format!("data/{}", path))?;
-        let file_path = format!("data/{}{}.json", path, work.id);
-        File::create(file_path)?.write(json.as_bytes())?;
+        tool::serialize_to_json_file(&work, format!("data/{}{}.json", path, work.id))?;
     }
     Ok(())
 }
@@ -166,8 +171,6 @@ fn parse_authors(author: &PageProperty, author_link: &PageProperty) -> Vec<Autho
     let authors_string = get_plain_text_or_none(author).unwrap_or_default();
     let authors_links_string = get_plain_text_or_none(author_link).unwrap_or_default();
     let au_silices = authors_string.split(',').collect::<Vec<_>>();
-    let binding = authors_links_string.replace(" ", "");
-    let al_silices = binding.split(',').collect::<Vec<_>>();
     let binding = authors_links_string.replace(" ", "");
     let al_silices = binding.split(',').collect::<Vec<_>>();
 
@@ -240,4 +243,27 @@ pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String> {
 pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<String>> {
     // collect to /assets/works/{id}/screenshots/screenshot_0.xxx
     todo!()
+}
+
+//return read works sorted by last_edited_date
+pub fn read_works() -> Result<Vec<Work>> {
+    //serde_json::from_str
+    let read = fs::read_dir("data/works")?;
+    let mut ret = Vec::<Work>::new();
+    for read_dir in read {
+        let unwrap = read_dir?;
+        let file_type = unwrap.file_type()?;
+        let path = unwrap.path();
+        let is_json_file = file_type.is_file() && path.ends_with(".json");
+        if is_json_file {
+            let string = fs::read_to_string(path)?;
+            if let std::result::Result::Ok(work) = serde_json::from_str::<Work>(string.as_str()) {
+                ret.push(work);
+            }
+        }
+    }
+    ret.sort_by(|a, b| {
+        a.last_edited_date.cmp(&b.last_edited_date)
+    });
+    Ok(ret)
 }
