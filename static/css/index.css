@@ -284,10 +284,11 @@ header .navi .right .selected p {
   width: 200px;
   padding: 4px;
 }
-.media.section .core div p {
+.media.section .core div a {
   margin: 0;
   padding-top: 4px;
   text-align: center;
+  color: var(--text-color-0);
 }
 
 footer {

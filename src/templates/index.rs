@@ -1,4 +1,3 @@
-
 use crate::components::work_item::*;
 use perseus::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -15,9 +14,9 @@ struct IndexPageState {
     recent_works: Vec<Work>,
 }
 
-pub static ABOUT_INTRODUCE_TEXT: &str = "Nova独游社全称Nova独立游戏社，成立于2018年冬，前身是西电软院科协独立游戏组，本部位于西安电子科技大学，在西安邮电大学、陕西科技大学设有分部。传承和发展独立游戏文化及独立游戏的独立精神成为西安地区高校学生游戏开发者聚集地成为西安地区高校游戏爱好者的聚集地。";
-pub static ABOUT_ACTIVITIES_TEXT: &str = "Nova独游社全称Nova独立游戏社，成立于2018年冬，前身是西电软院科协独立游戏组，本部位于西安电子科技大学，在西安邮电大学、陕西科技大学设有分部。传承和发展独立游戏文化及独立游戏的独立精神成为西安地区高校学生游戏开发者聚集地成为西安地区高校游戏爱好者的聚集地。";
-pub static ABOUT_JOIN_US_TEXT: &str = "Nova独游社全称Nova独立游戏社，成立于2018年冬，前身是西电软院科协独立游戏组，本部位于西安电子科技大学，在西安邮电大学、陕西科技大学设有分部。传承和发展独立游戏文化及独立游戏的独立精神成为西安地区高校学生游戏开发者聚集地成为西安地区高校游戏爱好者的聚集地。";
+pub static ABOUT_INTRODUCE_TEXT: &str = "我们是一个主要在西安电子科技大学活动的大学生独立游戏社团。我们的主要活动内容是制作游戏和欣赏游戏。Nova 独游社的前身是西电软院科协独立游戏组，现在的 Nova 独游社成立于 2018 年冬。我们会在线上社群和线下聚会中讨论游戏开发相关技术、品鉴游戏设计方法和交流游戏及泛游戏社区内容等。更重要的是，我们会制作游戏、互相试玩彼此的游戏并交流想法和感受。我们欢迎对游戏设计及开发感兴趣，或希望尝试开发自己的游戏的朋友。";
+pub static ABOUT_ACTIVITIES_TEXT: &str = "我们会举办定期的线下活动：新生见面会、春/秋季见面会是社团较大型的活动，会集中性地分享游戏设计、开发知识，分享项目开发经验等等多方面的内容；新生 GameJam、春/秋季 GameJam 是社团举办的限时限定主题的游戏开发活动，制作完游戏后，我们会举办路演会供大家互相展示和试玩彼此的作品。此外，我们还会持续性地举办不定期的线下活动：Nova 分享会以某个具体的主题为中心，交流相关的信息和知识。我们还会举办一些线上活动：包括由大家投稿的 Nova 测评（文章）、游戏主题杂谈的 Nova 电台（音频）。";
+pub static ABOUT_JOIN_US_TEXT: &str = "我们会在每年的 9~10 月开始招新。招新信息会发布在我们的微信公众号 “Nova 独游社” 中（或见网站下面的“媒体”部分），请有意向的朋友关注。我们欢迎对游戏设计及开发感兴趣，或希望尝试开发自己的游戏的朋友。";
 
 pub static ID_ABOUT_INTRODUCE: &str = "about_introduce";
 pub static ID_ABOUT_ACTIVITIES: &str = "about_activities";
@@ -26,7 +25,7 @@ pub static ID_ABOUT_INTRODUCE_TEXT: &str = "about_introduce_text";
 pub static ID_ABOUT_ACTIVITIES_TEXT: &str = "about_activities_text";
 pub static ID_ABOUT_JOIN_US_TEXT: &str = "about_join_us_text";
 
-fn id_selector(input: &str) -> String{
+fn id_selector(input: &str) -> String {
     format!("#{}", input)
 }
 
@@ -41,11 +40,23 @@ fn on_about_section_option_clicked(switch_to: AboutType, text: &Signal<&str>) {
         .query_selector(id_selector(ID_ABOUT_ACTIVITIES).as_str())
         .unwrap()
         .unwrap();
-    let join_us = document.query_selector(id_selector(ID_ABOUT_JOIN_US).as_str()).unwrap().unwrap();
+    let join_us = document
+        .query_selector(id_selector(ID_ABOUT_JOIN_US).as_str())
+        .unwrap()
+        .unwrap();
 
-    let introduce_text = document.query_selector(id_selector(ID_ABOUT_INTRODUCE_TEXT).as_str()).unwrap().unwrap();
-    let activities_text = document.query_selector(id_selector(ID_ABOUT_ACTIVITIES_TEXT).as_str()).unwrap().unwrap();
-    let join_us_text = document.query_selector(id_selector(ID_ABOUT_JOIN_US_TEXT).as_str()).unwrap().unwrap();
+    let introduce_text = document
+        .query_selector(id_selector(ID_ABOUT_INTRODUCE_TEXT).as_str())
+        .unwrap()
+        .unwrap();
+    let activities_text = document
+        .query_selector(id_selector(ID_ABOUT_ACTIVITIES_TEXT).as_str())
+        .unwrap()
+        .unwrap();
+    let join_us_text = document
+        .query_selector(id_selector(ID_ABOUT_JOIN_US_TEXT).as_str())
+        .unwrap()
+        .unwrap();
 
     for it in [&introduce, &activities, &join_us] {
         if it.class_list().contains("selected") {
@@ -53,7 +64,7 @@ fn on_about_section_option_clicked(switch_to: AboutType, text: &Signal<&str>) {
         }
     }
     for it in [&introduce_text, &activities_text, &join_us_text] {
-        if it.class_list().contains("active"){
+        if it.class_list().contains("active") {
             it.class_list().remove_1("active").unwrap()
         }
     }
@@ -65,7 +76,9 @@ fn on_about_section_option_clicked(switch_to: AboutType, text: &Signal<&str>) {
     }
     match switch_to {
         AboutType::Introduce => do_select(ABOUT_INTRODUCE_TEXT, &introduce, text, &introduce_text),
-        AboutType::Activities => do_select(ABOUT_ACTIVITIES_TEXT, &activities, text, &activities_text),
+        AboutType::Activities => {
+            do_select(ABOUT_ACTIVITIES_TEXT, &activities, text, &activities_text)
+        }
         AboutType::JoinUs => do_select(ABOUT_JOIN_US_TEXT, &join_us, text, &join_us_text),
     }
 }
@@ -141,6 +154,16 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
                             }
                         },
                     )
+                }
+            }
+            Section(name="media".to_string(),title_path="assets/images/title_media.png".to_string()){
+                div{
+                    img(src=statics("assets/images/qr_code/wechat.jpeg"), alt="wechat")
+                    a(href="https://mp.weixin.qq.com/s/vgXY1kWc0qa-n7RPXlSmwA",target="_blank"){ "微信公众号" }
+                }
+                div{
+                    img(src=statics("assets/images/qr_code/bilibili.png"), alt="bilibili")
+                    a(href="https://space.bilibili.com/406914779",target="_blank"){ "Bilibili" }
                 }
             }
         }
