@@ -1,19 +1,19 @@
 use anyhow::*;
 use chrono::{DateTime, Utc};
-use model::work::{Author, Platform, PlatformType, Work};
 use notion_client::{
     endpoints::{databases::query::request::QueryDatabaseRequest, Client},
     objects::page::{DateOrDateTime, DatePropertyValue, Page, PageProperty, SelectPropertyValue},
 };
 use std::{
     collections::HashMap,
+    ffi::OsStr,
     fs::{self, File},
     io::Write,
     vec,
 };
 use tool::{parse_file_url, parse_url_to_file_info};
+use website_model::work::*;
 
-pub mod model;
 pub mod tool;
 
 const WORKS_DATABASE_ID: &str = "9ff4f3a98e8343acb33defe8f82804bd";
@@ -91,7 +91,7 @@ pub async fn collect_database_to_file(
                         file_info.file_ext,
                     );
                     to_download.push((file_info.url.clone(), pos.clone()));
-                    Some(pos)
+                    Some(pos.replace("static/", ""))
                 } else {
                     None
                 }
@@ -112,7 +112,7 @@ pub async fn collect_database_to_file(
                             file_info.file_ext
                         );
                         to_download.push((file_info.url.clone(), pos.clone()));
-                        vec.push(pos);
+                        vec.push(pos.replace("static/", ""));
                     }
                     vec
                 } else {
@@ -127,12 +127,16 @@ pub async fn collect_database_to_file(
                 tags,
                 platforms,
                 authors,
-                submission_date,
+                submission_date: DateTimeUtc {
+                    date_rfc3339: submission_date.to_rfc3339(),
+                },
                 gamejams,
                 nova_gamejams,
                 cover,
                 screenshots,
-                last_edited_date: page.last_edited_time.clone(),
+                last_edited_date: DateTimeUtc {
+                    date_rfc3339: page.last_edited_time.to_rfc3339(),
+                },
             }
         })
         .collect();
@@ -219,9 +223,13 @@ fn push_platform_when_exist(
         }
     }
 }
-pub fn get_multi_selected_or_none(prop: &PageProperty) -> Vec<SelectPropertyValue> {
+pub fn get_multi_selected_or_none(prop: &PageProperty) -> Vec<SelectedValue> {
     if let PageProperty::MultiSelect { id, multi_select } = prop {
-        multi_select.clone()
+        multi_select
+            .clone()
+            .iter()
+            .map(into_selected_value)
+            .collect()
     } else {
         vec![]
     }
@@ -244,26 +252,43 @@ pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec
     // collect to /assets/works/{id}/screenshots/screenshot_0.xxx
     todo!()
 }
-
+fn into_selected_value(it: &SelectPropertyValue) -> SelectedValue {
+    SelectedValue {
+        name: it.name.clone().unwrap_or_default(),
+    }
+}
 //return read works sorted by last_edited_date
-pub fn read_works() -> Result<Vec<Work>> {
+pub fn read_works(folder_path: &str) -> Result<Vec<Work>> {
     //serde_json::from_str
-    let read = fs::read_dir("data/works")?;
+    let read = fs::read_dir(folder_path)?;
     let mut ret = Vec::<Work>::new();
     for read_dir in read {
         let unwrap = read_dir?;
         let file_type = unwrap.file_type()?;
         let path = unwrap.path();
-        let is_json_file = file_type.is_file() && path.ends_with(".json");
+        let path_ext = path.extension().unwrap_or(OsStr::new(""));
+        let is_json_file = file_type.is_file() && path_ext == "json";
         if is_json_file {
             let string = fs::read_to_string(path)?;
-            if let std::result::Result::Ok(work) = serde_json::from_str::<Work>(string.as_str()) {
-                ret.push(work);
-            }
+            let work = serde_json::from_str::<Work>(string.as_str())?;
+            ret.push(work);
         }
     }
     ret.sort_by(|a, b| {
-        a.last_edited_date.cmp(&b.last_edited_date)
+        let a = DateTime::parse_from_rfc3339(a.last_edited_date.date_rfc3339.as_str()).unwrap();
+        let b = DateTime::parse_from_rfc3339(b.last_edited_date.date_rfc3339.as_str()).unwrap();
+
+        a.cmp(&b)
     });
     Ok(ret)
+}
+
+#[cfg(test)]
+mod test {
+
+    #[test]
+    fn test_read() {
+        let a = super::read_works("../../data/works").unwrap();
+        assert_eq!(a.len(), 1usize);
+    }
 }

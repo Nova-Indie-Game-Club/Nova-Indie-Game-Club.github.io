@@ -1,6 +1,7 @@
 :root {
   --hlt-color: black;
   --text-color-0: #3B3936;
+  --text-color-4: #ccc8c8;
   --text-color-5: #E2E2E2;
   --theme-color: #FFC71F;
   --background-color: white;
@@ -142,19 +143,40 @@ header .navi .right .selected p {
   width: 33.3%;
   background: var(--text-color-5);
   outline: var(--theme-color) 1px solid;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 .about.section .core .options .option p {
   text-align: center;
   color: var(--text-color-0);
   margin: 0;
 }
+.about.section .core .options .option:hover {
+  background-color: var(--text-color-4);
+}
+.about.section .core .options .selected:hover {
+  background-color: var(--theme-color);
+}
 .about.section .core .options .selected {
   background: var(--theme-color);
   color: var(--hlt-color);
   font-weight: bold;
 }
-.about.section .core .text {
+.about.section .core .text-container {
+  height: 128px;
+}
+.about.section .core .text-container .text {
   position: relative;
+  top: 10px;
+  margin: 0;
+  height: 0;
+  transform: translateY(40px);
+  opacity: 0;
+  transition: 0.4s all ease;
+}
+.about.section .core .text-container .text.active {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .recommended-works.section .core {

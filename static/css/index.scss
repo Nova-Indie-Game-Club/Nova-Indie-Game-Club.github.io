@@ -1,6 +1,7 @@
 :root {
   --hlt-color: black;
   --text-color-0: #3B3936;
+  --text-color-4: #ccc8c8;
   --text-color-5: #E2E2E2;
   --theme-color: #FFC71F;
   --background-color: white;
@@ -174,10 +175,17 @@ header {
           color: var(--text-color-0);
           margin: 0;
         }
-        pointer-events: stroke;
+
+        cursor: pointer;
+        transition: background-color 0.2s;
       }
-      .option:hover{
-        
+
+      .option:hover {
+        background-color: var(--text-color-4);
+      }
+
+      .selected:hover {
+        background-color: var(--theme-color);
       }
 
       .selected {
@@ -187,8 +195,24 @@ header {
       }
     }
 
-    .text{
-      position: relative;
+    .text-container {
+      height: 128px;
+      .text {
+        position: relative;
+        top: 10px;
+        margin: 0;
+        height: 0;
+
+        // for text display animation
+        transform: translateY(40px);
+        opacity: 0;
+        transition: .4s all ease;
+      }
+      // for text display animation
+      .text.active {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
   }
 }
@@ -301,22 +325,25 @@ header {
 }
 
 .media.section {
-  .core{
+  .core {
     margin: 0 auto;
     width: fit-content;
     display: flex;
     flex-direction: row;
-    div{
+
+    div {
       display: flex;
       flex-direction: column;
       padding: 8px;
       margin: 0 12px;
       border: var(--hlt-color) 1px solid;
-      img{
+
+      img {
         width: 200px;
         padding: 4px;
       }
-      p{
+
+      p {
         margin: 0;
         padding-top: 4px;
         text-align: center;
@@ -331,9 +358,10 @@ footer {
   width: 100%;
   background: var(--theme-color);
   padding: 12px;
-  .footer-grid{
 
-    .item{
+  .footer-grid {
+
+    .item {
       display: flex;
       background: var(--background-color);
       width: min(320px, 90%);
@@ -344,12 +372,14 @@ footer {
       padding: 4px 12px;
       border-radius: 4px;
       align-content: center;
-      p{
+
+      p {
         margin: 0;
         text-overflow: ellipsis;
         overflow: hidden;
       }
-      .important{
+
+      .important {
         color: var(--hlt-color);
         font-weight: bold;
       }

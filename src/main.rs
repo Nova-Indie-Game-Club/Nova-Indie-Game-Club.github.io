@@ -1,4 +1,5 @@
 mod templates;
+mod components;
 
 use perseus::prelude::*;
 

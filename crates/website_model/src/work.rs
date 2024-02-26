@@ -1,6 +1,4 @@
 
-use chrono::{DateTime, Utc};
-use notion_client::objects::page;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
@@ -23,6 +21,16 @@ pub struct Platform {
 }
 
 
+#[derive(Serialize, Deserialize, Clone, PartialEq)]
+pub struct SelectedValue{
+    pub name: String,
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq)]
+pub struct DateTimeUtc{
+    pub date_rfc3339: String
+}
+
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
 pub struct Work {
@@ -30,22 +38,22 @@ pub struct Work {
     pub name: String,
     pub sub_name: Option<String>,
     pub introduce: String,
-    pub tags:  Vec<page::SelectPropertyValue>,
-    pub gamejams: Vec<page::SelectPropertyValue>,
-    pub nova_gamejams: Vec<page::SelectPropertyValue>,
+    pub tags:  Vec<SelectedValue>,
+    pub gamejams: Vec<SelectedValue>,
+    pub nova_gamejams: Vec<SelectedValue>,
     pub platforms: Vec<Platform>, 
     pub authors: Vec<Author>,
-    pub submission_date: DateTime<Utc>,
     /// assets path of cover.
     pub cover: Option<String>,
     /// assets pathes of screenshots.
     pub screenshots: Vec<String>,
-    pub last_edited_date: DateTime<Utc>,
+    pub submission_date: DateTimeUtc,
+    pub last_edited_date: DateTimeUtc,
 }
 
 impl Work {
     pub fn plain_submission_date_day(&self) -> String{
-        self.submission_date.time().format("%Y-%m-%d").to_string()
+        self.submission_date.date_rfc3339.split_once("T").unwrap().0.to_string()
     }
     pub fn plain_author_string(&self) -> String{
         self.authors.iter().map(|it| {it.name.clone()}).collect::<Vec<_>>().join(", ")
