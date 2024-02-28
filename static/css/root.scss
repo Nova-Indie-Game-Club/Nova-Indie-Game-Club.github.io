@@ -1,0 +1,41 @@
+:root {
+    --hlt-color: black;
+    --core-color-0: #3B3936; // Default Text Color
+    --core-color-4: #ccc8c8;
+    --core-color-5: #E2E2E2;
+    --theme-color: #FFC71F;
+    --background-color: white;
+    --url-color: #D82D33;
+
+    --font-size-small: 14px;
+    --font-size-normal: 16px;
+    --font-size-big: 18px;
+    --font-size-bigger: 24px;
+
+    --navi-height: 50px;
+    --navi-left-margin: 2vw;
+    --navi-rigth-margin: 5vw;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    color: var(--core-color-0);
+    font-size: var(--font-size-normal);
+}
+
+a{
+    color: var(--core-color-0);
+    transition: color .3s;
+}
+
+a:hover{
+    color: var(--url-color);
+}

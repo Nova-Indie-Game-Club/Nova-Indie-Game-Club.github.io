@@ -1,7 +1,7 @@
 use sycamore::prelude::*;
 use website_model::work::Work;
 
-use crate::statics;
+use crate::tool::statics;
 
 
 #[derive(Prop)]

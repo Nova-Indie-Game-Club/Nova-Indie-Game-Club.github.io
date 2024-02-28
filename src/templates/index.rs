@@ -1,4 +1,6 @@
-use crate::components::work_item::*;
+use crate::components::footer::FooterItem;
+use crate::components::{footer::Footer, work_item::*};
+use crate::tool::statics;
 use perseus::prelude::*;
 use serde::{Deserialize, Serialize};
 use sycamore::prelude::*;
@@ -6,7 +8,6 @@ use sycamore::prelude::*;
 use web_sys::Element;
 use website_model::work::Work;
 
-use crate::statics;
 
 #[derive(Serialize, Deserialize, ReactiveState, Clone)]
 #[rx(alias = "IndexPageStateRx")]
@@ -167,6 +168,21 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
                 }
             }
         }
+        Footer(items=vec![
+            FooterItem{
+                title: "联系我们".to_string(),
+                text: "hi@novaindiegame.club".to_string(),
+                link: None,
+                info: None,
+            },
+            FooterItem{
+                title: "网站信息".to_string(),
+                text: "网站仓库".to_string(),
+                link: Some("".to_string()),
+                info: Some("网站使用 Perseus 框架开发，代码遵循 MIT 开源协议，资源遵循 CC BY-NC-SA 4.0 协议。".to_string()),
+            }
+            ]
+        )
     }
 }
 #[derive(Prop)]
@@ -193,7 +209,9 @@ fn Section<'a, G: Html>(cx: Scope<'a>, props: SectionProps<'a, G>) -> View<G> {
 fn head(cx: Scope, _props: IndexPageState) -> View<SsrNode> {
     view! { cx,
         title { "Nova 独游社!" }
+        link(rel="stylesheet",href=(statics("css/root.css")))
         link(rel="stylesheet",href=(statics("css/index.css")))
+        link(rel="icon",type="image/x-icon",href=(statics("assets/images/logo_small.png")))
     }
 }
 
