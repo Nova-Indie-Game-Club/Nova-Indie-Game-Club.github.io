@@ -178,7 +178,7 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
             FooterItem{
                 title: "网站信息".to_string(),
                 text: "网站仓库".to_string(),
-                link: Some("".to_string()),
+                link: Some("https://github.com/Nova-Indie-Game-Club/nova_website".to_string()),
                 info: Some("网站使用 Perseus 框架开发，代码遵循 MIT 开源协议，资源遵循 CC BY-NC-SA 4.0 协议。".to_string()),
             }
             ]
