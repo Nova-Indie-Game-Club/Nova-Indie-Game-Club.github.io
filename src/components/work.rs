@@ -3,7 +3,10 @@ use std::{ops::Deref, rc::Rc, vec};
 use sycamore::prelude::*;
 use website_model::work::{Platform, Work};
 
-use crate::{components::Svg, tool::{link_in_new_tab, statics}};
+use crate::{
+    components::Svg,
+    tool::{link_in_new_tab, statics},
+};
 
 #[derive(Prop)]
 pub struct RecentWorkItemProps {
@@ -43,25 +46,32 @@ fn set_work(
     authors: &Signal<String>,
     screenshots: &Signal<Vec<(usize, String)>>,
     cover: &Signal<String>,
+    image_index: &Signal<usize>,
+    focused_image: &Signal<String>,
 ) {
     name.set(work.name.clone());
     introduce.set(work.introduce.clone());
     platforms.set(work.platforms.clone());
     authors.set(work.plain_author_string());
     let mut vec: Vec<(usize, String)> = vec![];
-    for i in 0..work.screenshots.len().min(5usize){
+    for i in 0..work.screenshots.len().min(5usize) {
         vec.push((i, work.screenshots[i].clone()))
     }
     screenshots.set(vec);
     cover.set(work.cover.clone().unwrap_or_default());
+    set_focused_image(0usize, image_index, focused_image, screenshots)
 }
 
-fn set_focused_image(index: usize, image_index: &Signal<usize>, focused_image: &Signal<String>, screenshots: &Signal<Vec<(usize, String)>>){
+fn set_focused_image(
+    index: usize,
+    image_index: &Signal<usize>,
+    focused_image: &Signal<String>,
+    screenshots: &Signal<Vec<(usize, String)>>,
+) {
     let len = screenshots.get().len();
     image_index.set((index + len) % len);
     focused_image.set(screenshots.get().get(index.clone()).unwrap().1.to_owned());
 }
-
 
 #[component]
 pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> View<G> {
@@ -69,30 +79,57 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
     let introduce = create_signal(cx, "Introduce here".to_string());
     let platforms: &Signal<Vec<Platform>> = create_signal(cx, vec![]);
     let authors: &Signal<String> = create_signal(cx, "authors".to_string());
-    let screenshots: &Signal<Vec<(usize,String)>> = create_signal(cx, vec![]);
+    let screenshots: &Signal<Vec<(usize, String)>> = create_signal(cx, vec![]);
     let focused_image = create_signal(cx, "".to_string());
     let cover = create_signal(cx, "".to_string());
 
     //---- Work Change ---------------------
     let game_index = create_signal(cx, 0usize);
+    let image_index = create_signal(cx, 0usize);
     let rec_works_count = props.works.len();
     let rec_works_rc_clone_0 = props.works.clone();
     let rec_works_rc_clone_1 = props.works.clone();
 
-    set_work(&props.works[*game_index.get()], name, introduce, platforms, authors, screenshots, cover);
+    set_work(
+        &props.works[*game_index.get()],
+        name,
+        introduce,
+        platforms,
+        authors,
+        screenshots,
+        cover,
+        image_index,
+        focused_image,
+    );
 
-    let on_click_previous = move |_|{
+    let on_click_previous = move |_| {
         game_index.set((*game_index.get() + rec_works_count - 1) % rec_works_count);
-        set_work(&rec_works_rc_clone_0[*game_index.get()], name, introduce, platforms, authors, screenshots, cover);
+        set_work(
+            &rec_works_rc_clone_0[*game_index.get()],
+            name,
+            introduce,
+            platforms,
+            authors,
+            screenshots,
+            cover,
+            image_index,
+            focused_image,
+        );
     };
-    let on_click_next = move |_|{
+    let on_click_next = move |_| {
         game_index.set((*game_index.get() + rec_works_count + 1) % rec_works_count);
-        set_work(&rec_works_rc_clone_1[*game_index.get()], name, introduce, platforms, authors, screenshots, cover);
+        set_work(
+            &rec_works_rc_clone_1[*game_index.get()],
+            name,
+            introduce,
+            platforms,
+            authors,
+            screenshots,
+            cover,
+            image_index,
+            focused_image,
+        );
     };
-    
-    //---- Image Change -----------------
-    let image_index = create_signal(cx, 0usize);
-
 
     //---- View -------------------------
 
@@ -113,14 +150,14 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
                 div(class="gallery"){
                     Indexed(
                         iterable=screenshots,
-                        view=|cx, it| {
+                        view= move |cx, it| {
                             let index = it.0.clone();
-                            view! { cx, 
-                                // div(class="item", on:click= move |_|{
-                                //     set_focused_image(index, image_index, focused_image, screenshots)
-                                // }){
-                                //     img(src=(statics(it.1.as_str())))
-                                // }
+                            view! { cx,
+                                div(class="item", on:click= move |_|{
+                                    set_focused_image(index, image_index, focused_image, screenshots)
+                                }){
+                                    img(src=(statics(it.1.as_str())))
+                                }
                             }
                         }
                     )
