@@ -1,18 +1,21 @@
+use std::rc::Rc;
+
 use crate::components::footer::FooterItem;
-use crate::components::{footer::Footer, work_item::*};
+use crate::components::{footer::Footer, work::*};
 use crate::tool::statics;
 use perseus::prelude::*;
 use serde::{Deserialize, Serialize};
 use sycamore::prelude::*;
 
 use web_sys::Element;
-use website_model::work::Work;
+use website_model::work::{Class, Work};
 
 
 #[derive(Serialize, Deserialize, ReactiveState, Clone)]
 #[rx(alias = "IndexPageStateRx")]
 struct IndexPageState {
     recent_works: Vec<Work>,
+    recommended_works: Vec<Work>,
 }
 
 pub static ABOUT_INTRODUCE_TEXT: &str = "我们是一个主要在西安电子科技大学活动的大学生独立游戏社团。我们的主要活动内容是制作游戏和欣赏游戏。Nova 独游社的前身是西电软院科协独立游戏组，现在的 Nova 独游社成立于 2018 年冬。我们会在线上社群和线下聚会中讨论游戏开发相关技术、品鉴游戏设计方法和交流游戏及泛游戏社区内容等。更重要的是，我们会制作游戏、互相试玩彼此的游戏并交流想法和感受。我们欢迎对游戏设计及开发感兴趣，或希望尝试开发自己的游戏的朋友。";
@@ -139,6 +142,9 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
                     }
                 }
             }
+            Section(name="recommended-works".to_string(), title_path="assets/images/title_recommended_works.png".to_string()){
+                FocusedWorkPanel(works=state.recommended_works.get())
+            }
             Section(name="recent-works".to_string(),title_path="assets/images/title_recent_works.png".to_string()){
                 div(class="works-container"){
                     Indexed(
@@ -222,7 +228,9 @@ async fn get_build_state(_info: StateGeneratorInfo<()>) -> IndexPageState {
 
     //Get first recent 9 works;
     let recent_works = works.iter().take(9).cloned().collect::<Vec<_>>();
-    IndexPageState { recent_works }
+    let recommended_works: Vec<_> = works.iter().filter(|it|{ it.class == Class::Spotlight }).cloned().collect();
+
+    IndexPageState { recent_works, recommended_works }
 }
 
 pub fn get_template<G: Html>() -> Template<G> {

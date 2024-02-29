@@ -6,7 +6,7 @@
   --recommended-works-item-width: 300px;
   --recommended-works-item-gap: 16px;
   --recent-works-width: 900px;
-  --recent-works-item-width: 280;
+  --recent-works-item-width: 280px;
 }
 
 header {
@@ -200,7 +200,7 @@ header .navi .right .selected p {
 }
 
 .recent-works.section .works-container {
-  columns: 5 var(--recent-works-item-width);
+  columns: 3 var(--recent-works-item-width);
   column-gap: 16px;
   width: min(90%, var(--recent-works-width));
   margin: 0 auto;

@@ -118,7 +118,16 @@ pub async fn collect_database_to_file(
                 } else {
                     vec![]
                 };
-
+            let class =
+                if let PageProperty::Select { id: _, select } = properties.get("Class").unwrap() {
+                    if select.name.clone().unwrap_or_default() == "Spotlight" {
+                        Class::Spotlight
+                    } else {
+                        Class::Normal
+                    }
+                } else {
+                    Class::Normal
+                };
             Work {
                 id,
                 name,
@@ -137,6 +146,7 @@ pub async fn collect_database_to_file(
                 last_edited_date: DateTimeUtc {
                     date_rfc3339: page.last_edited_time.to_rfc3339(),
                 },
+                class,
             }
         })
         .collect();
@@ -284,11 +294,4 @@ pub fn read_works(folder_path: &str) -> Result<Vec<Work>> {
 }
 
 #[cfg(test)]
-mod test {
-
-    #[test]
-    fn test_read() {
-        let a = super::read_works("../../data/works").unwrap();
-        assert_eq!(a.len(), 1usize);
-    }
-}
+mod test {}

@@ -19,7 +19,23 @@ pub struct Platform {
     pub platform_type: PlatformType,
     pub url: String,
 }
+impl PlatformType {
+    pub fn display_name(&self) -> String{
+        match self {
+            PlatformType::Itch => "itch.io".to_string(),
+            PlatformType::Steam => "Steam".to_string(),
+            PlatformType::GameCore => "机核".to_string(),
+            PlatformType::Homepage => "主页".to_string(),
+        }
+    }
+}
 
+
+#[derive(Serialize, Deserialize, Clone, PartialEq)]
+pub enum Class {
+    Spotlight,
+    Normal
+}
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
 pub struct SelectedValue{
@@ -49,6 +65,7 @@ pub struct Work {
     pub screenshots: Vec<String>,
     pub submission_date: DateTimeUtc,
     pub last_edited_date: DateTimeUtc,
+    pub class: Class
 }
 
 impl Work {
