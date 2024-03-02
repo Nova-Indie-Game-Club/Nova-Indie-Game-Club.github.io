@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use sycamore::prelude::*;
 
-use crate::tool::{link_in_new_tab, statics};
+use crate::{components::SvgCode, svg, tool::{link_in_new_tab, statics}};
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct FooterItem {
@@ -35,7 +35,7 @@ pub fn Footer<G: Html>(cx: Scope, props: FooterProps) -> View<G> {
                                 }
                                 div(class="right-part"){
                                     div(class="item-text"){ (it.text) }
-                                    object(class="link-icon", data=(statics("assets/svg/arrow.svg")))
+                                    SvgCode(class="link-icon", code=svg::LINK_ARROW)
                                 }
                             }
                             (if has_info {view!{cx, 

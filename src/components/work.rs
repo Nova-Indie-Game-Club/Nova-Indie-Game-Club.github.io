@@ -4,7 +4,8 @@ use sycamore::prelude::*;
 use website_model::work::{Platform, Work};
 
 use crate::{
-    components::Svg,
+    components::SvgCode,
+    svg,
     tool::{link_in_new_tab, statics},
 };
 
@@ -37,154 +38,134 @@ pub fn RecentWorkItem<G: Html>(cx: Scope, props: RecentWorkItemProps) -> View<G>
 pub struct FocusedWorkPanelProps {
     pub works: Rc<Vec<Work>>,
 }
-
-fn set_work(
-    work: &Work,
-    name: &Signal<String>,
-    introduce: &Signal<String>,
-    platforms: &Signal<Vec<Platform>>,
-    authors: &Signal<String>,
-    screenshots: &Signal<Vec<(usize, String)>>,
-    cover: &Signal<String>,
-    image_index: &Signal<usize>,
-    focused_image: &Signal<String>,
-) {
-    name.set(work.name.clone());
-    introduce.set(work.introduce.clone());
-    platforms.set(work.platforms.clone());
-    authors.set(work.plain_author_string());
-    let mut vec: Vec<(usize, String)> = vec![];
-    for i in 0..work.screenshots.len().min(5usize) {
-        vec.push((i, work.screenshots[i].clone()))
-    }
-    screenshots.set(vec);
-    cover.set(work.cover.clone().unwrap_or_default());
-    set_focused_image(0usize, image_index, focused_image, screenshots)
+struct WorkPanelContext<'a> {
+    pub name: &'a Signal<String>,
+    pub introduce: &'a Signal<String>,
+    pub platforms: &'a Signal<Vec<Platform>>,
+    pub authors: &'a Signal<String>,
+    pub screenshots: &'a Signal<Vec<(usize, String)>>,
+    pub cover: &'a Signal<String>,
+    pub game_index: &'a Signal<usize>,
+    pub image_index: &'a Signal<usize>,
+    pub focused_image: &'a Signal<String>,
+    pub works: &'a Signal<Vec<Work>>,
 }
+impl<'a> WorkPanelContext<'a> {
+    pub fn set_work(&self, work: &Work) {
+        self.name.set(work.name.clone());
+        self.introduce.set(work.introduce.clone());
+        self.platforms.set(work.platforms.clone());
+        self.authors.set(work.plain_author_string());
+        let mut vec: Vec<(usize, String)> = vec![];
+        for i in 0..work.screenshots.len().min(5usize) {
+            vec.push((i, work.screenshots[i].clone()))
+        }
+        self.screenshots.set(vec);
+        self.cover.set(work.cover.clone().unwrap_or_default());
+        self.set_focused_image(0usize);
+    }
+    pub fn refresh_work(&self) {
+        self.set_work(&self.works.get()[*self.game_index.get()])
+    }
+    pub fn set_focused_image(&self, index: usize) {
+        let len = self.screenshots.get().len();
+        self.image_index.set((index + len) % len);
+        self.focused_image.set(
+            self.screenshots
+                .get()
+                .get(index.clone())
+                .unwrap()
+                .1
+                .to_owned(),
+        );
+    }
 
-fn set_focused_image(
-    index: usize,
-    image_index: &Signal<usize>,
-    focused_image: &Signal<String>,
-    screenshots: &Signal<Vec<(usize, String)>>,
-) {
-    let len = screenshots.get().len();
-    image_index.set((index + len) % len);
-    focused_image.set(screenshots.get().get(index.clone()).unwrap().1.to_owned());
+    pub fn offset_work_index(&self, offset: i32) {
+        let len = self.works.get().len() as i32;
+        let offset = offset % len;
+        self.game_index
+            .set(((*self.game_index.get() as i32 + len + offset) % len) as usize);
+    }
 }
 
 #[component]
 pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> View<G> {
-    let name = create_signal(cx, "Game name here".to_string());
-    let introduce = create_signal(cx, "Introduce here".to_string());
-    let platforms: &Signal<Vec<Platform>> = create_signal(cx, vec![]);
-    let authors: &Signal<String> = create_signal(cx, "authors".to_string());
-    let screenshots: &Signal<Vec<(usize, String)>> = create_signal(cx, vec![]);
-    let focused_image = create_signal(cx, "".to_string());
-    let cover = create_signal(cx, "".to_string());
-
-    //---- Work Change ---------------------
-    let game_index = create_signal(cx, 0usize);
-    let image_index = create_signal(cx, 0usize);
-    let rec_works_count = props.works.len();
-    let rec_works_rc_clone_0 = props.works.clone();
-    let rec_works_rc_clone_1 = props.works.clone();
-
-    set_work(
-        &props.works[*game_index.get()],
-        name,
-        introduce,
-        platforms,
-        authors,
-        screenshots,
-        cover,
-        image_index,
-        focused_image,
+    let context = create_signal(
+        cx,
+        WorkPanelContext {
+            name: create_signal(cx, "Game name here".to_string()),
+            introduce: create_signal(cx, "Introduce here".to_string()),
+            platforms: create_signal(cx, vec![]),
+            authors: create_signal(cx, "authors".to_string()),
+            screenshots: create_signal(cx, vec![]),
+            focused_image: create_signal(cx, "".to_string()),
+            cover: create_signal(cx, "".to_string()),
+            game_index: create_signal(cx, 0usize),
+            image_index: create_signal(cx, 0usize),
+            works: create_signal(cx, (*props.works).clone()),
+        },
     );
 
+    //---- Work Change ---------------------
+    context.get().refresh_work();
+
     let on_click_previous = move |_| {
-        game_index.set((*game_index.get() + rec_works_count - 1) % rec_works_count);
-        set_work(
-            &rec_works_rc_clone_0[*game_index.get()],
-            name,
-            introduce,
-            platforms,
-            authors,
-            screenshots,
-            cover,
-            image_index,
-            focused_image,
-        );
+        context.get().offset_work_index(-1);
+        context.get().refresh_work();
     };
     let on_click_next = move |_| {
-        game_index.set((*game_index.get() + rec_works_count + 1) % rec_works_count);
-        set_work(
-            &rec_works_rc_clone_1[*game_index.get()],
-            name,
-            introduce,
-            platforms,
-            authors,
-            screenshots,
-            cover,
-            image_index,
-            focused_image,
-        );
+        context.get().offset_work_index(1);
+        context.get().refresh_work();
     };
 
     //---- View -------------------------
 
     view! { cx,
         div(class="work-container"){
-            div(class="image-panel"){
-                div(class="stage"){
-                    div(on:click=on_click_previous,id="recommended-works-previous-game-button"){
-                        Svg(path="assets/svg/left_tri_arrow.svg")
-                    }
+            //column
+            div(on:click=on_click_previous,class="arrow",id="recommended-works-previous-game-button"){
+                SvgCode(class="arrow-svg", code=svg::LEFT_TRI_ARROW)
+            }
+            div(class="work-content"){
+                div(class="image-panel"){
+                    //column
                     div(class="focused-image"){
-                        img(src=(statics(focused_image.get().as_str()))) //todo test
+                        img(src=(statics(context.get().focused_image.get().as_str()))) //todo test
                     }
-                    div(on:click=on_click_next,id="recommended-works-next-game-button"){
-                        Svg(path="assets/svg/right_tri_arrow.svg")
-                    }
-                }
-                div(class="gallery"){
-                    Indexed(
-                        iterable=screenshots,
-                        view= move |cx, it| {
+                    div(class="gallery"){
+                        Indexed(
+                            iterable=context.get().screenshots,
+                            view= move |cx, it| {
                             let index = it.0.clone();
                             view! { cx,
                                 div(class="item", on:click= move |_|{
-                                    set_focused_image(index, image_index, focused_image, screenshots)
+                                    context.get().set_focused_image(index);
                                 }){
                                     img(src=(statics(it.1.as_str())))
                                 }
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
-            }
-            div(class="info-panel"){
-                //column
-                h3{
-                    (name.get())
-                }
+                div(class="info-panel"){
                 div(class="detail"){
                     //row
                     div(class="left-part"){
                         //column
                         div(class="cover"){
-                            img(src=(statics(cover.get().as_str())), alt="cover")
+                            img(src=(statics(context.get().cover.get().as_str())), alt="cover")
                         }
                         div(class="platform"){
                             Indexed(
-                                iterable=platforms,
+                                iterable=context.get().platforms,
                                 view=|cx, it| view!{ cx,
                                     div(class="link-button", onclick=link_in_new_tab(&it.url)){
                                         //row
                                         div(class="text"){
                                             (it.platform_type.display_name())
                                         }
-                                        Svg(class="link-icon", path="assets/svg/arrow.svg")
+                                        SvgCode(class="link-icon", code=svg::LINK_ARROW)
                                     }
                                 }
                             )
@@ -192,14 +173,24 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
                     }
                     div(class="right-part"){
                         //column
-                        p(class="text") {
-                            (introduce.get())
+                        div{
+                            h3{
+                                (context.get().name.get())
+                            }
+                            p(class="text") {
+                                (context.get().introduce.get())
+                            }
                         }
                         p(class="author") {
-                            (format!("作者: {}", authors.get()))
+                            (format!("作者: {}", context.get().authors.get()))
                         }
                     }
                 }
+            }
+
+            }
+            div(on:click=on_click_next,class="arrow",id="recommended-works-next-game-button"){
+                SvgCode(class="arrow-svg", code=svg::RIGHT_TRI_ARROW)
             }
         }
     }

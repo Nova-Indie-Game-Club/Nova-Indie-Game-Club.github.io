@@ -12,7 +12,7 @@ pub enum PlatformType {
     Itch,
     Steam,
     GameCore,
-    Homepage,
+    HomePage,
 }
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
 pub struct Platform {
@@ -25,7 +25,7 @@ impl PlatformType {
             PlatformType::Itch => "itch.io".to_string(),
             PlatformType::Steam => "Steam".to_string(),
             PlatformType::GameCore => "机核".to_string(),
-            PlatformType::Homepage => "主页".to_string(),
+            PlatformType::HomePage => "主页".to_string(),
         }
     }
 }

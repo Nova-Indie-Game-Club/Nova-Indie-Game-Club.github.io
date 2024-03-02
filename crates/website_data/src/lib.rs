@@ -58,10 +58,10 @@ pub async fn collect_database_to_file(
             let gamejams = get_multi_selected_or_none(&properties.get("GameJam").unwrap());
             let nova_gamejams = get_multi_selected_or_none(&properties.get("NovaGameJam").unwrap());
             let mut platforms = Vec::<Platform>::new();
-            push_platform_when_exist(&properties, "Itch", &mut platforms);
-            push_platform_when_exist(&properties, "Steam", &mut platforms);
-            push_platform_when_exist(&properties, "GameCore", &mut platforms);
-            push_platform_when_exist(&properties, "HomePage", &mut platforms);
+            push_platform_when_exist(&properties, "Itch", &mut platforms, PlatformType::Itch);
+            push_platform_when_exist(&properties, "Steam", &mut platforms, PlatformType::Steam);
+            push_platform_when_exist(&properties, "GameCore", &mut platforms, PlatformType::GameCore);
+            push_platform_when_exist(&properties, "HomePage", &mut platforms, PlatformType::HomePage);
 
             let authors = parse_authors(
                 &properties.get("Author").unwrap(),
@@ -118,16 +118,13 @@ pub async fn collect_database_to_file(
                 } else {
                     vec![]
                 };
-            let class =
-                if let PageProperty::Select { id: _, select } = properties.get("Class").unwrap() {
-                    if select.name.clone().unwrap_or_default() == "Spotlight" {
-                        Class::Spotlight
-                    } else {
-                        Class::Normal
-                    }
+            let class = if let PageProperty::Select { id, select } = properties.get("Class").unwrap() {
+                if select.name.clone().unwrap_or_default() == "Spotlight" {
+                    Class::Spotlight
                 } else {
                     Class::Normal
-                };
+                } 
+            } else { Class::Normal };
             Work {
                 id,
                 name,
@@ -223,11 +220,12 @@ fn push_platform_when_exist(
     props: &HashMap<String, PageProperty>,
     name: &str,
     vec: &mut Vec<Platform>,
+    platform_type: PlatformType
 ) {
     if let Some(PageProperty::Url { id, url }) = props.get(name) {
         if let Some(it) = url {
             vec.push(Platform {
-                platform_type: PlatformType::Itch,
+                platform_type,
                 url: it.clone(),
             });
         }
@@ -294,4 +292,6 @@ pub fn read_works(folder_path: &str) -> Result<Vec<Work>> {
 }
 
 #[cfg(test)]
-mod test {}
+mod test {
+
+}

@@ -1,0 +1,6 @@
+
+
+
+pub static LINK_ARROW :&str = r###"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="64" height="64" viewBox="0 0 64 64"><g transform="matrix(1,0,0,-1,0,128)"><path d="M44.169,94.1465L44.169,64L64,64L64,128L0,128L0,108.169L30.1463,108.169L0.260733,78.2834L14.2834,64.260799L44.169,94.1465Z" fill-rule="evenodd" fill="#000000" fill-opacity="1"/></g></svg>"###;
+pub static LEFT_TRI_ARROW: &str = r###"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="27" height="47" viewBox="0 0 27 47"><g transform="matrix(0,-1,1,0,-47,47)"><path d="M23.5,47L43.8516,67.25L3.1484,67.25L23.5,47Z" fill="#FFC71F" fill-opacity="1"/></g></svg>"###;
+pub static RIGHT_TRI_ARROW: &str = r###"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="27" height="47" viewBox="0 0 27 47"><g transform="matrix(0,1,-1,0,27,-27)"><path d="M50.5,1.91847e-15L70.85159999999999,20.25L30.1484,20.25L50.5,1.91847e-15Z" fill="#FFC71F" fill-opacity="1"/></g></svg>"###;
