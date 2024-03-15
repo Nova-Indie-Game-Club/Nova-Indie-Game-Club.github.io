@@ -65,7 +65,10 @@ impl<'a> WorkPanelContext<'a> {
         self.set_focused_image(0usize);
     }
     pub fn refresh_work(&self) {
-        self.set_work(&self.works.get()[*self.game_index.get()])
+        // Determine whether there is work.
+        if self.works.get().len() > 0 {
+            self.set_work(&self.works.get()[*self.game_index.get()])
+        }
     }
     pub fn set_focused_image(&self, index: usize) {
         let len = self.screenshots.get().len();
@@ -121,77 +124,84 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
     //---- View -------------------------
 
     view! { cx,
-        div(class="work-container"){
-            //column
-            div(on:click=on_click_previous,class="arrow",id="recommended-works-previous-game-button"){
-                SvgCode(class="arrow-svg", code=svg::LEFT_TRI_ARROW)
-            }
-            div(class="work-content"){
-                div(class="image-panel"){
+        // Determine whether there is work.
+        (if context.get().works.get().len() > 0 {
+            view! { cx, 
+                div(class="work-container"){
                     //column
-                    div(class="focused-image"){
-                        img(src=(statics(context.get().focused_image.get().as_str()))) //todo test
+                    div(on:click=on_click_previous,class="arrow",id="recommended-works-previous-game-button"){
+                        SvgCode(class="arrow-svg", code=svg::LEFT_TRI_ARROW)
                     }
-                    div(class="gallery"){
-                        Indexed(
-                            iterable=context.get().screenshots,
-                            view= move |cx, it| {
-                            let index = it.0.clone();
-                            view! { cx,
-                                div(class="item", on:click= move |_|{
-                                    context.get().set_focused_image(index);
-                                }){
-                                    img(src=(statics(it.1.as_str())))
+                    div(class="work-content"){
+                        div(class="image-panel"){
+                            //column
+                            div(class="focused-image"){
+                                img(src=(statics(context.get().focused_image.get().as_str()))) //todo test
+                            }
+                            div(class="gallery"){
+                                Indexed(
+                                    iterable=context.get().screenshots,
+                                    view= move |cx, it| {
+                                    let index = it.0.clone();
+                                    view! { cx,
+                                        div(class="item", on:click= move |_|{
+                                            context.get().set_focused_image(index);
+                                        }){
+                                            img(src=(statics(it.1.as_str())))
+                                        }
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                        div(class="info-panel"){
+                        div(class="detail"){
+                            //row
+                            div(class="left-part"){
+                                //column
+                                div(class="cover"){
+                                    img(src=(statics(context.get().cover.get().as_str())), alt="cover")
                                 }
+                                div(class="platform"){
+                                    Indexed(
+                                        iterable=context.get().platforms,
+                                        view=|cx, it| view!{ cx,
+                                            div(class="link-button", onclick=link_in_new_tab(&it.url)){
+                                                //row
+                                                div(class="text"){
+                                                    (it.platform_type.display_name())
+                                                }
+                                                SvgCode(class="link-icon", code=svg::LINK_ARROW)
+                                            }
+                                        }
+                                    )
                                 }
                             }
-                        )
-                    }
-                }
-                div(class="info-panel"){
-                div(class="detail"){
-                    //row
-                    div(class="left-part"){
-                        //column
-                        div(class="cover"){
-                            img(src=(statics(context.get().cover.get().as_str())), alt="cover")
-                        }
-                        div(class="platform"){
-                            Indexed(
-                                iterable=context.get().platforms,
-                                view=|cx, it| view!{ cx,
-                                    div(class="link-button", onclick=link_in_new_tab(&it.url)){
-                                        //row
-                                        div(class="text"){
-                                            (it.platform_type.display_name())
-                                        }
-                                        SvgCode(class="link-icon", code=svg::LINK_ARROW)
+                            div(class="right-part"){
+                                //column
+                                div{
+                                    h3{
+                                        (context.get().name.get())
+                                    }
+                                    p(class="text") {
+                                        (context.get().introduce.get())
                                     }
                                 }
-                            )
+                                p(class="author") {
+                                    (format!("作者: {}", context.get().authors.get()))
+                                }
+                            }
                         }
                     }
-                    div(class="right-part"){
-                        //column
-                        div{
-                            h3{
-                                (context.get().name.get())
-                            }
-                            p(class="text") {
-                                (context.get().introduce.get())
-                            }
-                        }
-                        p(class="author") {
-                            (format!("作者: {}", context.get().authors.get()))
-                        }
+        
+                    }
+                    div(on:click=on_click_next,class="arrow",id="recommended-works-next-game-button"){
+                        SvgCode(class="arrow-svg", code=svg::RIGHT_TRI_ARROW)
                     }
                 }
             }
-
-            }
-            div(on:click=on_click_next,class="arrow",id="recommended-works-next-game-button"){
-                SvgCode(class="arrow-svg", code=svg::RIGHT_TRI_ARROW)
-            }
-        }
+        } else { 
+            view! { cx, }
+        })
     }
 }

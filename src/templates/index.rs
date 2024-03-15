@@ -223,7 +223,7 @@ fn head(cx: Scope, _props: IndexPageState) -> View<SsrNode> {
 
 #[engine_only_fn]
 async fn get_build_state(_info: StateGeneratorInfo<()>) -> IndexPageState {
-    let works = website_data::read_works("data/works").unwrap();
+    let works = website_data::read_works("data/works").unwrap_or_default();
     println!("{} works read!", works.len());
 
     //Get first recent 9 works;
