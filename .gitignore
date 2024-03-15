@@ -1,2 +1,7 @@
 dist/
 target/
+
+# Ignore .DS_Store in MacOS
+.DS_Store
+**/.DS_Store
+.DS_Store?
