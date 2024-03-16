@@ -16,3 +16,4 @@ reqwest = "0.11.24"
 notion-client = "0.1.5"
 chrono = "0.4.34"
 website_model ={ path = "../website_model"}
+scraper = "0.12"
