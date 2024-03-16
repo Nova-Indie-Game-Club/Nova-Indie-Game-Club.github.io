@@ -1,0 +1,1 @@
+cargo run -p website_data
