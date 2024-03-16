@@ -252,14 +252,105 @@ pub fn get_plain_text_or_none(prop: &PageProperty) -> Option<String> {
 }
 
 pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String> {
-    // collect to /assets/works/{id}/cover.xxx
-    todo!()
+    let mut result: String = String::new();
+    
+    println!("Collecting cover for \"{}\": ", id);
+    
+    // Get Response
+    let response = reqwest::get(itch_url).await;
+    match  response {
+        Err(e) => println!("Failed when connecting server! {}", e),
+        _ => {
+            // Collect element
+            let document = scraper::Html::parse_document(&response.unwrap().text().await?);
+            let div_selector = scraper::Selector::parse("div.header").unwrap();
+            let img_selector = scraper::Selector::parse("img").unwrap();
+            let div = document.select(&div_selector).next().unwrap();
+            let list = div.select(&img_selector);
+
+            // Get link and download
+            let src = list.last().unwrap().value().attr("src").unwrap().to_string();
+            result = src.clone();
+            let file_info = parse_url_to_file_info(&src).unwrap();
+            let path = format!(
+                "static/assets/works/{}/cover.{}",
+                id,
+                file_info.file_ext
+            );
+            download(file_info.cleaned_url, path).await?;
+        },
+    }
+    Ok(result)
 }
 
 pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<String>> {
-    // collect to /assets/works/{id}/screenshots/screenshot_0.xxx
-    todo!()
+    let mut result : Vec<String> = Vec::new();
+
+    print!("Collecting screenshots for \"{}\".", id);
+
+    // Get Response
+    let response = reqwest::get(itch_url).await;
+    match  response {
+        Err(e) => println!("Failed when connecting server! {}", e),
+        _ => {
+            // Collect elements
+            let document = scraper::Html::parse_document(&response.unwrap().text().await?);
+            let div_selector = scraper::Selector::parse("div.screenshot_list").unwrap();
+            let a_selector = scraper::Selector::parse("a").unwrap();
+            let div = document.select(&div_selector).next().unwrap();
+            let list = div.select(&a_selector);
+            println!("Find {} screenshots.", list.clone().count());
+
+            // Get links and download
+            let mut index = 0;
+            for element in list {
+                let href = element.value().attr("href").unwrap();
+                result.push(href.to_string());
+                let file_info = parse_url_to_file_info(&href.to_string()).unwrap();
+                let path = format!(
+                    "static/assets/works/{}/screenshot_{}.{}",
+                    id,
+                    index,
+                    file_info.file_ext
+                );
+                download(file_info.cleaned_url, path).await?;
+                index += 1;
+            }
+        },
+    }
+    Ok(result)
 }
+
+pub async fn download(url: String, path: String) -> Result<()> {
+    print!("Download \"{}\" to \"{}\": ", url.clone(), path.clone());
+
+    let response = reqwest::get(url.clone()).await;
+    match response {
+        Err(e) => println!("Failed when connecting server! {}", e),
+        _ => {
+            // Create folders if not exist
+            let pos = path.clone().rfind("/").unwrap_or_default();
+            let dir = path.clone().split_at(pos).0.to_string();
+            fs::create_dir_all(dir).unwrap();
+
+            // Create file
+            let file = File::create(path);
+            match file {
+                Err(e) => println!("Failed when creating folder! {}", e),
+                _ => {
+                    // Write data
+                    let result = file.unwrap().write_all(&response.unwrap().bytes().await?);
+                    match result {
+                        Err(e) => println!("Failed when writing files! {}", e),
+                        _ => println!("Success."),
+                    }
+                }
+            }
+        }
+    }
+    Ok(())
+}
+
 fn into_selected_value(it: &SelectPropertyValue) -> SelectedValue {
     SelectedValue {
         name: it.name.clone().unwrap_or_default(),
