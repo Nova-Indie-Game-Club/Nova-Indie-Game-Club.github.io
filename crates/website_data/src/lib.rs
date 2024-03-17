@@ -67,7 +67,7 @@ pub async fn collect_database_to_file(
                 &properties.get("Author").unwrap(),
                 &properties.get("AuthorLink").unwrap(),
             );
-            let submission_date = if let PageProperty::Date {
+            let submission_date = if let PageProperty::Date { // standard format with date and time
                 date:
                     Some(DatePropertyValue {
                         start: Some(DateOrDateTime::DateTime(it)),
@@ -76,9 +76,20 @@ pub async fn collect_database_to_file(
                 ..
             } = properties.get("SubmissionDate").unwrap()
             {
-                it.clone()
-            } else {
-                DateTime::<Utc>::default()
+                it.clone().to_rfc3339()
+            } else if let PageProperty::Date { // date only
+                date:
+                    Some(DatePropertyValue {
+                        start: Some(DateOrDateTime::Date(it)),
+                        ..
+                    }),
+                ..
+            } = properties.get("SubmissionDate").unwrap()
+            {
+                format!("{}T00:00:00+00:00", it.clone().to_string())
+            }  
+            else {
+                DateTime::<Utc>::default().to_rfc3339()
             };
 
             let cover = if let PageProperty::Files { files, .. } = properties.get("Cover").unwrap()
@@ -134,7 +145,7 @@ pub async fn collect_database_to_file(
                 platforms,
                 authors,
                 submission_date: DateTimeUtc {
-                    date_rfc3339: submission_date.to_rfc3339(),
+                    date_rfc3339: submission_date,
                 },
                 gamejams,
                 nova_gamejams,
