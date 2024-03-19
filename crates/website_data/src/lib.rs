@@ -40,9 +40,9 @@ pub async fn collect_database_to_file(
 
     //(url, native_position)
     let mut to_download: Vec<(String, String)> = vec![];
-    let works_objects: Vec<Work> = works_pages
-        .iter()
-        .map(|page| {
+    let mut works_objects: Vec<Work> = vec![];
+    for page in works_pages {
+        works_objects.push({
             let properties = &page.properties;
             let id = page.id.to_string();
             let name = if let Some(PageProperty::Title { title, .. }) = page.properties.get("Name")
@@ -55,6 +55,7 @@ pub async fn collect_database_to_file(
             let introduce = get_plain_text_or_none(&properties.get("Introduce").unwrap())
                 .unwrap_or("".to_string());
             let tags = get_multi_selected_or_none(&properties.get("Tag").unwrap());
+            let auto_collection = get_checkbox_or_none(&properties.get("AutoCollection").unwrap());
             let gamejams = get_multi_selected_or_none(&properties.get("GameJam").unwrap());
             let nova_gamejams = get_multi_selected_or_none(&properties.get("NovaGameJam").unwrap());
             let mut platforms = Vec::<Platform>::new();
@@ -92,25 +93,44 @@ pub async fn collect_database_to_file(
                 DateTime::<Utc>::default().to_rfc3339()
             };
 
-            let cover = if let PageProperty::Files { files, .. } = properties.get("Cover").unwrap()
-            {
-                if let Some(it) = files.get(0) {
-                    let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
-                    let pos = format!(
-                        "static/assets/works/{}/cover.{}",
-                        page.id.to_string(),
-                        file_info.file_ext,
-                    );
-                    to_download.push((file_info.url.clone(), pos.clone()));
-                    Some(pos.replace("static/", ""))
+            let cover = if auto_collection.unwrap() {
+                if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
+                    let res = collect_cover_image(id.as_str(), itch_url).await.unwrap();
+                    to_download.push(res.clone());
+                    Some(res.1.replace("static/", "")) 
                 } else {
                     None
                 }
             } else {
-                None
+                if let PageProperty::Files { files, .. } = properties.get("Cover").unwrap()
+                {
+                    if let Some(it) = files.get(0) {
+                        let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
+                        let pos = format!(
+                            "static/assets/works/{}/cover.{}",
+                            page.id.to_string(),
+                            file_info.file_ext,
+                        );
+                        to_download.push((file_info.cleaned_url.clone(), pos.clone()));
+                        Some(pos.replace("static/", ""))
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                }
             };
 
-            let screenshots: Vec<String> =
+            let screenshots: Vec<String> = if auto_collection.unwrap() {
+                if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
+                    let mut res = collect_screenshot_images(id.as_str(), itch_url).await.unwrap();
+                    let vec = res.iter().map(|item| {item.1.replace("static/", "")}).collect();
+                    to_download.append(&mut res);
+                    vec
+                } else {
+                    vec![]
+                }
+            } else {
                 if let PageProperty::Files { files, .. } = properties.get("Screenshot").unwrap() {
                     let mut vec = Vec::<String>::new();
                     for i in 0..files.len() {
@@ -122,13 +142,15 @@ pub async fn collect_database_to_file(
                             i,
                             file_info.file_ext
                         );
-                        to_download.push((file_info.url.clone(), pos.clone()));
+                        to_download.push((file_info.cleaned_url.clone(), pos.clone()));
                         vec.push(pos.replace("static/", ""));
                     }
                     vec
                 } else {
                     vec![]
-                };
+                }
+            };
+            
             let class = if let PageProperty::Select { id, select } = properties.get("Class").unwrap() {
                 if select.name.clone().unwrap_or_default() == "Spotlight" {
                     Class::Spotlight
@@ -142,6 +164,7 @@ pub async fn collect_database_to_file(
                 sub_name,
                 introduce,
                 tags,
+                auto_collection,
                 platforms,
                 authors,
                 submission_date: DateTimeUtc {
@@ -156,30 +179,12 @@ pub async fn collect_database_to_file(
                 },
                 class,
             }
-        })
-        .collect();
+        });
+    }
 
     // Download files
     for target in to_download {
-        let url = target.0;
-        let response = reqwest::get(url.clone()).await?;
-        let download_path = target.1;
-
-        let file_info = parse_url_to_file_info(&download_path).unwrap();
-
-        println!(
-            "downloading file: '{}' to '{}'",
-            file_info.cleaned_url, download_path
-        );
-
-        fs::create_dir_all(file_info.path.clone())?;
-        let mut file = File::create(download_path.to_string())?;
-        file.write(&response.bytes().await?)?;
-
-        println!(
-            "download successfully! filename: '{}'",
-            file_info.file_name_with_ext()
-        );
+        download(target.0, target.1).await?;
     }
 
     // Write json files
@@ -187,6 +192,15 @@ pub async fn collect_database_to_file(
         tool::serialize_to_json_file(&work, format!("data/{}{}.json", path, work.id))?;
     }
     Ok(())
+}
+
+fn get_itch_url_or_none(platforms: Vec::<Platform>) -> Option<String> {
+    for element in platforms {
+        if element.platform_type == PlatformType::Itch {
+            return Some(element.url)
+        }
+    }
+    None
 }
 
 fn parse_authors(author: &PageProperty, author_link: &PageProperty) -> Vec<Author> {
@@ -242,6 +256,7 @@ fn push_platform_when_exist(
         }
     }
 }
+
 pub fn get_multi_selected_or_none(prop: &PageProperty) -> Vec<SelectedValue> {
     if let PageProperty::MultiSelect { id, multi_select } = prop {
         multi_select
@@ -262,10 +277,18 @@ pub fn get_plain_text_or_none(prop: &PageProperty) -> Option<String> {
     }
 }
 
-pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String> {
-    let mut result: String = String::new();
+pub fn get_checkbox_or_none(prop: &PageProperty) -> Option<bool> {
+    if let PageProperty::Checkbox { id: _, checkbox } = prop {
+        Some(checkbox.clone())
+    } else {
+        None
+    }
+}
+
+pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<(String, String)> {
+    let mut result: (String, String) = (String::new(), String::new());
     
-    println!("Collecting cover for \"{}\": ", id);
+    print!("Collect cover for \"{}\": ", id);
     
     // Get Response
     let response = reqwest::get(itch_url).await;
@@ -278,26 +301,26 @@ pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<String> {
             let img_selector = scraper::Selector::parse("img").unwrap();
             let div = document.select(&div_selector).next().unwrap();
             let list = div.select(&img_selector);
+            println!("Success.");
 
             // Get link and download
             let src = list.last().unwrap().value().attr("src").unwrap().to_string();
-            result = src.clone();
             let file_info = parse_url_to_file_info(&src).unwrap();
             let path = format!(
                 "static/assets/works/{}/cover.{}",
                 id,
                 file_info.file_ext
             );
-            download(file_info.cleaned_url, path).await?;
+            result = (src, path);
         },
     }
     Ok(result)
 }
 
-pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<String>> {
-    let mut result : Vec<String> = Vec::new();
+pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<(String, String)>> {
+    let mut result : Vec<(String, String)> = Vec::new();
 
-    print!("Collecting screenshots for \"{}\".", id);
+    print!("Collect screenshots for \"{}\": ", id);
 
     // Get Response
     let response = reqwest::get(itch_url).await;
@@ -315,16 +338,15 @@ pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec
             // Get links and download
             let mut index = 0;
             for element in list {
-                let href = element.value().attr("href").unwrap();
-                result.push(href.to_string());
-                let file_info = parse_url_to_file_info(&href.to_string()).unwrap();
+                let href = element.value().attr("href").unwrap().to_string();
+                let file_info = parse_url_to_file_info(&href).unwrap();
                 let path = format!(
                     "static/assets/works/{}/screenshot_{}.{}",
                     id,
                     index,
                     file_info.file_ext
                 );
-                download(file_info.cleaned_url, path).await?;
+                result.push((href, path));
                 index += 1;
             }
         },

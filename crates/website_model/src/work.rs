@@ -57,6 +57,7 @@ pub struct Work {
     pub tags:  Vec<SelectedValue>,
     pub gamejams: Vec<SelectedValue>,
     pub nova_gamejams: Vec<SelectedValue>,
+    pub auto_collection: Option<bool>,
     pub platforms: Vec<Platform>, 
     pub authors: Vec<Author>,
     /// assets path of cover.
