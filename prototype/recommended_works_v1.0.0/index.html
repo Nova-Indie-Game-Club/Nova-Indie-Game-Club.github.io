@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 每个字页面都要导入 root.css，里面有什么内容可以点进去看看  -->
+    <link rel="stylesheet" href="../../static/css/root.css">
+
+
+    <!-- 因为这部分和其它部分相对独立，所以单开两个样式表
+        一个样式表是精选作品部分的样式，另一个是会被复用的组件的样式（点进 work_spotlight.scss 看注释） -->
+    <!-- To Rust Front End:至于哪部分样式表要被合并到 index.scss 里，按照我想的规范，recommended_works.scss 被合并进去，而组件不合并会比较好 -->
+    <link rel="stylesheet" href="./css/recommended_works.css">
+    <link rel="stylesheet" href="./css/work_spotlight.css">
+
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="main">
+        <div class="section recommended-works">
+            <img src=../../static/assets/images/title_recommended_works.png alt=recommended-works class=title>
+            <div class="core">
+                <!-- todo 内容写在这里 -->
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
