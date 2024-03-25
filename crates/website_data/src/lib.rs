@@ -2,7 +2,7 @@ use anyhow::*;
 use chrono::{DateTime, Utc};
 use notion_client::{
     endpoints::{databases::query::request::QueryDatabaseRequest, Client},
-    objects::page::{DateOrDateTime, DatePropertyValue, Page, PageProperty, SelectPropertyValue},
+    objects::page::{DateOrDateTime, DatePropertyValue, FilePropertyValue, Page, PageProperty, SelectPropertyValue},
 };
 use std::{
     collections::HashMap,
@@ -11,7 +11,7 @@ use std::{
     io::Write,
     vec,
 };
-use tool::{parse_file_url, parse_url_to_file_info};
+use tool::{parse_file_download_url, parse_file_info, parse_url_to_file_info};
 use website_model::work::*;
 
 pub mod tool;
@@ -123,7 +123,7 @@ pub async fn collect_database_to_file(
             )
             .await;
             let class =
-                if let PageProperty::Select { id, select } = properties.get("Class").unwrap() {
+                if let PageProperty::Select { id, select: Some(select) } = properties.get("Class").unwrap() {
                     if select.name.clone().unwrap_or_default() == "Spotlight" {
                         Class::Spotlight
                     } else {
@@ -204,14 +204,15 @@ async fn get_screenshots(
         let mut vec = Vec::<String>::new();
         for i in 0..files.len() {
             let it = files[i].clone();
-            let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
+            let download_url = parse_file_download_url(&it.file, &id.clone());
+            let file_info = parse_file_info(&it.file).unwrap();
             let pos = format!(
                 "static/assets/works/{}/screenshot_{}.{}",
                 page.id.to_string(),
                 i,
                 file_info.file_ext
             );
-            to_download.push((file_info.cleaned_url.clone(), pos.clone()));
+            to_download.push((download_url, pos.clone()));
             vec.push(pos.replace("static/", ""));
         }
         return vec;
@@ -237,13 +238,14 @@ async fn get_cover(
     }
     if let PageProperty::Files { files, .. } = properties.get("Cover").unwrap() {
         if let Some(it) = files.get(0) {
-            let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
+            let url = parse_file_download_url(&it.file, &id.clone());
+            let file_info = parse_file_info(&it.file).unwrap();
             let pos = format!(
                 "static/assets/works/{}/cover.{}",
                 page.id.to_string(),
                 file_info.file_ext,
             );
-            to_download.push((file_info.cleaned_url.clone(), pos.clone()));
+            to_download.push((url, pos.clone()));
             return Some(pos.replace("static/", ""));
         }
     }
@@ -253,32 +255,32 @@ async fn get_cover(
 fn parse_authors(author: &PageProperty, author_link: &PageProperty) -> Vec<Author> {
     let authors_string = get_plain_text_or_none(author).unwrap_or_default();
     let authors_links_string = get_plain_text_or_none(author_link).unwrap_or_default();
-    let au_silices = authors_string.split(',').collect::<Vec<_>>();
+    let au_slices = authors_string.split(',').collect::<Vec<_>>();
     let binding = authors_links_string.replace(" ", "");
-    let al_silices = binding.split(',').collect::<Vec<_>>();
+    let al_slices = binding.split(',').collect::<Vec<_>>();
 
     let mut authors = Vec::<Author>::new();
-    if au_silices.len() == al_silices.len() {
-        for i in 0..au_silices.len() {
-            let link = al_silices[i];
+    if au_slices.len() == al_slices.len() {
+        for i in 0..au_slices.len() {
+            let link = al_slices[i];
             let url = if !link.is_empty() {
                 Some(link.to_string())
             } else {
                 None
             };
             authors.push(Author {
-                name: au_silices[i].to_string(),
+                name: au_slices[i].to_string(),
                 url,
             })
         }
     } else {
-        let link = al_silices[0];
+        let link = al_slices[0];
         let url = if !link.is_empty() {
             Some(link.to_string())
         } else {
             None
         };
-        for name in au_silices {
+        for name in au_slices {
             authors.push(Author {
                 name: name.to_string(),
                 url: url.clone(),
@@ -317,7 +319,7 @@ pub fn get_multi_selected_or_none(prop: &PageProperty) -> Vec<SelectedValue> {
 }
 
 pub fn get_auto_collection(prop: &PageProperty) -> Option<PlatformType> {
-    if let PageProperty::Select { id: _, select } = prop {
+    if let PageProperty::Select { id: _, select: Some(select) } = prop {
         let ret = PlatformType::from_en_id(select.name.clone().unwrap_or_default().as_str());
         ret
     } else {
