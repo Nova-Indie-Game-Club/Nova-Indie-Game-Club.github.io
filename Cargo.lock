@@ -1355,9 +1355,9 @@ dependencies = [
 
 [[package]]
 name = "notion-client"
-version = "0.1.5"
+version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ad3c6ca8cfbc10a26e0f31fc32317614a29addcda7139945faaa3ab56fb2920c"
+checksum = "348f5677fd85c1a242871f32bd7bdec6cb494b01b75d6aee9ee7d5d210ab0386"
 dependencies = [
  "chrono",
  "reqwest",
@@ -2872,6 +2872,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio",
+ "urlencoding",
  "website_model",
 ]
 

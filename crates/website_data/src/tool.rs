@@ -1,7 +1,10 @@
 use anyhow::*;
-use std::{fs::{self, File}, io::Write};
 use notion_client::objects::{file, rich_text::RichText};
 use serde::{Deserialize, Serialize};
+use std::{
+    fs::{self, File},
+    io::Write,
+};
 
 pub fn get_plain_string(vec: &Vec<RichText>) -> String {
     vec.iter()
@@ -36,12 +39,23 @@ impl FileInfo {
         format!("{}.{}", self.file_name, self.file_ext)
     }
 }
-pub fn parse_file_url(it: &file::File) -> String {
+pub fn parse_file_download_url(it: &file::File, id: &String) -> String {
     let url = match it {
         file::File::External { external } => external.url.clone(),
-        file::File::File { file } => file.url.clone(),
+        file::File::File { file } => {
+            let url = file.url.clone();
+            url
+        }
     };
     url
+}
+
+pub fn parse_file_info(it: &file::File) -> Result<FileInfo>{
+    let url = match it {
+        file::File::External { external } => external.url.clone(),
+        file::File::File { file } => file.url.clone()
+    };
+    parse_url_to_file_info(&url)
 }
 
 pub fn parse_url_to_file_info(raw_url: &String) -> Result<FileInfo> {
@@ -106,4 +120,3 @@ mod test {
         assert_eq!(info.path, "https://github.com/tokio-rs/tokio/workflows/CI")
     }
 }
-
