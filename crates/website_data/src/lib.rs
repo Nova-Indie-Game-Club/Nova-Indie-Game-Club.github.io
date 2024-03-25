@@ -55,7 +55,7 @@ pub async fn collect_database_to_file(
             let introduce = get_plain_text_or_none(&properties.get("Introduce").unwrap())
                 .unwrap_or("".to_string());
             let tags = get_multi_selected_or_none(&properties.get("Tag").unwrap());
-            let auto_collection = get_auto_fill(&properties.get("AutoCollection").unwrap());
+            let auto_collection = get_auto_collection(&properties.get("AutoCollection").unwrap());
             let gamejams = get_multi_selected_or_none(&properties.get("GameJam").unwrap());
             let nova_gamejams = get_multi_selected_or_none(&properties.get("NovaGameJam").unwrap());
             let mut platforms = Vec::<Platform>::new();
@@ -104,75 +104,24 @@ pub async fn collect_database_to_file(
                 DateTime::<Utc>::default().to_rfc3339()
             };
 
-            let cover = if let Some(it) = auto_collection.clone() {
-                if it == PlatformType::Itch {
-                    if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
-                        let res = collect_cover_image(id.as_str(), itch_url).await.unwrap();
-                        to_download.push(res.clone());
-                        Some(res.1.replace("static/", ""))
-                    } else {
-                        None
-                    }
-                } else {
-                    None
-                }
-            } else {
-                if let PageProperty::Files { files, .. } = properties.get("Cover").unwrap() {
-                    if let Some(it) = files.get(0) {
-                        let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
-                        let pos = format!(
-                            "static/assets/works/{}/cover.{}",
-                            page.id.to_string(),
-                            file_info.file_ext,
-                        );
-                        to_download.push((file_info.cleaned_url.clone(), pos.clone()));
-                        Some(pos.replace("static/", ""))
-                    } else {
-                        None
-                    }
-                } else {
-                    None
-                }
-            };
-            let screenshots: Vec<String> = if let Some(it) = auto_collection.clone() {
-                if it == PlatformType::Itch {
-                    if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
-                        let mut res = collect_screenshot_images(id.as_str(), itch_url)
-                            .await
-                            .unwrap();
-                        let vec = res
-                            .iter()
-                            .map(|item| item.1.replace("static/", ""))
-                            .collect();
-                        to_download.append(&mut res);
-                        vec
-                    } else {
-                        vec![]
-                    }
-                } else {
-                    vec![]
-                }
-            } else {
-                if let PageProperty::Files { files, .. } = properties.get("Screenshot").unwrap() {
-                    let mut vec = Vec::<String>::new();
-                    for i in 0..files.len() {
-                        let it = files[i].clone();
-                        let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
-                        let pos = format!(
-                            "static/assets/works/{}/screenshot_{}.{}",
-                            page.id.to_string(),
-                            i,
-                            file_info.file_ext
-                        );
-                        to_download.push((file_info.cleaned_url.clone(), pos.clone()));
-                        vec.push(pos.replace("static/", ""));
-                    }
-                    vec
-                } else {
-                    vec![]
-                }
-            };
-
+            let cover: Option<String> = get_cover(
+                auto_collection.clone(),
+                &platforms,
+                &mut to_download,
+                &id,
+                properties,
+                &page,
+            )
+            .await;
+            let screenshots: Vec<String> = get_screenshots(
+                auto_collection.clone(),
+                &platforms,
+                &id,
+                &mut to_download,
+                properties,
+                &page,
+            )
+            .await;
             let class =
                 if let PageProperty::Select { id, select } = properties.get("Class").unwrap() {
                     if select.name.clone().unwrap_or_default() == "Spotlight" {
@@ -226,6 +175,79 @@ fn get_itch_url_or_none(platforms: Vec<Platform>) -> Option<String> {
         }
     }
     None
+}
+
+async fn get_screenshots(
+    auto_collection: Option<PlatformType>,
+    platforms: &Vec<Platform>,
+    id: &String,
+    to_download: &mut Vec<(String, String)>,
+    properties: &HashMap<String, PageProperty>,
+    page: &Page,
+) -> Vec<String> {
+    if let Some(it) = auto_collection.clone() {
+        if it == PlatformType::Itch {
+            if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
+                let mut res = collect_screenshot_images(id.as_str(), itch_url)
+                    .await
+                    .unwrap();
+                let vec = res
+                    .iter()
+                    .map(|item| item.1.replace("static/", ""))
+                    .collect();
+                to_download.append(&mut res);
+                return vec;
+            }
+        }
+    };
+    if let PageProperty::Files { files, .. } = properties.get("Screenshot").unwrap() {
+        let mut vec = Vec::<String>::new();
+        for i in 0..files.len() {
+            let it = files[i].clone();
+            let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
+            let pos = format!(
+                "static/assets/works/{}/screenshot_{}.{}",
+                page.id.to_string(),
+                i,
+                file_info.file_ext
+            );
+            to_download.push((file_info.cleaned_url.clone(), pos.clone()));
+            vec.push(pos.replace("static/", ""));
+        }
+        return vec;
+    };
+    return vec![];
+}
+async fn get_cover(
+    auto_collection: Option<PlatformType>,
+    platforms: &Vec<Platform>,
+    to_download: &mut Vec<(String, String)>,
+    id: &String,
+    properties: &HashMap<String, PageProperty>,
+    page: &Page,
+) -> Option<String> {
+    if let Some(it) = auto_collection {
+        if it == PlatformType::Itch {
+            if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
+                let res = collect_cover_image(id.as_str(), itch_url).await.unwrap();
+                to_download.push(res.clone());
+                return Some(res.1.replace("static/", ""));
+            }
+        }
+    }
+    if let PageProperty::Files { files, .. } = properties.get("Cover").unwrap() {
+        if let Some(it) = files.get(0) {
+            let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
+            let pos = format!(
+                "static/assets/works/{}/cover.{}",
+                page.id.to_string(),
+                file_info.file_ext,
+            );
+            to_download.push((file_info.cleaned_url.clone(), pos.clone()));
+            return Some(pos.replace("static/", ""));
+        }
+    }
+    return None;
 }
 
 fn parse_authors(author: &PageProperty, author_link: &PageProperty) -> Vec<Author> {
@@ -294,13 +316,9 @@ pub fn get_multi_selected_or_none(prop: &PageProperty) -> Vec<SelectedValue> {
     }
 }
 
-pub fn get_auto_fill(prop: &PageProperty) -> Option<PlatformType> {
-    if let PageProperty::Select {
-        id: Some(id),
-        select,
-    } = prop
-    {
-        let ret = PlatformType::from_en_id(&id);
+pub fn get_auto_collection(prop: &PageProperty) -> Option<PlatformType> {
+    if let PageProperty::Select { id: _, select } = prop {
+        let ret = PlatformType::from_en_id(select.name.clone().unwrap_or_default().as_str());
         ret
     } else {
         None

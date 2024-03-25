@@ -72,7 +72,7 @@ impl<'a> WorkPanelContext<'a> {
     }
     pub fn set_focused_image(&self, index: usize) {
         let len = self.screenshots.get().len();
-        self.image_index.set((index + len) % len);
+        self.image_index.set((index + len) % len);//todo fix condition: len = 0
         self.focused_image.set(
             self.screenshots
                 .get()
@@ -126,7 +126,7 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
     view! { cx,
         // Determine whether there is work.
         (if context.get().works.get().len() > 0 {
-            view! { cx, 
+            view! { cx,
                 div(class="work-container"){
                     //column
                     div(on:click=on_click_previous,class="arrow",id="recommended-works-previous-game-button"){
@@ -193,14 +193,14 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
                             }
                         }
                     }
-        
+
                     }
                     div(on:click=on_click_next,class="arrow",id="recommended-works-next-game-button"){
                         SvgCode(class="arrow-svg", code=svg::RIGHT_TRI_ARROW)
                     }
                 }
             }
-        } else { 
+        } else {
             view! { cx, }
         })
     }
