@@ -1,0 +1,131 @@
+:root {
+  --hlt-color: black;
+  --core-color-0: #3B3936;
+  --core-color-1: #605d5a;
+  --core-color-2: rgb(137, 133, 128);
+  --core-color-3: #a4a29d;
+  --core-color-4: #ccc8c8;
+  --core-color-5: #E2E2E2;
+  --core-color-6: #EFEFEF;
+  --theme-color: #FFC71F;
+  --background-color: white;
+  --url-color: #D82D33;
+  --font-size-small: 14px;
+  --font-size-normal: 16px;
+  --font-size-big: 18px;
+  --font-size-bigger: 24px;
+  --navi-height: 50px;
+  --navi-left-margin: 2vw;
+  --navi-rigth-margin: 5vw;
+}
+
+.main .recommended_works {
+  width: 100%;
+  margin: 52px auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.main .recommended_works .title {
+  display: flex;
+  margin: 30px auto;
+  width: 252.43px;
+  height: 65.83px;
+}
+.main .recommended_works .core {
+  display: flex;
+  justify-content: center;
+}
+.main .recommended_works .core .select_area {
+  position: relative;
+  width: 431px;
+  height: 611px;
+  margin-left: 24px;
+}
+.main .recommended_works .core .select_area .upper_left_frame {
+  position: absolute;
+  height: 16.36%;
+  top: 0;
+  left: 0;
+}
+.main .recommended_works .core .select_area .lower_right_frame {
+  position: absolute;
+  height: 16.36%;
+  bottom: 0;
+  right: 0;
+}
+.main .recommended_works .core .select_area .options {
+  width: 357px;
+  height: 548px;
+  position: relative;
+  top: 38px;
+  left: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.main .recommended_works .core .select_area .options .selection {
+  position: relative;
+  width: 357px;
+  height: 104px;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.main .recommended_works .core .select_area .options .selection .info {
+  position: inherit;
+  top: 21px;
+  height: 29.85%;
+  padding-left: 28px;
+  opacity: 1;
+}
+.main .recommended_works .core .select_area .options .selection .info p {
+  margin: 0;
+  font-family: Source Han Sans;
+  font-size: var(--font-size-small);
+  font-weight: normal;
+  line-height: normal;
+  letter-spacing: 0em;
+  font-variation-settings: "opsz" auto;
+  font-feature-settings: "kern" on;
+  color: var(--core-color-3);
+}
+.main .recommended_works .core .select_area .options .selection .game_name {
+  position: relative;
+  top: 2px;
+  height: 52.24%;
+  padding-left: 28px;
+  opacity: 1;
+}
+.main .recommended_works .core .select_area .options .selection .game_name p {
+  margin: 0;
+  font-family: Source Han Sans;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: normal;
+  letter-spacing: 0em;
+  font-variation-settings: "opsz" auto;
+  font-feature-settings: "kern" on;
+  color: var(--core-color-3);
+}
+.main .recommended_works .core .select_area .options .selection .devide_line {
+  position: relative;
+  width: 354px;
+  height: 0;
+  opacity: 1;
+  border: 1px solid var(--core-color-4);
+}
+.main .recommended_works .core .select_area .options .selection .devide_line .rectangle {
+  position: absolute;
+  left: 344px;
+  top: -4.5px;
+  width: 9px;
+  height: 9px;
+  opacity: 1;
+  background-color: var(--core-color-4);
+}
+.main .recommended_works .core .select_area .options .selection .last_line {
+  visibility: hidden;
+}
+
+/*# sourceMappingURL=recommended_works.css.map */
