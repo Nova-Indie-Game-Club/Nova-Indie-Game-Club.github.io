@@ -55,20 +55,31 @@ pub async fn collect_database_to_file(
             let introduce = get_plain_text_or_none(&properties.get("Introduce").unwrap())
                 .unwrap_or("".to_string());
             let tags = get_multi_selected_or_none(&properties.get("Tag").unwrap());
-            let auto_collection = get_checkbox_or_none(&properties.get("AutoCollection").unwrap());
+            let auto_collection = get_auto_fill(&properties.get("AutoCollection").unwrap());
             let gamejams = get_multi_selected_or_none(&properties.get("GameJam").unwrap());
             let nova_gamejams = get_multi_selected_or_none(&properties.get("NovaGameJam").unwrap());
             let mut platforms = Vec::<Platform>::new();
             push_platform_when_exist(&properties, "Itch", &mut platforms, PlatformType::Itch);
             push_platform_when_exist(&properties, "Steam", &mut platforms, PlatformType::Steam);
-            push_platform_when_exist(&properties, "GameCore", &mut platforms, PlatformType::GameCore);
-            push_platform_when_exist(&properties, "HomePage", &mut platforms, PlatformType::HomePage);
+            push_platform_when_exist(
+                &properties,
+                "GameCore",
+                &mut platforms,
+                PlatformType::GameCore,
+            );
+            push_platform_when_exist(
+                &properties,
+                "HomePage",
+                &mut platforms,
+                PlatformType::HomePage,
+            );
 
             let authors = parse_authors(
                 &properties.get("Author").unwrap(),
                 &properties.get("AuthorLink").unwrap(),
             );
-            let submission_date = if let PageProperty::Date { // standard format with date and time
+            let submission_date = if let PageProperty::Date {
+                // standard format with date and time
                 date:
                     Some(DatePropertyValue {
                         start: Some(DateOrDateTime::DateTime(it)),
@@ -78,7 +89,8 @@ pub async fn collect_database_to_file(
             } = properties.get("SubmissionDate").unwrap()
             {
                 it.clone().to_rfc3339()
-            } else if let PageProperty::Date { // date only
+            } else if let PageProperty::Date {
+                // date only
                 date:
                     Some(DatePropertyValue {
                         start: Some(DateOrDateTime::Date(it)),
@@ -88,22 +100,24 @@ pub async fn collect_database_to_file(
             } = properties.get("SubmissionDate").unwrap()
             {
                 format!("{}T00:00:00+00:00", it.clone().to_string())
-            }  
-            else {
+            } else {
                 DateTime::<Utc>::default().to_rfc3339()
             };
 
-            let cover = if auto_collection.unwrap() {
-                if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
-                    let res = collect_cover_image(id.as_str(), itch_url).await.unwrap();
-                    to_download.push(res.clone());
-                    Some(res.1.replace("static/", "")) 
+            let cover = if let Some(it) = auto_collection.clone() {
+                if it == PlatformType::Itch {
+                    if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
+                        let res = collect_cover_image(id.as_str(), itch_url).await.unwrap();
+                        to_download.push(res.clone());
+                        Some(res.1.replace("static/", ""))
+                    } else {
+                        None
+                    }
                 } else {
                     None
                 }
             } else {
-                if let PageProperty::Files { files, .. } = properties.get("Cover").unwrap()
-                {
+                if let PageProperty::Files { files, .. } = properties.get("Cover").unwrap() {
                     if let Some(it) = files.get(0) {
                         let file_info = parse_url_to_file_info(&parse_file_url(&it.file)).unwrap();
                         let pos = format!(
@@ -120,13 +134,21 @@ pub async fn collect_database_to_file(
                     None
                 }
             };
-
-            let screenshots: Vec<String> = if auto_collection.unwrap() {
-                if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
-                    let mut res = collect_screenshot_images(id.as_str(), itch_url).await.unwrap();
-                    let vec = res.iter().map(|item| {item.1.replace("static/", "")}).collect();
-                    to_download.append(&mut res);
-                    vec
+            let screenshots: Vec<String> = if let Some(it) = auto_collection.clone() {
+                if it == PlatformType::Itch {
+                    if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
+                        let mut res = collect_screenshot_images(id.as_str(), itch_url)
+                            .await
+                            .unwrap();
+                        let vec = res
+                            .iter()
+                            .map(|item| item.1.replace("static/", ""))
+                            .collect();
+                        to_download.append(&mut res);
+                        vec
+                    } else {
+                        vec![]
+                    }
                 } else {
                     vec![]
                 }
@@ -150,14 +172,17 @@ pub async fn collect_database_to_file(
                     vec![]
                 }
             };
-            
-            let class = if let PageProperty::Select { id, select } = properties.get("Class").unwrap() {
-                if select.name.clone().unwrap_or_default() == "Spotlight" {
-                    Class::Spotlight
+
+            let class =
+                if let PageProperty::Select { id, select } = properties.get("Class").unwrap() {
+                    if select.name.clone().unwrap_or_default() == "Spotlight" {
+                        Class::Spotlight
+                    } else {
+                        Class::Normal
+                    }
                 } else {
                     Class::Normal
-                } 
-            } else { Class::Normal };
+                };
             Work {
                 id,
                 name,
@@ -194,10 +219,10 @@ pub async fn collect_database_to_file(
     Ok(())
 }
 
-fn get_itch_url_or_none(platforms: Vec::<Platform>) -> Option<String> {
+fn get_itch_url_or_none(platforms: Vec<Platform>) -> Option<String> {
     for element in platforms {
         if element.platform_type == PlatformType::Itch {
-            return Some(element.url)
+            return Some(element.url);
         }
     }
     None
@@ -245,7 +270,7 @@ fn push_platform_when_exist(
     props: &HashMap<String, PageProperty>,
     name: &str,
     vec: &mut Vec<Platform>,
-    platform_type: PlatformType
+    platform_type: PlatformType,
 ) {
     if let Some(PageProperty::Url { id, url }) = props.get(name) {
         if let Some(it) = url {
@@ -269,6 +294,18 @@ pub fn get_multi_selected_or_none(prop: &PageProperty) -> Vec<SelectedValue> {
     }
 }
 
+pub fn get_auto_fill(prop: &PageProperty) -> Option<PlatformType> {
+    if let PageProperty::Select {
+        id: Some(id),
+        select,
+    } = prop
+    {
+        let ret = PlatformType::from_en_id(&id);
+        ret
+    } else {
+        None
+    }
+}
 pub fn get_plain_text_or_none(prop: &PageProperty) -> Option<String> {
     if let PageProperty::RichText { id, rich_text } = prop {
         Some(tool::get_plain_string(rich_text))
@@ -287,12 +324,12 @@ pub fn get_checkbox_or_none(prop: &PageProperty) -> Option<bool> {
 
 pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<(String, String)> {
     let mut result: (String, String) = (String::new(), String::new());
-    
+
     print!("Collect cover for \"{}\": ", id);
-    
+
     // Get Response
     let response = reqwest::get(itch_url).await;
-    match  response {
+    match response {
         Err(e) => println!("Failed when connecting server! {}", e),
         _ => {
             // Collect element
@@ -304,27 +341,32 @@ pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<(String, 
             println!("Success.");
 
             // Get link and download
-            let src = list.last().unwrap().value().attr("src").unwrap().to_string();
+            let src = list
+                .last()
+                .unwrap()
+                .value()
+                .attr("src")
+                .unwrap()
+                .to_string();
             let file_info = parse_url_to_file_info(&src).unwrap();
-            let path = format!(
-                "static/assets/works/{}/cover.{}",
-                id,
-                file_info.file_ext
-            );
+            let path = format!("static/assets/works/{}/cover.{}", id, file_info.file_ext);
             result = (src, path);
-        },
+        }
     }
     Ok(result)
 }
 
-pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec<(String, String)>> {
-    let mut result : Vec<(String, String)> = Vec::new();
+pub async fn collect_screenshot_images(
+    id: &str,
+    itch_url: String,
+) -> Result<Vec<(String, String)>> {
+    let mut result: Vec<(String, String)> = Vec::new();
 
     print!("Collect screenshots for \"{}\": ", id);
 
     // Get Response
     let response = reqwest::get(itch_url).await;
-    match  response {
+    match response {
         Err(e) => println!("Failed when connecting server! {}", e),
         _ => {
             // Collect elements
@@ -342,14 +384,12 @@ pub async fn collect_screenshot_images(id: &str, itch_url: String) -> Result<Vec
                 let file_info = parse_url_to_file_info(&href).unwrap();
                 let path = format!(
                     "static/assets/works/{}/screenshot_{}.{}",
-                    id,
-                    index,
-                    file_info.file_ext
+                    id, index, file_info.file_ext
                 );
                 result.push((href, path));
                 index += 1;
             }
-        },
+        }
     }
     Ok(result)
 }
@@ -416,6 +456,4 @@ pub fn read_works(folder_path: &str) -> Result<Vec<Work>> {
 }
 
 #[cfg(test)]
-mod test {
-
-}
+mod test {}
