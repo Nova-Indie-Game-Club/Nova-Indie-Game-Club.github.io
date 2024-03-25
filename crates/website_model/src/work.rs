@@ -1,4 +1,6 @@
 
+use std::str;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
@@ -27,6 +29,22 @@ impl PlatformType {
             PlatformType::GameCore => "机核".to_string(),
             PlatformType::HomePage => "主页".to_string(),
         }
+    }
+
+    pub fn from_en_id(id: &str) -> Option<Self>{
+        if id == "Itch" {
+            return Some(PlatformType::Itch);
+        }
+        if id == "GameCore" {
+            return Some(PlatformType::GameCore);
+        }
+        if id == "Steam" {
+            return Some(PlatformType::Steam);
+        }
+        if id == "HomePage" {
+            return Some(PlatformType::HomePage);
+        }
+        return Option::None;
     }
 }
 
@@ -57,8 +75,8 @@ pub struct Work {
     pub tags:  Vec<SelectedValue>,
     pub gamejams: Vec<SelectedValue>,
     pub nova_gamejams: Vec<SelectedValue>,
-    pub auto_collection: Option<bool>,
-    pub platforms: Vec<Platform>, 
+    pub auto_collection: Option<PlatformType>,
+    pub platforms: Vec<Platform>,
     pub authors: Vec<Author>,
     /// assets path of cover.
     pub cover: Option<String>,
