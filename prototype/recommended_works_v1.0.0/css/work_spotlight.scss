@@ -23,31 +23,34 @@
     --navi-rigth-margin: 5vw;
 }
 
-.work_spotlight{
+.work-spotlight {
     display: flex;
     left: 931px;
     width: 626px;
     height: 611px;
     justify-content: flex-start;
     flex-direction: column;
-    .container{
+
+    .container {
         position: relative;
-        margin:0;
+        margin: 0;
         width: 594px;
         height: 333.23px;
         align-items: center;
         justify-content: center;
-        .content{
+
+        .content {
             position: relative;
             flex: none;
-            display: flex; 
-            flex-wrap: nowrap;   
+            display: flex;
+            flex-wrap: nowrap;
             width: 100%;
             height: 100%;
             box-sizing: border-box;
             border: 2px solid var(--core-color-0);
             background: var(--background-color);
-            .game_image{
+
+            .game-image {
                 flex: none;
                 width: 100%;
                 height: 100%;
@@ -57,47 +60,61 @@
                 position: absolute;
                 left: 0;
                 top: 0;
-                img{
+
+                img {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
                 }
             }
-            .pre_image{
+
+            .pre-image {
                 opacity: 0;
                 transform: translateX(-100%);
             }
-            .current_image{
+
+            .current-image {
                 opacity: 1;
                 transform: translateX(0);
             }
-            .next_image{
+
+            .next-image {
                 opacity: 0;
                 transform: translateX(100%);
             }
         }
 
-    } 
-    .gallery{
+    }
+
+    .gallery {
         display: flex;
         justify-content: space-between;
         width: 594px;
         height: 63.2px;
         margin-top: 10.17px;
-        .item{
+
+        .item {
             width: 111px;
             height: 62px;
-            img{
+
+            img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
             }
+            cursor: pointer;
+            transition-property: outline-color;
+            transition-duration: 0.3s;
+            outline: 2px solid transparent;
+            outline-offset: -2px;
         }
-        :hover{
-            border: 2px solid var(--core-color-0);
+
+        .item:hover {
+            outline-color: var(--core-color-0);
         }
     }
-    .author{
+
+    .author {
         position: inherit;
         left: 0px;
         top: 0px;
@@ -105,20 +122,22 @@
         height: 37px;
         opacity: 1;
         margin-top: 17.6px;
-        p{
+
+        p {
             margin: 0;
             font-family: Source Han Sans;
             font-size: var(--font-size-bigger);
             font-weight: bold;
             line-height: normal;
             letter-spacing: 0em;
-                
+
             font-variation-settings: "opsz" auto;
             font-feature-settings: "kern" on;
             color: var(--theme-color);
-        }    	
+        }
     }
-    .discription{
+
+    .discription {
         position: inherit;
         left: 0px;
         top: 44px;
@@ -127,45 +146,51 @@
         opacity: 1;
         margin-top: 7px;
         overflow: hidden;
-        p{
+
+        p {
             margin: 0;
             font-family: Source Han Sans;
             font-size: 20px;
             font-weight: normal;
             line-height: normal;
-            letter-spacing: 0em; 
+            letter-spacing: 0em;
 
             font-variation-settings: "opsz" auto;
             font-feature-settings: "kern" on;
             color: var(--core-color-0);
         }
     }
-    .links{
+
+    .links {
         display: flex;
         flex-direction: row;
-        .link{
+
+        .link {
             width: 102px;
-            height:35px;
+            height: 35px;
             margin-right: 44px;
             display: flex;
             position: relative;
-            
+
             font-family: Source Han Sans;
             font-size: var(--font-size-bigger);
             font-weight: bold;
             line-height: normal;
             letter-spacing: 0em;
 
-            a{
+            a {
                 text-decoration: none;
-                .link_icon{
+
+                .link-icon {
                     display: inline-block;
-                }   
-            } 
-            :hover{
+                }
+            }
+
+            :hover {
                 color: var(--background-color);
                 background-color: var(--core-color-0);
             }
+
             //添加下划线
             &::after {
                 content: "";
