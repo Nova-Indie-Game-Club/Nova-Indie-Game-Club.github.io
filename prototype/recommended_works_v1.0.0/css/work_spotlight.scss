@@ -163,10 +163,16 @@
 
     .links {
         display: flex;
-        flex-direction: row;
+        flex-wrap: nowrap;
+        .itch-link{
+            width: 102px;
+        }
+
+        .steam-link{
+            width: 100px;
+        }
 
         .link {
-            width: 102px;
             height: 35px;
             margin-right: 44px;
             display: flex;
@@ -179,9 +185,12 @@
             letter-spacing: 0em;
 
             a {
+                width: 100%;
                 text-decoration: none;
 
                 .link-icon {
+                    fill: var(--core-color-0);
+                    transition: fill 0.15s ease-in;
                     display: inline-block;
                 }
             }
@@ -189,6 +198,10 @@
             :hover {
                 color: var(--background-color);
                 background-color: var(--core-color-0);
+
+                .link-icon{
+                    fill: var(--background-color);
+                }
             }
 
             //添加下划线
@@ -197,7 +210,7 @@
                 position: absolute;
                 bottom: 0;
                 left: 0;
-                width: 100%;
+                width: 99%;
                 height: 0px;
                 border: 1px solid var(--core-color-4);
             }
