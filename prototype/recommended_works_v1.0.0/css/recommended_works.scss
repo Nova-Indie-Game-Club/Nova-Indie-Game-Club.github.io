@@ -21,41 +21,45 @@
   --navi-rigth-margin: 5vw;
 }
 
-.main{
-  .recommended_works{  
+.main {
+  .recommended-works {
     width: 100%;
     margin: 52px auto;
     padding-top: 8px;
     padding-bottom: 8px;
 
-    .title{
+    .title {
       display: flex;
       margin: 30px auto;
       width: 252.43px;
       height: 65.83px;
     }
-    .core{
+
+    .core {
       display: flex;
       justify-content: center;
-      .select_area{
+
+      .select-area {
         position: relative;
         width: 431px;
         height: 611px;
         margin-left: 24px;
-        
-        .upper_left_frame{
+
+        .upper-left-frame {
           position: absolute;
           height: 16.36%;
           top: 0;
           left: 0;
         }
-        .lower_right_frame{
+
+        .lower-right-frame {
           position: absolute;
           height: 16.36%;
           bottom: 0;
           right: 0;
         }
-        .options{
+
+        .options {
           width: 357px;
           height: 548px;
           position: relative;
@@ -64,7 +68,14 @@
           display: flex;
           flex-direction: column;
           justify-content: space-evenly;
-          .selection{
+
+          .selection:hover {
+            * {
+              color: var(--core-color-1);
+            }
+          }
+
+          .selection {
             position: relative;
             width: 357px;
             height: 104px;
@@ -72,13 +83,21 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            .info{
+            cursor: pointer;
+
+            p {
+              transition-property: all;
+              transition-duration: 0.3s;
+            }
+
+            .info {
               position: inherit;
               top: 21px;
-              height: 29.85%; 
+              height: 29.85%;
               padding-left: 28px;
-              opacity: 1;  
-              p{
+              opacity: 1;
+
+              p {
                 margin: 0;
                 font-family: Source Han Sans;
                 font-size: var(--font-size-small);
@@ -91,13 +110,15 @@
                 color: var(--core-color-3);
               }
             }
-            .game_name{
+
+            .game-name {
               position: relative;
               top: 2px;
               height: 52.24%;
               padding-left: 28px;
               opacity: 1;
-              p{
+
+              p {
                 margin: 0;
                 font-family: Source Han Sans;
                 font-size: 24px;
@@ -110,28 +131,37 @@
                 color: var(--core-color-3);
               }
             }
-            .devide_line{
+
+            .devide-line {
               position: relative;
               width: 354px;
               height: 0;
               opacity: 1;
               border: 1px solid var(--core-color-4);
-              .rectangle{
+
+              .rectangle {
                 position: absolute;
                 left: 344px;
-                top:-4.5px;
+                top: -4.5px;
                 width: 9px;
                 height: 9px;
                 opacity: 1;
-                background-color:var(--core-color-4);
+                background-color: var(--core-color-4);
               }
             }
-            .last_line{
+
+            .last-line {
               visibility: hidden;
             }
           }
+
+          .selection:hover {
+            p {
+              color: var(--core-color-0);
+            }
+          }
         }
-      } 
+      }
     }
   }
 }
