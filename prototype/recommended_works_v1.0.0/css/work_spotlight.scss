@@ -88,10 +88,11 @@
 
     .gallery {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         width: 594px;
         height: 63.2px;
         margin-top: 10.17px;
+        gap: 9.5px;
 
         .item {
             width: 111px;
