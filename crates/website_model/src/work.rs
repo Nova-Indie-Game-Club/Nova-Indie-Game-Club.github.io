@@ -31,6 +31,15 @@ impl PlatformType {
         }
     }
 
+    pub fn type_name(&self) -> String{
+        match self {
+            PlatformType::Itch => "itch".to_string(),
+            PlatformType::Steam => "steam".to_string(),
+            PlatformType::GameCore => "gamecore".to_string(),
+            PlatformType::HomePage => "homepage".to_string(),
+        }
+    }
+
     pub fn from_en_id(id: &str) -> Option<Self>{
         if id == "Itch" {
             return Some(PlatformType::Itch);

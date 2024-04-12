@@ -1,4 +1,4 @@
-use std::{ops::Deref, rc::Rc, vec};
+use std::{rc::Rc, vec};
 
 use sycamore::prelude::*;
 use website_model::work::{Platform, Work};
@@ -6,7 +6,7 @@ use website_model::work::{Platform, Work};
 use crate::{
     components::SvgCode,
     svg,
-    tool::{link_in_new_tab, statics},
+    tool::statics,
 };
 
 #[derive(Prop)]
@@ -48,6 +48,7 @@ struct WorkPanelContext<'a> {
     pub game_index: &'a Signal<usize>,
     pub image_index: &'a Signal<usize>,
     pub focused_image: &'a Signal<String>,
+    pub select_item: &'a Signal<Vec<(usize, String, String, String)>>,
     pub works: &'a Signal<Vec<Work>>,
 }
 impl<'a> WorkPanelContext<'a> {
@@ -69,6 +70,8 @@ impl<'a> WorkPanelContext<'a> {
         if self.works.get().len() > 0 {
             self.set_work(&self.works.get()[*self.game_index.get()])
         }
+
+
     }
     pub fn set_focused_image(&self, index: usize) {
         let len = self.screenshots.get().len();
@@ -83,11 +86,17 @@ impl<'a> WorkPanelContext<'a> {
         );
     }
 
-    pub fn offset_work_index(&self, offset: i32) {
-        let len = self.works.get().len() as i32;
-        let offset = offset % len;
+    pub fn set_work_index(&self, index: usize) {
         self.game_index
-            .set(((*self.game_index.get() as i32 + len + offset) % len) as usize);
+            .set(index);
+    }
+
+    pub fn refresh_select_list(&self) {
+        let mut vec: Vec<(usize, String, String, String)> = vec![];
+        for i in 0..self.works.get().len() {
+            vec.push((i.clone(), self.works.get()[i].name.clone(), self.works.get()[i].plain_author_string(), self.works.get()[i].submission_date.date_rfc3339[0..=9].to_string()));
+        }
+        self.select_item.set(vec);
     }
 }
 
@@ -105,98 +114,107 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
             cover: create_signal(cx, "".to_string()),
             game_index: create_signal(cx, 0usize),
             image_index: create_signal(cx, 0usize),
+            select_item: create_signal(cx, vec![]),
             works: create_signal(cx, (*props.works).clone()),
         },
     );
 
     //---- Work Change ---------------------
     context.get().refresh_work();
-
-    let on_click_previous = move |_| {
-        context.get().offset_work_index(-1);
-        context.get().refresh_work();
-    };
-    let on_click_next = move |_| {
-        context.get().offset_work_index(1);
-        context.get().refresh_work();
-    };
-
+    context.get().refresh_select_list();
     //---- View -------------------------
 
     view! { cx,
         // Determine whether there is work.
         (if context.get().works.get().len() > 0 {
             view! { cx,
-                div(class="work-container"){
-                    //column
-                    div(on:click=on_click_previous,class="arrow",id="recommended-works-previous-game-button"){
-                        SvgCode(class="arrow-svg", code=svg::LEFT_TRI_ARROW)
-                    }
-                    div(class="work-content"){
-                        div(class="image-panel"){
-                            //column
-                            div(class="focused-image"){
-                                img(src=(statics(context.get().focused_image.get().as_str()))) //todo test
-                            }
-                            div(class="gallery"){
-                                Indexed(
-                                    iterable=context.get().screenshots,
-                                    view= move |cx, it| {
-                                    let index = it.0.clone();
-                                    view! { cx,
-                                        div(class="item", on:click= move |_|{
-                                            context.get().set_focused_image(index);
-                                        }){
-                                            img(src=(statics(it.1.as_str())))
-                                        }
-                                        }
-                                    }
-                                )
+                // Spotlight
+                div(class="work-spotlight"){
+                    // Screenshots
+                    div(class="container"){
+                        div(class="content")
+                        {
+                            div(class="game-image current_image"){
+                                img(src=(statics(context.get().focused_image.get().as_str())))
                             }
                         }
-                        div(class="info-panel"){
-                        div(class="detail"){
-                            //row
-                            div(class="left-part"){
-                                //column
-                                div(class="cover"){
-                                    img(src=(statics(context.get().cover.get().as_str())), alt="cover")
+                    }
+                    // Gallery
+                    div(class="gallery"){
+                        Indexed(
+                            iterable=context.get().screenshots,
+                            view= move |cx, it| {
+                            let index = it.0.clone();
+                            view! { cx,
+                                div(class="item", on:click= move |_|{
+                                    context.get().set_focused_image(index);
+                                }){
+                                    img(src=(statics(it.1.as_str())))
                                 }
-                                div(class="platform"){
-                                    Indexed(
-                                        iterable=context.get().platforms,
-                                        view=|cx, it| view!{ cx,
-                                            div(class="link-button", onclick=link_in_new_tab(&it.url)){
-                                                //row
-                                                div(class="text"){
-                                                    (it.platform_type.display_name())
-                                                }
-                                                SvgCode(class="link-icon", code=svg::LINK_ARROW)
+                                }
+                            }
+                        )
+                    }
+                    // Author
+                    div(class="author"){
+                        p() {
+                            (format!("By {}", context.get().authors.get()))
+                        }
+                    }
+                    // Description
+                    div(class="description"){
+                        p() {
+                            (context.get().introduce.get())
+                        }
+                    }
+                    // Links
+                    div(class="links"){
+                        Indexed(
+                            iterable=context.get().platforms,
+                            view=|cx, it| view!{ cx,
+                                div(class="link"){
+                                    a(href=&it.url){
+                                        (it.platform_type.display_name())
+                                        SvgCode(class="link-icon", code=svg::LINK_ARROW)
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+                
+                // Select Area
+                div(class="select-area"){
+                    SvgCode(class="upper-left-frame", code=svg::UPPER_LEFT_FRAME)
+                    SvgCode(class="lower-right-frame", code=svg::LOWER_RIGHT_FRAME)
+                    // Options
+                    div(class="options"){
+                        Indexed(
+                            iterable=context.get().select_item,
+                            view= move |cx, it| {
+                                let index = it.0.clone();
+                                view! { cx,
+                                    div(class="selection", on:click= move |_|{
+                                        context.get().set_work_index(index);
+                                        context.get().refresh_work();
+                                    }){
+                                        div(class="info"){
+                                            p(){
+                                                (format!("{}/{}", it.2.clone(), it.3.clone()))
                                             }
                                         }
-                                    )
-                                }
-                            }
-                            div(class="right-part"){
-                                //column
-                                div{
-                                    h3{
-                                        (context.get().name.get())
-                                    }
-                                    p(class="text") {
-                                        (context.get().introduce.get())
+                                        div(class="game-name"){
+                                            p(){
+                                                (it.1.clone())
+                                            }
+                                        }
+                                        div(class="devide-line"){
+                                            div(class="rectangle"){}
+                                        }
                                     }
                                 }
-                                p(class="author") {
-                                    (format!("作者: {}", context.get().authors.get()))
-                                }
                             }
-                        }
-                    }
-
-                    }
-                    div(on:click=on_click_next,class="arrow",id="recommended-works-next-game-button"){
-                        SvgCode(class="arrow-svg", code=svg::RIGHT_TRI_ARROW)
+                        ) 
                     }
                 }
             }

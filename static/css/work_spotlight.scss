@@ -1,0 +1,219 @@
+//因为详细展示那部分要被“最近作品”也复用，所以我们把这个组件开一个单独的样式比较好
+//这里起名由开发者决定，不确定的时候可以问问群里的伙伴
+:root {
+    --hlt-color: black;
+    --core-color-0: #3B3936; // Default Text Color
+    --core-color-1: #605d5a;
+    --core-color-2: rgb(137, 133, 128);
+    --core-color-3: #a4a29d;
+    --core-color-4: #ccc8c8;
+    --core-color-5: #E2E2E2;
+    --core-color-6: #EFEFEF;
+    --theme-color: #FFC71F;
+    --background-color: white;
+    --url-color: #D82D33;
+
+    --font-size-small: 14px;
+    --font-size-normal: 16px;
+    --font-size-big: 18px;
+    --font-size-bigger: 24px;
+
+    --navi-height: 50px;
+    --navi-left-margin: 2vw;
+    --navi-rigth-margin: 5vw;
+}
+
+.work-spotlight {
+    display: flex;
+    left: 931px;
+    width: 626px;
+    height: 611px;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    .container {
+        position: relative;
+        margin: 0;
+        width: 594px;
+        height: 333.23px;
+        align-items: center;
+        justify-content: center;
+
+        .content {
+            position: relative;
+            flex: none;
+            display: flex;
+            flex-wrap: nowrap;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            border: 2px solid var(--core-color-0);
+            background: var(--background-color);
+
+            .game-image {
+                flex: none;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                left: 0;
+                top: 0;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .pre-image {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+
+            .current-image {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            .next-image {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+    }
+
+    .gallery {
+        display: flex;
+        justify-content: space-between;
+        width: 594px;
+        height: 63.2px;
+        margin-top: 10.17px;
+
+        .item {
+            width: 111px;
+            height: 62px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            cursor: pointer;
+            transition-property: outline-color;
+            transition-duration: 0.3s;
+            outline: 2px solid transparent;
+            outline-offset: -2px;
+        }
+
+        .item:hover {
+            outline-color: var(--core-color-0);
+        }
+    }
+
+    .author {
+        position: inherit;
+        left: 0px;
+        top: 0px;
+        width: 425px;
+        height: 37px;
+        opacity: 1;
+        margin-top: 17.6px;
+
+        p {
+            margin: 0;
+            font-family: Source Han Sans;
+            font-size: var(--font-size-bigger);
+            font-weight: bold;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            font-variation-settings: "opsz" auto;
+            font-feature-settings: "kern" on;
+            color: var(--theme-color);
+        }
+    }
+
+    .discription {
+        position: inherit;
+        left: 0px;
+        top: 44px;
+        width: 626px;
+        height: 102px;
+        opacity: 1;
+        margin-top: 7px;
+        overflow: hidden;
+
+        p {
+            margin: 0;
+            font-family: Source Han Sans;
+            font-size: 20px;
+            font-weight: normal;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            font-variation-settings: "opsz" auto;
+            font-feature-settings: "kern" on;
+            color: var(--core-color-0);
+        }
+    }
+
+    .links {
+        display: flex;
+        flex-wrap: nowrap;
+        .itch-link{
+            width: 102px;
+        }
+
+        .steam-link{
+            width: 100px;
+        }
+
+        .link {
+            height: 35px;
+            margin-right: 44px;
+            display: flex;
+            position: relative;
+
+            font-family: Source Han Sans;
+            font-size: var(--font-size-bigger);
+            font-weight: bold;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            a {
+                width: 100%;
+                text-decoration: none;
+
+                .link-icon {
+                    fill: var(--core-color-0);
+                    transition: fill 0.15s ease-in;
+                    display: inline-block;
+                }
+            }
+
+            :hover {
+                color: var(--background-color);
+                background-color: var(--core-color-0);
+
+                .link-icon{
+                    fill: var(--background-color);
+                }
+            }
+
+            //添加下划线
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 99%;
+                height: 0px;
+                border: 1px solid var(--core-color-4);
+            }
+        }
+    }
+}
