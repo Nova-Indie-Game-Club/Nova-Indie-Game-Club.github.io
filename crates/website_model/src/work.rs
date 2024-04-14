@@ -84,7 +84,6 @@ pub struct Work {
     pub tags:  Vec<SelectedValue>,
     pub gamejams: Vec<SelectedValue>,
     pub nova_gamejams: Vec<SelectedValue>,
-    pub auto_collection: Option<PlatformType>,
     pub platforms: Vec<Platform>,
     pub authors: Vec<Author>,
     /// assets path of cover.
@@ -93,7 +92,8 @@ pub struct Work {
     pub screenshots: Vec<String>,
     pub submission_date: DateTimeUtc,
     pub last_edited_date: DateTimeUtc,
-    pub class: Class
+    pub class: Class,
+    pub auto_collection: Option<PlatformType>,
 }
 
 impl Work {
