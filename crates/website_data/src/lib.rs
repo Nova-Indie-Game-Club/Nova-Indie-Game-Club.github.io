@@ -2,7 +2,10 @@ use anyhow::*;
 use chrono::{DateTime, Utc};
 use notion_client::{
     endpoints::{databases::query::request::QueryDatabaseRequest, Client},
-    objects::page::{DateOrDateTime, DatePropertyValue, FilePropertyValue, Page, PageProperty, SelectPropertyValue},
+    objects::page::{
+        DateOrDateTime, DatePropertyValue, FilePropertyValue, Page, PageProperty,
+        SelectPropertyValue,
+    },
 };
 use std::{
     collections::HashMap,
@@ -122,16 +125,19 @@ pub async fn collect_database_to_file(
                 &page,
             )
             .await;
-            let class =
-                if let PageProperty::Select { id, select: Some(select) } = properties.get("Class").unwrap() {
-                    if select.name.clone().unwrap_or_default() == "Spotlight" {
-                        Class::Spotlight
-                    } else {
-                        Class::Normal
-                    }
+            let class = if let PageProperty::Select {
+                id,
+                select: Some(select),
+            } = properties.get("Class").unwrap()
+            {
+                if select.name.clone().unwrap_or_default() == "Spotlight" {
+                    Class::Spotlight
                 } else {
                     Class::Normal
-                };
+                }
+            } else {
+                Class::Normal
+            };
             Work {
                 id,
                 name,
@@ -319,7 +325,11 @@ pub fn get_multi_selected_or_none(prop: &PageProperty) -> Vec<SelectedValue> {
 }
 
 pub fn get_auto_collection(prop: &PageProperty) -> Option<PlatformType> {
-    if let PageProperty::Select { id: _, select: Some(select) } = prop {
+    if let PageProperty::Select {
+        id: _,
+        select: Some(select),
+    } = prop
+    {
         let ret = PlatformType::from_en_id(select.name.clone().unwrap_or_default().as_str());
         ret
     } else {

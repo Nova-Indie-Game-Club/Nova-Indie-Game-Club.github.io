@@ -50,10 +50,10 @@ pub fn parse_file_download_url(it: &file::File, id: &String) -> String {
     url
 }
 
-pub fn parse_file_info(it: &file::File) -> Result<FileInfo>{
+pub fn parse_file_info(it: &file::File) -> Result<FileInfo> {
     let url = match it {
         file::File::External { external } => external.url.clone(),
-        file::File::File { file } => file.url.clone()
+        file::File::File { file } => file.url.clone(),
     };
     parse_url_to_file_info(&url)
 }

@@ -1,4 +1,3 @@
-
 use std::str;
 
 use serde::{Deserialize, Serialize};
@@ -22,7 +21,7 @@ pub struct Platform {
     pub url: String,
 }
 impl PlatformType {
-    pub fn display_name(&self) -> String{
+    pub fn display_name(&self) -> String {
         match self {
             PlatformType::Itch => "itch.io".to_string(),
             PlatformType::Steam => "Steam".to_string(),
@@ -31,7 +30,7 @@ impl PlatformType {
         }
     }
 
-    pub fn type_name(&self) -> String{
+    pub fn type_name(&self) -> String {
         match self {
             PlatformType::Itch => "itch".to_string(),
             PlatformType::Steam => "steam".to_string(),
@@ -40,7 +39,7 @@ impl PlatformType {
         }
     }
 
-    pub fn from_en_id(id: &str) -> Option<Self>{
+    pub fn from_en_id(id: &str) -> Option<Self> {
         if id == "Itch" {
             return Some(PlatformType::Itch);
         }
@@ -57,23 +56,21 @@ impl PlatformType {
     }
 }
 
-
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
 pub enum Class {
     Spotlight,
-    Normal
+    Normal,
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
-pub struct SelectedValue{
+pub struct SelectedValue {
     pub name: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
-pub struct DateTimeUtc{
-    pub date_rfc3339: String
+pub struct DateTimeUtc {
+    pub date_rfc3339: String,
 }
-
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
 pub struct Work {
@@ -81,7 +78,7 @@ pub struct Work {
     pub name: String,
     pub sub_name: Option<String>,
     pub introduce: String,
-    pub tags:  Vec<SelectedValue>,
+    pub tags: Vec<SelectedValue>,
     pub gamejams: Vec<SelectedValue>,
     pub nova_gamejams: Vec<SelectedValue>,
     pub platforms: Vec<Platform>,
@@ -97,10 +94,19 @@ pub struct Work {
 }
 
 impl Work {
-    pub fn plain_submission_date_day(&self) -> String{
-        self.submission_date.date_rfc3339.split_once("T").unwrap().0.to_string()
+    pub fn plain_submission_date_day(&self) -> String {
+        self.submission_date
+            .date_rfc3339
+            .split_once("T")
+            .unwrap()
+            .0
+            .to_string()
     }
-    pub fn plain_author_string(&self) -> String{
-        self.authors.iter().map(|it| {it.name.clone()}).collect::<Vec<_>>().join(", ")
+    pub fn plain_author_string(&self) -> String {
+        self.authors
+            .iter()
+            .map(|it| it.name.clone())
+            .collect::<Vec<_>>()
+            .join(", ")
     }
 }

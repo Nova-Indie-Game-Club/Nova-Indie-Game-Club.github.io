@@ -3,11 +3,7 @@ use std::{rc::Rc, vec};
 use sycamore::prelude::*;
 use website_model::work::{Platform, Work};
 
-use crate::{
-    components::SvgCode,
-    svg,
-    tool::statics,
-};
+use crate::{components::SvgCode, svg, tool::statics};
 
 #[derive(Prop)]
 pub struct RecentWorkItemProps {
@@ -70,12 +66,10 @@ impl<'a> WorkPanelContext<'a> {
         if self.works.get().len() > 0 {
             self.set_work(&self.works.get()[*self.game_index.get()])
         }
-
-
     }
     pub fn set_focused_image(&self, index: usize) {
         let len = self.screenshots.get().len();
-        self.image_index.set((index + len) % len);//todo fix condition: len = 0
+        self.image_index.set((index + len) % len); //todo fix condition: len = 0
         self.focused_image.set(
             self.screenshots
                 .get()
@@ -87,14 +81,18 @@ impl<'a> WorkPanelContext<'a> {
     }
 
     pub fn set_work_index(&self, index: usize) {
-        self.game_index
-            .set(index);
+        self.game_index.set(index);
     }
 
     pub fn refresh_select_list(&self) {
         let mut vec: Vec<(usize, String, String, String)> = vec![];
         for i in 0..self.works.get().len() {
-            vec.push((i.clone(), self.works.get()[i].name.clone(), self.works.get()[i].plain_author_string(), self.works.get()[i].submission_date.date_rfc3339[0..=9].to_string()));
+            vec.push((
+                i.clone(),
+                self.works.get()[i].name.clone(),
+                self.works.get()[i].plain_author_string(),
+                self.works.get()[i].submission_date.date_rfc3339[0..=9].to_string(),
+            ));
         }
         self.select_item.set(vec);
     }
@@ -182,7 +180,7 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
                         )
                     }
                 }
-                
+
                 // Select Area
                 div(class="select-area"){
                     SvgCode(class="upper-left-frame", code=svg::UPPER_LEFT_FRAME)
@@ -214,7 +212,7 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
                                     }
                                 }
                             }
-                        ) 
+                        )
                     }
                 }
             }

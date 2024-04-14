@@ -7,5 +7,3 @@ pub fn perseus<G: Html>() -> PerseusApp<G> {
         .template(templates::index::get_template())
         .template(templates::about::get_template())
 }
-
-

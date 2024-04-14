@@ -10,7 +10,6 @@ use sycamore::prelude::*;
 use web_sys::Element;
 use website_model::work::{Class, Work};
 
-
 #[derive(Serialize, Deserialize, ReactiveState, Clone)]
 #[rx(alias = "IndexPageStateRx")]
 struct IndexPageState {
@@ -230,9 +229,16 @@ async fn get_build_state(_info: StateGeneratorInfo<()>) -> IndexPageState {
 
     //Get first recent 9 works;
     let recent_works = works.iter().take(9).cloned().collect::<Vec<_>>();
-    let recommended_works: Vec<_> = works.iter().filter(|it|{ it.class == Class::Spotlight }).cloned().collect();
+    let recommended_works: Vec<_> = works
+        .iter()
+        .filter(|it| it.class == Class::Spotlight)
+        .cloned()
+        .collect();
 
-    IndexPageState { recent_works, recommended_works }
+    IndexPageState {
+        recent_works,
+        recommended_works,
+    }
 }
 
 pub fn get_template<G: Html>() -> Template<G> {
