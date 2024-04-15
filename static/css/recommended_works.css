@@ -61,7 +61,6 @@
   left: 40px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
 }
 .main .recommended-works .core .select-area .options .selection:hover * {
   color: var(--core-color-1);
