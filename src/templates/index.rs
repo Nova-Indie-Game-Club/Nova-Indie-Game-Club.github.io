@@ -91,10 +91,11 @@ enum AboutType {
 #[auto_scope]
 fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
     let about_section_text = create_signal(cx, ABOUT_INTRODUCE_TEXT);
-    let recent_work_focused_index = create_signal(cx, 0usize);
+    // let recent_work_focused_index = create_signal(cx, 0usize);
     view! { cx,
         div(class="recent-work-focused"){
-            FocusedWorkPanel(works=state.recommended_works.get())
+            div(class="mask"){}
+            //todo work spotlight
         }
         header{
             div(class="navi"){
