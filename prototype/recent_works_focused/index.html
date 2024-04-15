@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 每个子页面都要导入 root.css，里面有什么内容可以点进去看看  -->
+    <link rel="stylesheet" href="../../static/css/root.css">
+
+    <!-- 因为这部分和其它部分相对独立，所以单开两个样式表
+        一个样式表是精选作品部分的样式，另一个是会被复用的组件的样式（点进 work_spotlight.scss 看注释） -->
+    <!-- To Rust Front End:至于哪部分样式表要被合并到 index.scss 里，按照我想的规范，recommended_works.scss 被合并进去，而组件不合并会比较好 -->
+    <link rel="stylesheet" href="./css/recommended_works.css">
+    <link rel="stylesheet" href="./css/work_spotlight.css">
+    <link rel="stylesheet" href="./css/recent_work_focused.css">
+
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="recent-works-focused">
+        <div class="mask"></div>
+        <div class="work-spotlight">
+            <div class="container">
+                <div class="content">
+                    <div class="game-image game-image"></div>
+                    <div class="game-image game-image"></div>
+                    <div class="game-image current_image">
+                        <img src=../../static/assets/images/works/img_3.png alt="game_name">
+                    </div>
+                    <div class="game-image next-image"></div>
+                    <div class="game-image next-image"></div>
+                </div>
+            </div>
+            <div class="gallery">
+                 <div class="item">
+                    <img src=../../static/assets/images/works/img_3.png>
+                 </div>
+                 <div class="item">
+                    <img src=../../static/assets/images/works/img_3.png>
+                 </div>
+                 <div class="item">
+                    <img src=../../static/assets/images/works/img_3.png>
+                 </div>
+                 <div class="item">
+                    <img src=../../static/assets/images/works/img_3.png>
+                 </div>
+                 <div class="item">
+                    <img src=../../static/assets/images/works/img_3.png>
+                 </div>
+            </div>
+            <div class="author">
+                <p>By# author_name</p>
+            </div>
+            <div class="discription">
+                <p>
+                    森撒很京东安康疯狂但啊司令家疯狂东岸肯静来三啊疯狂激动啊领翻领叫阿赛领积分啦赛将看啊赛况将看塞阿拉发了阿赛季零负担萨里翻领撒旦翻领大囧领森撒很京东安康疯狂但啊司令家疯狂东岸肯静来三啊
+                </p>
+            </div>
+            <div class="links">
+                <div class="link itch-link">
+                    <a href="https://akacmd.itch.io/stoneman-adventure">itch.io
+                        <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="16" height="16" viewBox="0 0 16 16"><g transform="matrix(1,0,0,-1,0,32)"><path d="M11.0423,23.53662L11.0423,16L16,16L16,32L0,32L0,27.042299999999997L7.53658,27.042299999999997L0.0651832,19.57086L3.57084,16.0651996L11.0423,23.53662Z" fill-rule="evenodd" fill-opacity="1"/></g></svg>
+                    </a>
+                </div>
+                <div class="link steam-link">
+                    <a href="https://store.steampowered.com/app/2434860/_/">steam
+                        <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="16" height="16" viewBox="0 0 16 16"><g transform="matrix(1,0,0,-1,0,32)"><path d="M11.0423,23.53662L11.0423,16L16,16L16,32L0,32L0,27.042299999999997L7.53658,27.042299999999997L0.0651832,19.57086L3.57084,16.0651996L11.0423,23.53662Z" fill-rule="evenodd" fill-opacity="1"/></g></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

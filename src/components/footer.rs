@@ -42,7 +42,7 @@ pub fn Footer<G: Html>(cx: Scope, props: FooterProps) -> View<G> {
                                     SvgCode(class="link-icon", code=svg::LINK_ARROW)
                                 }
                             }
-                            (if has_info {view!{cx, 
+                            (if has_info {view!{cx,
                                 div(class="down-part"){
                                     p{ (info) }
                                 }
@@ -60,7 +60,7 @@ pub fn Footer<G: Html>(cx: Scope, props: FooterProps) -> View<G> {
                                     div(class="item-text"){ (it.text) }
                                 }
                             }
-                            (if has_info {view!{cx, 
+                            (if has_info {view!{cx,
                                 div(class="down-part"){
                                     p{ (info) }
                                 }

@@ -1,5 +1,3 @@
-use std::rc::Rc;
-
 use crate::components::footer::FooterItem;
 use crate::components::{footer::Footer, work::*};
 use crate::tool::statics;
@@ -93,7 +91,11 @@ enum AboutType {
 #[auto_scope]
 fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
     let about_section_text = create_signal(cx, ABOUT_INTRODUCE_TEXT);
+    let recent_work_focused_index = create_signal(cx, 0usize);
     view! { cx,
+        div(class="recent-work-focused"){
+            FocusedWorkPanel(works=state.recommended_works.get())
+        }
         header{
             div(class="navi"){
                 div(class="left"){
