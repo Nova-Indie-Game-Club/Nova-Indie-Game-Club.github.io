@@ -25,6 +25,7 @@ pub static ID_ABOUT_JOIN_US: &str = "about_join_us";
 pub static ID_ABOUT_INTRODUCE_TEXT: &str = "about_introduce_text";
 pub static ID_ABOUT_ACTIVITIES_TEXT: &str = "about_activities_text";
 pub static ID_ABOUT_JOIN_US_TEXT: &str = "about_join_us_text";
+pub static ID_RECENT_WORK_FOCUSED: &str = "recent-work-focused";
 
 fn id_selector(input: &str) -> String {
     format!("#{}", input)
@@ -34,28 +35,28 @@ fn on_about_section_option_clicked(switch_to: AboutType, text: &Signal<&str>) {
     let window = web_sys::window().unwrap();
     let document = window.document().unwrap();
     let introduce = document
-        .query_selector(id_selector(ID_ABOUT_INTRODUCE).as_str())
+        .query_selector(&id_selector(ID_ABOUT_INTRODUCE))
         .unwrap()
         .unwrap();
     let activities = document
-        .query_selector(id_selector(ID_ABOUT_ACTIVITIES).as_str())
+        .query_selector(&id_selector(ID_ABOUT_ACTIVITIES))
         .unwrap()
         .unwrap();
     let join_us = document
-        .query_selector(id_selector(ID_ABOUT_JOIN_US).as_str())
+        .query_selector(&id_selector(ID_ABOUT_JOIN_US))
         .unwrap()
         .unwrap();
 
     let introduce_text = document
-        .query_selector(id_selector(ID_ABOUT_INTRODUCE_TEXT).as_str())
+        .query_selector(&id_selector(ID_ABOUT_INTRODUCE_TEXT))
         .unwrap()
         .unwrap();
     let activities_text = document
-        .query_selector(id_selector(ID_ABOUT_ACTIVITIES_TEXT).as_str())
+        .query_selector(&id_selector(ID_ABOUT_ACTIVITIES_TEXT))
         .unwrap()
         .unwrap();
     let join_us_text = document
-        .query_selector(id_selector(ID_ABOUT_JOIN_US_TEXT).as_str())
+        .query_selector(&id_selector(ID_ABOUT_JOIN_US_TEXT))
         .unwrap()
         .unwrap();
 
@@ -88,14 +89,77 @@ enum AboutType {
     Activities,
     JoinUs,
 }
+
+pub fn set_recent_work_focused_enable(enable: bool) {
+    let window = web_sys::window().unwrap();
+    let document = window.document().unwrap();
+    let recent_work_focused = document
+        .query_selector(&id_selector(ID_RECENT_WORK_FOCUSED))
+        .unwrap()
+        .unwrap();
+    if enable {
+        recent_work_focused
+            .class_list()
+            .replace("disable", "enable")
+            .unwrap();
+    } else {
+        recent_work_focused
+            .class_list()
+            .replace("enable", "disable")
+            .unwrap();
+    }
+}
 #[auto_scope]
 fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
     let about_section_text = create_signal(cx, ABOUT_INTRODUCE_TEXT);
+    let name = create_signal(cx, "Game name here".to_string());
+    let introduce = create_signal(cx, "Introduce here".to_string());
+    let platforms = create_signal(cx, vec![]);
+    let authors = create_signal(cx, "authors".to_string());
+    let screenshots = create_signal(cx, vec![]);
+    let focused_image = create_signal(cx, "".to_string());
+    let cover = create_signal(cx, "".to_string());
+    let image_index = create_signal(cx, 0usize);
+    let works = create_signal(cx, (*state.recommended_works.get()).to_owned());
+
+    let work_spotlight_props = WorkSpotlightProps {
+        name,
+        introduce,
+        platforms,
+        authors,
+        screenshots,
+        focused_image,
+        cover,
+        image_index,
+        works,
+    };
+
+    let recent_work_items_view = View::new_fragment(
+        state
+            .recent_works
+            .get()
+            .iter()
+            .enumerate()
+            .map(|(index, it)| {
+                let cover = it.cover.clone().unwrap();
+                view! {cx,
+                    RecentWorkItem(
+                        cover_path=cover,
+                        date=it.plain_submission_date_day(),
+                        author=it.plain_author_string(),
+                        title=it.name.clone(),
+                        index=index,
+                        focused_props=work_spotlight_props
+                    )
+                }
+            })
+            .collect(),
+    );
     // let recent_work_focused_index = create_signal(cx, 0usize);
     view! { cx,
-        div(class="recent-work-focused"){
-            div(class="mask"){}
-            //todo work spotlight
+        div(id="recent-work-focused", class="disable"){
+            div(class="mask", on:click=|_|{ set_recent_work_focused_enable(false) }){}
+            WorkSpotlight(work_spotlight_props)
         }
         header{
             div(class="navi"){
@@ -149,20 +213,7 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
             }
             Section(name="recent-works".to_string(),title_path="assets/images/title_recent_works.png".to_string()){
                 div(class="works-container"){
-                    Indexed(
-                        iterable=&state.recent_works,
-                        view=|cx, it| {
-                            let cover = it.cover.clone().unwrap();
-                            view!{ cx,
-                                RecentWorkItem(
-                                    cover_path=cover,
-                                    date=it.plain_submission_date_day(),
-                                    author=it.plain_author_string(),
-                                    title=it.name
-                                )
-                            }
-                        },
-                    )
+                    (recent_work_items_view)
                 }
             }
             Section(name="media".to_string(),title_path="assets/images/title_media.png".to_string()){
@@ -221,6 +272,7 @@ fn head(cx: Scope, _props: IndexPageState) -> View<SsrNode> {
         link(rel="stylesheet",href=(statics("css/index.css")))
         link(rel="stylesheet",href=(statics("css/recommended_works.css")))
         link(rel="stylesheet",href=(statics("css/work_spotlight.css")))
+        link(rel="stylesheet",href=(statics("css/recent_work_focused.css")))
         link(rel="icon",type="image/x-icon",href=(statics("assets/images/logo_small.png")))
     }
 }

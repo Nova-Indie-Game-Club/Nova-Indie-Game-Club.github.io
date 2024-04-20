@@ -1,24 +1,3 @@
-:root {
-  --hlt-color: black;
-  --core-color-0: #3B3936;
-  --core-color-1: #605d5a;
-  --core-color-2: rgb(137, 133, 128);
-  --core-color-3: #a4a29d;
-  --core-color-4: #ccc8c8;
-  --core-color-5: #E2E2E2;
-  --core-color-6: #EFEFEF;
-  --theme-color: #FFC71F;
-  --background-color: white;
-  --url-color: #D82D33;
-  --font-size-small: 14px;
-  --font-size-normal: 16px;
-  --font-size-big: 18px;
-  --font-size-bigger: 24px;
-  --navi-height: 50px;
-  --navi-left-margin: 2vw;
-  --navi-rigth-margin: 5vw;
-}
-
 .work-spotlight {
   display: flex;
   left: 931px;
@@ -119,7 +98,7 @@
   font-feature-settings: "kern" on;
   color: var(--theme-color);
 }
-.work-spotlight .discription {
+.work-spotlight .description {
   position: inherit;
   left: 0px;
   top: 44px;
@@ -129,7 +108,7 @@
   margin-top: 7px;
   overflow: hidden;
 }
-.work-spotlight .discription p {
+.work-spotlight .description p {
   margin: 0;
   font-family: Source Han Sans;
   font-size: 20px;

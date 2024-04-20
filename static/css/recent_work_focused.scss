@@ -1,9 +1,17 @@
 :root {
-    --mask-color: rgba(0,0,0,0.3);
-    --mask-filter: blur(8px);
+    --mask-color: rgb(255 255 255 / 50%);
+    --mask-filter: blur(16px);
+}
+#recent-work-focused.disable{
+    opacity: 0;
+    visibility: hidden;
+}
+#recent-work-focused.enable{
+    opacity: 1;
+    visibility: visible;
 }
 
-.recent-works-focused {
+#recent-work-focused {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,6 +21,7 @@
     right: 0;
     bottom: 0;
     top: 0;
+    transition: all 0.5s;
 
     .mask {
         z-index: 11;

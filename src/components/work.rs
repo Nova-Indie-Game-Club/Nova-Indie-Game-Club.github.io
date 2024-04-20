@@ -3,19 +3,28 @@ use std::{rc::Rc, vec};
 use sycamore::prelude::*;
 use website_model::work::{Platform, Work};
 
-use crate::{components::SvgCode, svg, tool::statics};
+use crate::{components::SvgCode, svg, templates, tool::statics};
 
 #[derive(Prop)]
-pub struct RecentWorkItemProps {
+pub struct RecentWorkItemProps<'a> {
     pub cover_path: String,
     pub date: String,
     pub author: String,
     pub title: String,
+    pub index: usize,
+    pub focused_props: WorkSpotlightProps<'a>,
 }
 #[component]
-pub fn RecentWorkItem<G: Html>(cx: Scope, props: RecentWorkItemProps) -> View<G> {
+pub fn RecentWorkItem<'a, G: Html>(cx: Scope<'a>, props: RecentWorkItemProps<'a>) -> View<G> {
+    let index = props.index;
+    let on_click = move |_it| {
+        props
+            .focused_props
+            .set_work(props.focused_props.works.get().get(index).unwrap());
+        templates::index::set_recent_work_focused_enable(true);
+    };
     view!(cx,
-        div(class="item"){
+        div(class="item", on:click=on_click){
             div(class="up-part"){
                 img(src=(statics(props.cover_path.as_str())), alt="Cover")
                 div(class="info"){
@@ -34,20 +43,115 @@ pub fn RecentWorkItem<G: Html>(cx: Scope, props: RecentWorkItemProps) -> View<G>
 pub struct FocusedWorkPanelProps {
     pub works: Rc<Vec<Work>>,
 }
-struct WorkPanelContext<'a> {
+
+fn refresh_select_list(
+    works: &Signal<Vec<Work>>,
+    select_item: &Signal<Vec<(usize, String, String, String)>>,
+) {
+    let mut vec: Vec<(usize, String, String, String)> = vec![];
+    for i in 0..works.get().len() {
+        vec.push((
+            i.clone(),
+            works.get()[i].name.clone(),
+            works.get()[i].plain_author_string(),
+            works.get()[i].submission_date.date_rfc3339[0..=9].to_string(),
+        ));
+    }
+    select_item.set(vec);
+}
+#[component]
+pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> View<G> {
+    let name = create_signal(cx, "Game name here".to_string());
+    let introduce = create_signal(cx, "Introduce here".to_string());
+    let platforms = create_signal(cx, vec![]);
+    let authors = create_signal(cx, "authors".to_string());
+    let screenshots = create_signal(cx, vec![]);
+    let focused_image = create_signal(cx, "".to_string());
+    let cover = create_signal(cx, "".to_string());
+    let game_index = create_signal(cx, 0usize);
+    let image_index = create_signal(cx, 0usize);
+    let select_item = create_signal(cx, Vec::<(usize, String, String, String)>::new());
+    let works = create_signal(cx, (*props.works).clone());
+
+    let work_spotlight_props = WorkSpotlightProps {
+        name,
+        introduce,
+        platforms,
+        authors,
+        screenshots,
+        focused_image,
+        cover,
+        image_index,
+        works,
+    };
+
+    //---- Work Change ---------------------
+    work_spotlight_props.refresh_work(*game_index.get());
+    refresh_select_list(works, select_item);
+    //---- View -------------------------
+
+    view! { cx,
+        // Determine whether there is work.
+        (if works.get().len() > 0 {
+            view! { cx,
+                WorkSpotlight(work_spotlight_props)
+                // Select Area
+                div(class="select-area"){
+                    SvgCode(class="upper-left-frame", code=svg::UPPER_LEFT_FRAME)
+                    SvgCode(class="lower-right-frame", code=svg::LOWER_RIGHT_FRAME)
+                    // Options
+                    div(class="options"){
+                        Indexed(
+                            iterable=select_item,
+                            view= move |cx, it| {
+                                let index = it.0.clone();
+                                view! { cx,
+                                    div(class="selection", on:click= move |_|{
+                                        game_index.set(index);
+                                        if works.get().len() > 0 {
+                                            work_spotlight_props.set_work(&works.get()[*game_index.get()])
+                                        }
+                                    }){
+                                        div(class="info"){
+                                            p(){
+                                                (format!("{}/{}", it.2.clone(), it.3.clone()))
+                                            }
+                                        }
+                                        div(class="game-name"){
+                                            p(){
+                                                (it.1.clone())
+                                            }
+                                        }
+                                        div(class="divide-line"){
+                                            div(class="rectangle"){}
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        } else {
+            view! { cx, }
+        })
+    }
+}
+
+#[derive(Prop, Clone, Copy)]
+pub struct WorkSpotlightProps<'a> {
     pub name: &'a Signal<String>,
     pub introduce: &'a Signal<String>,
     pub platforms: &'a Signal<Vec<Platform>>,
     pub authors: &'a Signal<String>,
     pub screenshots: &'a Signal<Vec<(usize, String)>>,
     pub cover: &'a Signal<String>,
-    pub game_index: &'a Signal<usize>,
     pub image_index: &'a Signal<usize>,
     pub focused_image: &'a Signal<String>,
-    pub select_item: &'a Signal<Vec<(usize, String, String, String)>>,
     pub works: &'a Signal<Vec<Work>>,
 }
-impl<'a> WorkPanelContext<'a> {
+
+impl<'a> WorkSpotlightProps<'a> {
     pub fn set_work(&self, work: &Work) {
         self.name.set(work.name.clone());
         self.introduce.set(work.introduce.clone());
@@ -61,163 +165,76 @@ impl<'a> WorkPanelContext<'a> {
         self.cover.set(work.cover.clone().unwrap_or_default());
         self.set_focused_image(0usize);
     }
-    pub fn refresh_work(&self) {
-        // Determine whether there is work.
-        if self.works.get().len() > 0 {
-            self.set_work(&self.works.get()[*self.game_index.get()])
-        }
-    }
     pub fn set_focused_image(&self, index: usize) {
         let len = self.screenshots.get().len();
         self.image_index.set((index + len) % len); //todo fix condition: len = 0
-        self.focused_image.set(
-            self.screenshots
-                .get()
-                .get(index.clone())
-                .unwrap()
-                .1
-                .to_owned(),
-        );
+        self.focused_image
+            .set(self.screenshots.get().get(index).cloned().unwrap().1);
     }
-
-    pub fn set_work_index(&self, index: usize) {
-        self.game_index.set(index);
-    }
-
-    pub fn refresh_select_list(&self) {
-        let mut vec: Vec<(usize, String, String, String)> = vec![];
-        for i in 0..self.works.get().len() {
-            vec.push((
-                i.clone(),
-                self.works.get()[i].name.clone(),
-                self.works.get()[i].plain_author_string(),
-                self.works.get()[i].submission_date.date_rfc3339[0..=9].to_string(),
-            ));
+    pub fn refresh_work(&self, index: usize) {
+        // Determine whether there is work.
+        if self.works.get().len() > 0 {
+            self.set_work(&self.works.get()[index])
         }
-        self.select_item.set(vec);
     }
 }
 
 #[component]
-pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> View<G> {
-    let context = create_signal(
-        cx,
-        WorkPanelContext {
-            name: create_signal(cx, "Game name here".to_string()),
-            introduce: create_signal(cx, "Introduce here".to_string()),
-            platforms: create_signal(cx, vec![]),
-            authors: create_signal(cx, "authors".to_string()),
-            screenshots: create_signal(cx, vec![]),
-            focused_image: create_signal(cx, "".to_string()),
-            cover: create_signal(cx, "".to_string()),
-            game_index: create_signal(cx, 0usize),
-            image_index: create_signal(cx, 0usize),
-            select_item: create_signal(cx, vec![]),
-            works: create_signal(cx, (*props.works).clone()),
-        },
-    );
-
-    //---- Work Change ---------------------
-    context.get().refresh_work();
-    context.get().refresh_select_list();
-    //---- View -------------------------
-
+pub fn WorkSpotlight<'a, G: Html>(cx: Scope<'a>, props: WorkSpotlightProps<'a>) -> View<G> {
     view! { cx,
-        // Determine whether there is work.
-        (if context.get().works.get().len() > 0 {
-            view! { cx,
-                // Spotlight
-                div(class="work-spotlight"){
-                    // Screenshots
-                    div(class="container"){
-                        div(class="content")
-                        {
-                            div(class="game-image current_image"){
-                                img(src=(statics(context.get().focused_image.get().as_str())))
-                            }
-                        }
-                    }
-                    // Gallery
-                    div(class="gallery"){
-                        Indexed(
-                            iterable=context.get().screenshots,
-                            view= move |cx, it| {
-                            let index = it.0.clone();
-                            view! { cx,
-                                div(class="item", on:click= move |_|{
-                                    context.get().set_focused_image(index);
-                                }){
-                                    img(src=(statics(it.1.as_str())))
-                                }
-                                }
-                            }
-                        )
-                    }
-                    // Author
-                    div(class="author"){
-                        p() {
-                            (format!("By {}", context.get().authors.get()))
-                        }
-                    }
-                    // Description
-                    div(class="description"){
-                        p() {
-                            (context.get().introduce.get())
-                        }
-                    }
-                    // Links
-                    div(class="links"){
-                        Indexed(
-                            iterable=context.get().platforms,
-                            view=|cx, it| view!{ cx,
-                                div(class="link"){
-                                    a(href=&it.url){
-                                        (it.platform_type.display_name())
-                                        SvgCode(class="link-icon", code=svg::LINK_ARROW)
-                                    }
-                                }
-                            }
-                        )
-                    }
-                }
-
-                // Select Area
-                div(class="select-area"){
-                    SvgCode(class="upper-left-frame", code=svg::UPPER_LEFT_FRAME)
-                    SvgCode(class="lower-right-frame", code=svg::LOWER_RIGHT_FRAME)
-                    // Options
-                    div(class="options"){
-                        Indexed(
-                            iterable=context.get().select_item,
-                            view= move |cx, it| {
-                                let index = it.0.clone();
-                                view! { cx,
-                                    div(class="selection", on:click= move |_|{
-                                        context.get().set_work_index(index);
-                                        context.get().refresh_work();
-                                    }){
-                                        div(class="info"){
-                                            p(){
-                                                (format!("{}/{}", it.2.clone(), it.3.clone()))
-                                            }
-                                        }
-                                        div(class="game-name"){
-                                            p(){
-                                                (it.1.clone())
-                                            }
-                                        }
-                                        div(class="devide-line"){
-                                            div(class="rectangle"){}
-                                        }
-                                    }
-                                }
-                            }
-                        )
-                    }
+    // Spotlight
+    div(class="work-spotlight"){
+        // Screenshots
+        div(class="container"){
+            div(class="content")
+            {
+                div(class="game-image current_image"){
+                    img(src=(statics(props.focused_image.get().as_str())))
                 }
             }
-        } else {
-            view! { cx, }
-        })
+        }
+        // Gallery
+        div(class="gallery"){
+            Indexed(
+                iterable=props.screenshots,
+                view= move |cx, it| {
+                let index = it.0;
+                view! { cx,
+                    div(class="item", on:click= move |_|{
+                        props.set_focused_image(index);
+                    }){
+                        img(src=(statics(it.1.as_str())))
+                    }
+                    }
+                }
+            )
+        }
+        // Author
+        div(class="author"){
+            p() {
+                (format!("By {}", props.authors.get()))
+            }
+        }
+        // Description
+        div(class="description"){
+            p() {
+                (props.introduce.get())
+            }
+        }
+        // Links
+        div(class="links"){
+            Indexed(
+                iterable=props.platforms,
+                view=|cx, it| view!{ cx,
+                    div(class="link"){
+                        a(href=&it.url){
+                            (it.platform_type.display_name())
+                            SvgCode(class="link-icon", code=svg::LINK_ARROW)
+                        }
+                    }
+                }
+            )
+        }
+    }
     }
 }

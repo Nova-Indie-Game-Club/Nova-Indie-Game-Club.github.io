@@ -1,9 +1,19 @@
 :root {
-  --mask-color: rgba(0,0,0,0.3);
-  --mask-filter: blur(8px);
+  --mask-color: rgb(255 255 255 / 50%);
+  --mask-filter: blur(16px);
 }
 
-.recent-works-focused {
+#recent-work-focused.disable {
+  opacity: 0;
+  visibility: hidden;
+}
+
+#recent-work-focused.enable {
+  opacity: 1;
+  visibility: visible;
+}
+
+#recent-work-focused {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,8 +23,9 @@
   right: 0;
   bottom: 0;
   top: 0;
+  transition: all 0.5s;
 }
-.recent-works-focused .mask {
+#recent-work-focused .mask {
   z-index: 11;
   position: fixed;
   left: 0;
@@ -24,7 +35,7 @@
   background-color: var(--mask-color);
   backdrop-filter: var(--mask-filter);
 }
-.recent-works-focused .work-spotlight {
+#recent-work-focused .work-spotlight {
   z-index: 12;
   width: fit-content;
   height: fit-content;
