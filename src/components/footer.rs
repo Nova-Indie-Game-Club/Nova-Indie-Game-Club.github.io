@@ -1,11 +1,7 @@
 use serde::{Deserialize, Serialize};
 use sycamore::prelude::*;
 
-use crate::{
-    components::SvgCode,
-    svg,
-    tool::{link_in_new_tab, statics},
-};
+use crate::{components::SvgCode, svg, tool::link_in_new_tab};
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct FooterItem {
