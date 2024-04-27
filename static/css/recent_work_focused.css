@@ -4,13 +4,34 @@
 }
 
 #recent-work-focused.disable {
-  opacity: 0;
   visibility: hidden;
+}
+#recent-work-focused.disable .work-spotlight * {
+  transform: translateY(600px);
+  transform: all none;
 }
 
 #recent-work-focused.enable {
-  opacity: 1;
   visibility: visible;
+}
+#recent-work-focused.enable .work-spotlight {
+  transform: translateY(0px);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#recent-work-focused.enable .work-spotlight .container {
+  transition-duration: 0.5s;
+}
+#recent-work-focused.enable .work-spotlight .gallery {
+  transition-duration: 0.55s;
+}
+#recent-work-focused.enable .work-spotlight .author {
+  transition-duration: 0.6s;
+}
+#recent-work-focused.enable .work-spotlight .description {
+  transition-duration: 0.65s;
+}
+#recent-work-focused.enable .work-spotlight .links {
+  transition-duration: 0.7s;
 }
 
 #recent-work-focused {
@@ -23,7 +44,6 @@
   right: 0;
   bottom: 0;
   top: 0;
-  transition: all 0.5s;
 }
 #recent-work-focused .mask {
   z-index: 11;
