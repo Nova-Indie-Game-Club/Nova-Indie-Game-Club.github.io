@@ -172,24 +172,24 @@
                 }
             }
 
-            :hover {
-                color: var(--background-color);
-                background-color: var(--core-color-0);
-
-                .link-icon{
-                    fill: var(--background-color);
-                }
-            }
-
             //添加下划线
-            &::after {
+            ::after {
                 content: "";
                 position: absolute;
                 bottom: 0;
                 left: 0;
                 width: 99%;
                 height: 0px;
-                border: 1px solid var(--core-color-4);
+                border-bottom: 1px solid var(--core-color-4);
+                transition: all 0.15s;
+            }
+
+            :hover {
+                color: var(--core-color-0);
+                
+                &::after {
+                    border-bottom: 5px solid var(--core-color-0);
+                }
             }
         }
     }
