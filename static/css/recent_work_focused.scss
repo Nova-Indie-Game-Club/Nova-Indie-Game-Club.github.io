@@ -3,13 +3,38 @@
     --mask-filter: blur(16px);
 }
 #recent-work-focused.disable{
-    opacity: 0;
     visibility: hidden;
+    .work-spotlight{
+        *{
+            transform: translateY(600px);
+            transform: all none;
+        }
+    }
 }
 #recent-work-focused.enable{
-    opacity: 1;
     visibility: visible;
+    .work-spotlight{
+        transform: translateY(0px);
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+        .container{
+            transition-duration: 0.5s;
+        }
+        .gallery {
+            transition-duration: 0.55s;
+        }
+        .author{
+            transition-duration: 0.6s;
+        }
+        .description{
+            transition-duration: 0.65s;
+        }
+        .links{
+            transition-duration: 0.7s;
+        }
+    }
 }
+
 
 #recent-work-focused {
     display: flex;
@@ -21,7 +46,6 @@
     right: 0;
     bottom: 0;
     top: 0;
-    transition: all 0.5s;
 
     .mask {
         z-index: 11;
