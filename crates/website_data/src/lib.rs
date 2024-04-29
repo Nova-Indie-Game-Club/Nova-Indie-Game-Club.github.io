@@ -197,12 +197,14 @@ async fn get_screenshots(
                 let mut res = collect_screenshot_images(id.as_str(), itch_url)
                     .await
                     .unwrap();
-                let vec = res
-                    .iter()
-                    .map(|item| item.1.replace("static/", ""))
-                    .collect();
-                to_download.append(&mut res);
-                return vec;
+                if !res.is_empty() {
+                    let vec = res
+                        .iter()
+                        .map(|item| item.1.replace("static/", ""))
+                        .collect();
+                    to_download.append(&mut res);
+                    return vec;
+                }
             }
         }
     };
@@ -237,8 +239,10 @@ async fn get_cover(
         if it == PlatformType::Itch {
             if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
                 let res = collect_cover_image(id.as_str(), itch_url).await.unwrap();
-                to_download.push(res.clone());
-                return Some(res.1.replace("static/", ""));
+                if !res.0.is_empty() {
+                    to_download.push(res.clone());
+                    return Some(res.1.replace("static/", ""));
+                }
             }
         }
     }
@@ -366,8 +370,17 @@ pub async fn collect_cover_image(id: &str, itch_url: String) -> Result<(String, 
             let document = scraper::Html::parse_document(&response.unwrap().text().await?);
             let div_selector = scraper::Selector::parse("div.header").unwrap();
             let img_selector = scraper::Selector::parse("img").unwrap();
+            let divs = document.clone();
+            if divs.select(&div_selector).count() == 0 {
+                println!("No Cover.");
+                return Ok(result);
+            }
             let div = document.select(&div_selector).next().unwrap();
             let list = div.select(&img_selector);
+            if list.clone().count() == 0 {
+                println!("No Cover.");
+                return Ok(result);
+            }
             println!("Success.");
 
             // Get link and download
@@ -403,8 +416,17 @@ pub async fn collect_screenshot_images(
             let document = scraper::Html::parse_document(&response.unwrap().text().await?);
             let div_selector = scraper::Selector::parse("div.screenshot_list").unwrap();
             let a_selector = scraper::Selector::parse("a").unwrap();
+            let divs = document.clone();
+            if divs.select(&div_selector).count() == 0 {
+                println!("No screenshot.");
+                return Ok(result);
+            }
             let div = document.select(&div_selector).next().unwrap();
             let list = div.select(&a_selector);
+            if list.clone().count() == 0 {
+                println!("No screenshot.");
+                return Ok(result);
+            }
             println!("Find {} screenshots.", list.clone().count());
 
             // Get links and download
