@@ -120,9 +120,10 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
     let focused_image = create_signal(cx, "".to_string());
     let cover = create_signal(cx, "".to_string());
     let image_index = create_signal(cx, 0usize);
-    let works = create_signal(cx, (*state.recommended_works.get()).to_owned());
+    let _recommended_works = create_signal(cx, (*state.recommended_works.get()).to_owned());
+    let recent_works = create_signal(cx, (*state.recent_works.get()).to_owned());
 
-    let work_spotlight_props = WorkSpotlightProps {
+    let recent_work_spotlight_props = WorkSpotlightProps {
         name,
         introduce,
         platforms,
@@ -131,7 +132,7 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
         focused_image,
         cover,
         image_index,
-        works,
+        works: recent_works,
     };
 
     let recent_work_items_view = View::new_fragment(
@@ -139,8 +140,7 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
             .recent_works
             .get()
             .iter()
-            .enumerate()
-            .map(|(index, it)| {
+            .map(|it| {
                 let cover = it.cover.clone().unwrap_or_default();
                 view! {cx,
                     RecentWorkItem(
@@ -148,8 +148,8 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
                         date=it.plain_submission_date_day(),
                         author=it.plain_author_string(),
                         title=it.name.clone(),
-                        index=index,
-                        focused_props=work_spotlight_props
+                        work_id=it.id.clone(),
+                        focused_props=recent_work_spotlight_props
                     )
                 }
             })
@@ -159,7 +159,7 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
     view! { cx,
         div(id="recent-work-focused", class="disable"){
             div(class="mask", on:click=|_|{ set_recent_work_focused_enable(false) }){}
-            WorkSpotlight(work_spotlight_props)
+            WorkSpotlight(recent_work_spotlight_props)
         }
         header{
             div(class="navi"){
@@ -170,9 +170,9 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
                     div(class="option selected"){
                         p{ "主页" }
                     }
-                    div(class="option"){
-                        p{ "作品" }
-                    }
+                    // div(class="option"){
+                    //     p{ "作品" }
+                    // }
                 }
             }
         }

@@ -235,17 +235,17 @@ async fn get_cover(
     properties: &HashMap<String, PageProperty>,
     page: &Page,
 ) -> Option<String> {
-    if let Some(it) = auto_collection {
-        if it == PlatformType::Itch {
-            if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
-                let res = collect_cover_image(id.as_str(), itch_url).await.unwrap();
-                if !res.0.is_empty() {
-                    to_download.push(res.clone());
-                    return Some(res.1.replace("static/", ""));
-                }
-            }
-        }
-    }
+    // if let Some(it) = auto_collection {
+    //     if it == PlatformType::Itch {
+    //         if let Some(itch_url) = get_itch_url_or_none(platforms.clone()) {
+    //             let res = collect_cover_image(id.as_str(), itch_url).await.unwrap();
+    //             if !res.0.is_empty() {
+    //                 to_download.push(res.clone());
+    //                 return Some(res.1.replace("static/", ""));
+    //             }
+    //         }
+    //     }
+    // }
     if let PageProperty::Files { files, .. } = properties.get("Cover").unwrap() {
         if let Some(it) = files.get(0) {
             let url = parse_file_download_url(&it.file, &id.clone());

@@ -1,5 +1,6 @@
 use std::{rc::Rc, vec};
 
+use serde::{Deserialize, Serialize};
 use sycamore::prelude::*;
 use website_model::work::{Platform, Work};
 
@@ -11,16 +12,21 @@ pub struct RecentWorkItemProps<'a> {
     pub date: String,
     pub author: String,
     pub title: String,
-    pub index: usize,
+    pub work_id: String,
     pub focused_props: WorkSpotlightProps<'a>,
 }
 #[component]
 pub fn RecentWorkItem<'a, G: Html>(cx: Scope<'a>, props: RecentWorkItemProps<'a>) -> View<G> {
-    let index = props.index;
     let on_click = move |_it| {
-        props
-            .focused_props
-            .set_work(props.focused_props.works.get().get(index).unwrap());
+        props.focused_props.set_work(
+            props
+                .focused_props
+                .works
+                .get()
+                .iter()
+                .find(|it| it.id == props.work_id)
+                .unwrap(),
+        );
         templates::index::set_recent_work_focused_enable(true);
     };
     view!(cx,
@@ -44,18 +50,23 @@ pub struct FocusedWorkPanelProps {
     pub works: Rc<Vec<Work>>,
 }
 
-fn refresh_select_list(
-    works: &Signal<Vec<Work>>,
-    select_item: &Signal<Vec<(usize, String, String, String)>>,
-) {
-    let mut vec: Vec<(usize, String, String, String)> = vec![];
-    for i in 0..works.get().len() {
-        vec.push((
-            i.clone(),
-            works.get()[i].name.clone(),
-            works.get()[i].plain_author_string(),
-            works.get()[i].submission_date.date_rfc3339[0..=9].to_string(),
-        ));
+#[derive(Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct SelectionItem {
+    index: usize,
+    name: String,
+    author_text: String,
+    data_text: String,
+}
+
+fn refresh_select_list(works: &Signal<Vec<Work>>, select_item: &Signal<Vec<SelectionItem>>) {
+    let mut vec: Vec<SelectionItem> = vec![];
+    for (i, work) in works.get().iter().enumerate() {
+        vec.push(SelectionItem {
+            index: i,
+            name: work.name.clone(),
+            author_text: work.plain_author_string(),
+            data_text: work.submission_date.date_rfc3339[0..=9].to_string(),
+        });
     }
     select_item.set(vec);
 }
@@ -70,7 +81,7 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
     let cover = create_signal(cx, "".to_string());
     let game_index = create_signal(cx, 0usize);
     let image_index = create_signal(cx, 0usize);
-    let select_item = create_signal(cx, Vec::<(usize, String, String, String)>::new());
+    let select_items = create_signal(cx, Vec::<SelectionItem>::new());
     let works = create_signal(cx, (*props.works).clone());
 
     let work_spotlight_props = WorkSpotlightProps {
@@ -87,7 +98,7 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
 
     //---- Work Change ---------------------
     work_spotlight_props.refresh_work(*game_index.get());
-    refresh_select_list(works, select_item);
+    refresh_select_list(works, select_items);
     //---- View -------------------------
 
     view! { cx,
@@ -102,9 +113,9 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
                     // Options
                     div(class="options"){
                         Indexed(
-                            iterable=select_item,
+                            iterable=select_items,
                             view= move |cx, it| {
-                                let index = it.0.clone();
+                                let index = it.index;
                                 view! { cx,
                                     div(class="selection", on:click= move |_|{
                                         game_index.set(index);
@@ -114,12 +125,12 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
                                     }){
                                         div(class="info"){
                                             p(){
-                                                (format!("{}/{}", it.2.clone(), it.3.clone()))
+                                                (format!("{}/{}", &it.author_text, &it.data_text))
                                             }
                                         }
                                         div(class="game-name"){
                                             p(){
-                                                (it.1.clone())
+                                                (it.name.clone())
                                             }
                                         }
                                         div(class="divide-line"){
@@ -166,10 +177,17 @@ impl<'a> WorkSpotlightProps<'a> {
         self.set_focused_image(0usize);
     }
     pub fn set_focused_image(&self, index: usize) {
-        let len = self.screenshots.get().len();
-        self.image_index.set((index + len) % len); //todo fix condition: len = 0
-        self.focused_image
-            .set(self.screenshots.get().get(index).cloned().unwrap().1);
+        if self.has_screenshots() {
+            let len = self.screenshots.get().len();
+            self.image_index.set((index + len) % len); //todo fix condition: len = 0
+            self.focused_image
+                .set(self.screenshots.get().get(index).cloned().unwrap().1);
+        } else {
+            self.focused_image.set((*self.cover.get()).clone());
+        }
+    }
+    pub fn has_screenshots(&self) -> bool {
+        self.screenshots.get().len() > 0
     }
     pub fn refresh_work(&self, index: usize) {
         // Determine whether there is work.
@@ -194,21 +212,29 @@ pub fn WorkSpotlight<'a, G: Html>(cx: Scope<'a>, props: WorkSpotlightProps<'a>) 
             }
         }
         // Gallery
-        div(class="gallery"){
-            Indexed(
-                iterable=props.screenshots,
-                view= move |cx, it| {
-                let index = it.0;
-                view! { cx,
-                    div(class="item", on:click= move |_|{
-                        props.set_focused_image(index);
-                    }){
-                        img(src=(statics(it.1.as_str())))
-                    }
-                    }
+        (if props.has_screenshots() {
+            view!{ cx,
+                div(class="gallery"){
+                    Indexed(
+                        iterable=props.screenshots,
+                        view= move |cx, it| {
+                        let index = it.0;
+                        view! { cx,
+                            div(class="item", on:click= move |_|{
+                                props.set_focused_image(index);
+                            }){
+                                img(src=(statics(it.1.as_str())))
+                            }
+                            }
+                        }
+                    )
                 }
-            )
-        }
+
+            }
+        } else {
+            view!(cx,)
+        })
+
         // Author
         div(class="author"){
             p() {
@@ -227,7 +253,7 @@ pub fn WorkSpotlight<'a, G: Html>(cx: Scope<'a>, props: WorkSpotlightProps<'a>) 
                 iterable=props.platforms,
                 view=|cx, it| view!{ cx,
                     div(class="link"){
-                        a(href=&it.url){
+                        a(href=&it.url, target="_blank"){
                             (it.platform_type.display_name())
                             SvgCode(class="link-icon", code=svg::LINK_ARROW)
                         }
