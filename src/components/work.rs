@@ -177,10 +177,17 @@ impl<'a> WorkSpotlightProps<'a> {
         self.set_focused_image(0usize);
     }
     pub fn set_focused_image(&self, index: usize) {
-        let len = self.screenshots.get().len();
-        self.image_index.set((index + len) % len); //todo fix condition: len = 0
-        self.focused_image
-            .set(self.screenshots.get().get(index).cloned().unwrap().1);
+        if self.has_screenshots() {
+            let len = self.screenshots.get().len();
+            self.image_index.set((index + len) % len); //todo fix condition: len = 0
+            self.focused_image
+                .set(self.screenshots.get().get(index).cloned().unwrap().1);
+        } else {
+            self.focused_image.set((*self.cover.get()).clone());
+        }
+    }
+    pub fn has_screenshots(&self) -> bool {
+        self.screenshots.get().len() > 0
     }
     pub fn refresh_work(&self, index: usize) {
         // Determine whether there is work.
@@ -205,21 +212,29 @@ pub fn WorkSpotlight<'a, G: Html>(cx: Scope<'a>, props: WorkSpotlightProps<'a>) 
             }
         }
         // Gallery
-        div(class="gallery"){
-            Indexed(
-                iterable=props.screenshots,
-                view= move |cx, it| {
-                let index = it.0;
-                view! { cx,
-                    div(class="item", on:click= move |_|{
-                        props.set_focused_image(index);
-                    }){
-                        img(src=(statics(it.1.as_str())))
-                    }
-                    }
+        (if props.has_screenshots() {
+            view!{ cx,
+                div(class="gallery"){
+                    Indexed(
+                        iterable=props.screenshots,
+                        view= move |cx, it| {
+                        let index = it.0;
+                        view! { cx,
+                            div(class="item", on:click= move |_|{
+                                props.set_focused_image(index);
+                            }){
+                                img(src=(statics(it.1.as_str())))
+                            }
+                            }
+                        }
+                    )
                 }
-            )
-        }
+
+            }
+        } else {
+            view!(cx,)
+        })
+
         // Author
         div(class="author"){
             p() {
