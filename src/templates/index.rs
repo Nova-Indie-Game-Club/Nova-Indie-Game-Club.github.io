@@ -141,7 +141,7 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
             .iter()
             .enumerate()
             .map(|(index, it)| {
-                let cover = it.cover.clone().unwrap();
+                let cover = it.cover.clone().unwrap_or_default();
                 view! {cx,
                     RecentWorkItem(
                         cover_path=cover,
