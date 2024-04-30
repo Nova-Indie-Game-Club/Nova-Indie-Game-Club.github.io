@@ -120,7 +120,7 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
     let focused_image = create_signal(cx, "".to_string());
     let cover = create_signal(cx, "".to_string());
     let image_index = create_signal(cx, 0usize);
-    let recommended_works = create_signal(cx, (*state.recommended_works.get()).to_owned());
+    let _recommended_works = create_signal(cx, (*state.recommended_works.get()).to_owned());
     let recent_works = create_signal(cx, (*state.recent_works.get()).to_owned());
 
     let recent_work_spotlight_props = WorkSpotlightProps {
