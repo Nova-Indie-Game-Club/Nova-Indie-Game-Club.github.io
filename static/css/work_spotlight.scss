@@ -1,16 +1,15 @@
-
 .work-spotlight {
     display: flex;
-    left: 931px;
-    width: 626px;
+    max-width: 95vw;
     height: 611px;
     justify-content: flex-start;
     flex-direction: column;
+    max-width: 594px;
 
     .container {
         position: relative;
         margin: 0;
-        width: 594px;
+        width: 100%;
         height: 333.23px;
         align-items: center;
         justify-content: center;
@@ -23,13 +22,14 @@
             width: 100%;
             height: 100%;
             box-sizing: border-box;
-            border: 2px solid var(--core-color-0);
+            /* border: 2px solid var(--core-color-0); */
             background: var(--background-color);
+            box-shadow: 0px 0px 18px var(--shadow-color-0);
 
             .game-image {
                 flex: none;
-                width: 100%;
                 height: 100%;
+                width: 100%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -59,7 +59,6 @@
                 transform: translateX(100%);
             }
         }
-
     }
 
     .gallery {
@@ -73,6 +72,8 @@
         .item {
             width: 111px;
             height: 62px;
+
+            box-shadow: 0px 0px 10px var(--shadow-color-0);
 
             img {
                 width: 100%;
@@ -95,8 +96,8 @@
         position: inherit;
         left: 0px;
         top: 0px;
-        width: 425px;
-        height: 37px;
+        width: 100%;
+        height: fit-content;
         opacity: 1;
         margin-top: 17.6px;
 
@@ -127,25 +128,25 @@
         p {
             margin: 0;
             font-family: Source Han Sans;
-            font-size: 20px;
+            font-size: var(--font-size-normal);
             font-weight: normal;
             line-height: normal;
             letter-spacing: 0em;
 
             font-variation-settings: "opsz" auto;
             font-feature-settings: "kern" on;
-            color: var(--core-color-0);
+            color: var(--core-color-1);
         }
     }
 
     .links {
         display: flex;
         flex-wrap: nowrap;
-        .itch-link{
+        .itch-link {
             width: 102px;
         }
 
-        .steam-link{
+        .steam-link {
             width: 100px;
         }
 
@@ -186,7 +187,7 @@
 
             :hover {
                 color: var(--core-color-0);
-                
+
                 &::after {
                     border-bottom: 5px solid var(--core-color-0);
                 }

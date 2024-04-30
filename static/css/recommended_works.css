@@ -16,7 +16,7 @@
 }
 .main .recommended-works .core .select-area {
   position: relative;
-  width: 431px;
+  max-width: 431px;
   height: 611px;
   margin-left: 24px;
 }
@@ -33,7 +33,7 @@
   right: 0;
 }
 .main .recommended-works .core .select-area .options {
-  width: 357px;
+  width: 90%;
   height: 548px;
   position: relative;
   top: 38px;
@@ -46,7 +46,7 @@
 }
 .main .recommended-works .core .select-area .options .selection {
   position: relative;
-  width: 357px;
+  width: 100%;
   height: 104px;
   opacity: 1;
   display: flex;
@@ -64,8 +64,14 @@
   height: 29.85%;
   padding-left: 28px;
   opacity: 1;
+  width: 90%;
+  margin-bottom: 10px;
 }
 .main .recommended-works .core .select-area .options .selection .info p {
+  width: 90%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   margin: 0;
   font-family: Source Han Sans;
   font-size: var(--font-size-small);
@@ -96,14 +102,14 @@
 }
 .main .recommended-works .core .select-area .options .selection .divide-line {
   position: relative;
-  width: 354px;
+  width: 90%;
   height: 0;
   opacity: 1;
   border: 1px solid var(--core-color-4);
 }
 .main .recommended-works .core .select-area .options .selection .divide-line .rectangle {
   position: absolute;
-  left: 344px;
+  right: -2px;
   top: -4.5px;
   width: 9px;
   height: 9px;
