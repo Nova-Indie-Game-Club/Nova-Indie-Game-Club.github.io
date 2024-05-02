@@ -212,9 +212,9 @@ pub fn WorkSpotlight<'a, G: Html>(cx: Scope<'a>, props: WorkSpotlightProps<'a>) 
             }
         }
         // Gallery
-        (if props.has_screenshots() {
-            view!{ cx,
-                div(class="gallery"){
+        div(class="gallery"){
+            (if props.has_screenshots() {
+                view!{ cx,
                     Indexed(
                         iterable=props.screenshots,
                         view= move |cx, it| {
@@ -229,11 +229,11 @@ pub fn WorkSpotlight<'a, G: Html>(cx: Scope<'a>, props: WorkSpotlightProps<'a>) 
                         }
                     )
                 }
+            } else {
+                view!(cx,)
+            })
+        }
 
-            }
-        } else {
-            view!(cx,)
-        })
 
         // Author
         div(class="author"){

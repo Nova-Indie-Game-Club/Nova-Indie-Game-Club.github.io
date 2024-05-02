@@ -58,7 +58,8 @@
   display: flex;
   justify-content: flex-start;
   width: 594px;
-  height: 63.2px;
+  /* height: 63.2px; */
+  height: fit-content;
   margin-top: 10.17px;
   gap: 9.5px;
 }

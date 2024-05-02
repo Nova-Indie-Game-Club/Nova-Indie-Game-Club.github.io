@@ -1,64 +1,63 @@
 :root {
-  --mask-color: rgb(255 255 255 / 70%);
-  --mask-filter: blur(16px);
+    --mask-color: rgb(255 255 255 / 70%);
+    --mask-filter: blur(16px);
 }
 
 #recent-work-focused.disable {
-  visibility: hidden;
+    visibility: hidden;
 }
-#recent-work-focused.disable .work-spotlight * {
-  transform: translateY(600px);
-  transform: all none;
+#recent-work-focused.disable .work-spotlight > * {
+    transform: translateY(600px);
 }
 
 #recent-work-focused.enable {
-  visibility: visible;
+    visibility: visible;
 }
-#recent-work-focused.enable .work-spotlight {
-  transform: translateY(0px);
-  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+#recent-work-focused.enable .work-spotlight > * {
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateY(0px);
 }
 #recent-work-focused.enable .work-spotlight .container {
-  transition-duration: 0.5s;
+    transition-duration: 0.5s;
 }
 #recent-work-focused.enable .work-spotlight .gallery {
-  transition-duration: 0.55s;
+    transition-duration: 0.55s;
 }
 #recent-work-focused.enable .work-spotlight .author {
-  transition-duration: 0.6s;
+    transition-duration: 0.6s;
 }
 #recent-work-focused.enable .work-spotlight .description {
-  transition-duration: 0.65s;
+    transition-duration: 0.65s;
 }
 #recent-work-focused.enable .work-spotlight .links {
-  transition-duration: 0.7s;
+    transition-duration: 0.7s;
 }
 
 #recent-work-focused {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
 }
 #recent-work-focused .mask {
-  z-index: 11;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  background-color: var(--mask-color);
-  backdrop-filter: var(--mask-filter);
+    z-index: 11;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: var(--mask-color);
+    backdrop-filter: var(--mask-filter);
 }
 #recent-work-focused .work-spotlight {
-  z-index: 12;
-  width: fit-content;
-  height: fit-content;
+    z-index: 12;
+    width: fit-content;
+    height: fit-content;
 }
 
 /*# sourceMappingURL=recent_work_focused.css.map */
