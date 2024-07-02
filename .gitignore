@@ -1,5 +1,6 @@
 dist/
 target/
+pkg/
 
 # Ignore .DS_Store in MacOS
 .DS_Store
