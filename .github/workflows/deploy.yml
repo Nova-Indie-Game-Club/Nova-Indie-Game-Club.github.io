@@ -5,7 +5,7 @@ on:
     paths:
       - "static/**"
       - "src/**"
-      - ".github/deploy.yml" # If we change this build script, it should rerun
+      - ".github/workflows/deploy.yml" # If we change this build script, it should rerun
     branches:
       - main
 
