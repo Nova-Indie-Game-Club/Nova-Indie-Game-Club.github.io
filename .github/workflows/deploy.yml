@@ -1,71 +1,73 @@
 name: Compile and Deploy Website
 
 on:
-    push:
-        branches:
-            - main
+  push:
+    paths:
+      - "static/**"
+      - "src/**"
+      - ".github/deploy.yml" # If we change this build script, it should rerun
+    branches:
+      - main
 
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        env:
-          PERSEUS_VERSION: 0.4.0
-        steps:
-            # The website builder accesses Git history for old examples, so we need everything
-            - uses: actions/checkout@v2
-              with:
-                  fetch-depth: 0
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      PERSEUS_VERSION: 0.4.0
+    steps:
+      # The website builder accesses Git history for old examples, so we need everything
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-            # Cache the Cargo binaries
-            - uses: actions/cache@v3
-              id: cache
-              with:
-                path: |
-                  ~/.cargo/bin/
-                # The cache should be OS-specific
-                key: ${{ runner.os }}-website-cargo-bins-$PERSEUS_VERSION
-            # Only install the binaries if the cache doesn't have them
-            - name: Install Dependencies
-              if: steps.cache.outputs.cache-hit != 'true'
-              run: cargo install bonnie rust-script && cargo install perseus-cli --version $PERSEUS_VERSION && RUSTFLAGS=--cfg=web_sys_unstable_apis cargo install tribble
+      # Cache the Cargo binaries
+      - uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            ~/.cargo/bin/
+          # The cache should be OS-specific
+          key: ${{ runner.os }}-website-cargo-bins-$PERSEUS_VERSION
+      # Only install the binaries if the cache doesn't have them
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: cargo install bonnie rust-script && cargo install perseus-cli --version $PERSEUS_VERSION && RUSTFLAGS=--cfg=web_sys_unstable_apis cargo install tribble
 
-            # Also cache all the other Cargo files, since plenty of CI runs won't involve different dependencies
-            - uses: actions/cache@v3
-              with:
-                path: |
-                  ~/.cargo/registry/index/
-                  ~/.cargo/registry/cache/
-                  ~/.cargo/git/db/
-                  target/
-                key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+      # Also cache all the other Cargo files, since plenty of CI runs won't involve different dependencies
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
 
-            # - name: Get npm cache directory
-            #   id: npm-cache-dir
-            #   run: |
-            #     echo "::set-output name=dir::$(npm config get cache)"
-            # - uses: actions/cache@v3
-            #   id: npm-cache
-            #   with:
-            #     path: ${{ steps.npm-cache-dir.outputs.dir }}
-            #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-            #     restore-keys: |
-            #       ${{ runner.os }}-node-
-            # # TODO Only install the NPM dependencies if the cache doesn't have them
-            # - name: Install NPM dependencies
-            #   # if: steps.npm-cache.outputs.cache-hit != 'true'
-            #   run: npm install
-            #   working-directory: website
-            # - name: Install Tailwind
-            #   run: npm install -g tailwindcss
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      # TODO Only install the NPM dependencies if the cache doesn't have them
+      - name: Install NPM dependencies
+        # if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm install
+        working-directory: website
+      - name: Install Tailwind
+        run: npm install -g tailwindcss
 
-            - name: Build website
-              run: bonnie site deploy-prod
-            - name: Deploy website to GitHub Pages
-              uses: peaceiris/actions-gh-pages@v3
-              if: github.ref == 'refs/heads/main'
-              with:
-                  github_token: ${{ secrets.DEPLOY_KEY }}
-                  external_repository: Nova-Indie-Game-Club/Nove-Indie-Game-Club.github.io
-                  publish_branch: gh-pages
-                  publish_dir: ./
-                 
+      - name: Build website
+        run: bonnie site deploy-prod
+      - name: Deploy website to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: pkg
+          publish_branch: gh-pages
