@@ -2,10 +2,10 @@ name: Compile and Deploy Website
 
 on:
   push:
-    paths:
-      - "static/**"
-      - "src/**"
-      - ".github/workflows/deploy.yml" # If we change this build script, it should rerun
+    # paths:
+    #   - "static/**"
+    #   - "src/**"
+    #   - ".github/workflows/deploy.yml" # If we change this build script, it should rerun
     branches:
       - main
 
