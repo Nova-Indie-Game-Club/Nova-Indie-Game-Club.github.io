@@ -9,3 +9,4 @@ pub fn perseus<G: Html>() -> PerseusApp<G> {
         .template(templates::about::get_template())
         .error_views(error_views::get_error_views())
 }
+//
