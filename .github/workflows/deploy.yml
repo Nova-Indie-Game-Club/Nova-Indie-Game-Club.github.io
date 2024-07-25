@@ -19,9 +19,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      # TODO: toolchain cache
+
       # Let's prepare our env
       - name: Prepare toolchain
         run: cargo install perseus-cli
+
+      # Restore cache of build target
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}    
 
       - name: Build and Export Website
         run: perseus --wasm-opt-version version_118 export
