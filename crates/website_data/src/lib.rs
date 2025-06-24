@@ -24,7 +24,7 @@ const WORKS_DATABASE_ID: &str = "9ff4f3a98e8343acb33defe8f82804bd";
 const WORKS_DATA_PATH: &str = "works/";
 
 pub async fn run_notion_data_collection() -> Result<()> {
-    let notion_api = Client::new(std::env::var("NOVA_WEBSITE_NOTION_TOKEN")?)?;
+    let notion_api = Client::new(std::env::var("NOVA_WEBSITE_NOTION_TOKEN")?, None)?;
 
     collect_database_to_file(&notion_api, WORKS_DATABASE_ID, WORKS_DATA_PATH).await?;
     Ok(())

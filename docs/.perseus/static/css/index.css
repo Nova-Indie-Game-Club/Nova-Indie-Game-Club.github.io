@@ -257,10 +257,10 @@ header .navi .right .selected p {
   padding-right: 6px;
   font-weight: bold;
   font-size: var(--font-size-small);
-  color: var(--background-color);
+  color: var(--bg-color-0);
 }
 .recommended-works.section .core .work-container .info-panel .detail .left-part .platform .link-button .link-icon * {
-  fill: var(--background-color);
+  fill: var(--bg-color-0);
 }
 .recommended-works.section .core .work-container .info-panel .detail .left-part .platform .link-button .link-icon svg {
   width: 14px;
@@ -300,7 +300,7 @@ header .navi .right .selected p {
   column-gap: 16px;
   width: min(90%, var(--recent-works-width));
   margin: 0 auto;
-  background: var(--background-color);
+  background: var(--bg-color-0);
 }
 .recent-works.section .works-container .item {
   outline: var(--theme-color) 1px solid;

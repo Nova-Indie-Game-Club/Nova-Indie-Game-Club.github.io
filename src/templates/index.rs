@@ -269,7 +269,7 @@ fn head(cx: Scope, _props: IndexPageState) -> View<SsrNode> {
     view! { cx,
         title { "Nova 独游社!" }
         link(rel="stylesheet",href=(statics("css/root.css")))
-        link(rel="stylesheet",href=(statics("css/index.css")))
+        link(rel="stylesheet",href=(statics("css/page/home.css")))
         link(rel="stylesheet",href=(statics("css/recommended_works.css")))
         link(rel="stylesheet",href=(statics("css/work_spotlight.css")))
         link(rel="stylesheet",href=(statics("css/recent_work_focused.css")))

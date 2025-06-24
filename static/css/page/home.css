@@ -1,17 +1,29 @@
 :root {
   --section-about-title-height: 62px;
   --section-title-height: 48px;
-  --section-padding: 8px;
+  --section-padding: 48px;
   --about-width: 720px;
   --recommended-works-item-width: 300px;
   --recommended-works-item-gap: 16px;
   --recent-works-width: 900px;
   --recent-works-item-width: 280px;
   --focused-work-panel-main-width: min(720px, 80vw);
+  --content-width: 90vw;
+  --bg-image-noise: url("/.perseus/static/assets/images/bg_noise.jpg");
+  --selected-option-image: url("/.perseus/static/assets/images/navi_option_selected.png");
+}
+
+#root {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  --border-color: var(--hlt-color);
+  border-left: var(--theme-color) 1px solid;
+  border-right: var(--theme-color) 1px solid;
 }
 
 header {
   width: 100%;
+  max-width: 100%;
 }
 header .navi {
   position: absolute;
@@ -22,7 +34,7 @@ header .navi {
   height: var(--navi-height);
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: var(--content-width);
 }
 header .navi .left {
   margin-left: var(--navi-left-margin);
@@ -53,7 +65,7 @@ header .navi .right .option p {
   color: var(--core-color-5);
 }
 header .navi .right .selected {
-  background-image: url("../assets/images/navi_option_selected.png");
+  background-image: var(--selected-option-image);
   background-size: contain;
   background-position: center;
 }
@@ -83,7 +95,8 @@ header .navi .right .selected p {
   position: absolute;
   z-index: -1;
   top: 0;
-  width: 100%;
+  width: var(--content-width);
+  object-fit: contain;
 }
 
 .main {
@@ -91,13 +104,15 @@ header .navi .right .selected p {
 }
 .main .section {
   width: 100%;
-  margin: 52px auto;
-  padding-top: var(--section-padding);
-  padding-bottom: var(--section-padding);
+  margin: 0 auto;
+  border-top: var(--theme-color) 1px solid;
+  padding: var(--section-padding) 0;
+  background: linear-gradient(0deg, var(--theme-color-shadow-0), transparent), var(--bg-image-noise) repeat;
 }
 .main .section .title {
   display: flex;
-  margin: 30px auto;
+  margin: 32px auto;
+  margin-top: 0;
   height: var(--section-title-height);
 }
 
@@ -128,13 +143,13 @@ header .navi .right .selected p {
 .about.section .core .options .option:hover {
   background-color: var(--core-color-4);
 }
-.about.section .core .options .selected:hover {
-  background-color: var(--theme-color);
-}
 .about.section .core .options .selected {
   background: var(--theme-color);
   color: var(--hlt-color);
   font-weight: bold;
+}
+.about.section .core .options .selected:hover {
+  background-color: var(--theme-color);
 }
 .about.section .core .text-container {
   height: 128px;
@@ -209,7 +224,6 @@ header .navi .right .selected p {
 }
 .recommended-works.section .core .work-container .info-panel {
   flex-direction: column;
-  width: fit-content;
   margin: 0 auto;
   margin-top: 6px;
   border-radius: 6px;
@@ -239,9 +253,6 @@ header .navi .right .selected p {
   margin-top: 12px;
   gap: 10px;
 }
-.recommended-works.section .core .work-container .info-panel .detail .left-part .platform .link-button:hover {
-  background-color: var(--core-color-0);
-}
 .recommended-works.section .core .work-container .info-panel .detail .left-part .platform .link-button {
   flex-direction: row;
   cursor: pointer;
@@ -252,15 +263,18 @@ header .navi .right .selected p {
   transition: all 0.3s;
   border-radius: 3px;
 }
+.recommended-works.section .core .work-container .info-panel .detail .left-part .platform .link-button:hover {
+  background-color: var(--core-color-0);
+}
 .recommended-works.section .core .work-container .info-panel .detail .left-part .platform .link-button .text {
   padding: 0 8px;
   padding-right: 6px;
   font-weight: bold;
   font-size: var(--font-size-small);
-  color: var(--background-color);
+  color: var(--bg-color-0);
 }
 .recommended-works.section .core .work-container .info-panel .detail .left-part .platform .link-button .link-icon * {
-  fill: var(--background-color);
+  fill: var(--bg-color-0);
 }
 .recommended-works.section .core .work-container .info-panel .detail .left-part .platform .link-button .link-icon svg {
   width: 14px;
@@ -300,9 +314,9 @@ header .navi .right .selected p {
   column-gap: 16px;
   width: min(90%, var(--recent-works-width));
   margin: 0 auto;
-  background: var(--background-color);
 }
 .recent-works.section .works-container .item {
+  background: var(--bg-color-0);
   outline: var(--theme-color) 1px solid;
   flex-direction: column;
   margin: 12px;
@@ -366,4 +380,4 @@ header .navi .right .selected p {
   text-align: center;
 }
 
-/*# sourceMappingURL=index.css.map */
+/*# sourceMappingURL=home.css.map */

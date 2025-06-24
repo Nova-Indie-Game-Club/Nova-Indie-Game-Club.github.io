@@ -8,7 +8,9 @@
   --core-color-5: #e2e2e2;
   --core-color-6: #efefef;
   --theme-color: #ffc71f;
-  --background-color: white;
+  --theme-color-shadow-0: #ffc71f22;
+  --theme-color-shadow-1: #ffc71f44;
+  --bg-color-0: white;
   --url-color: #d82d33;
   --font-size-small: 14px;
   --font-size-normal: 16px;
@@ -27,7 +29,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--background-color);
+  background-color: var(--bg-color-0);
 }
 
 p {
@@ -46,33 +48,28 @@ a:hover {
 
 footer {
   width: 100%;
-  margin-top: 160px;
   min-height: 200px;
   display: flex;
   padding: 0;
   background: var(--theme-color);
 }
-
 footer .footer-left-part {
   width: 500px;
   background-color: var(--theme-color);
-  border-right: solid var(--background-color) 1px;
+  border-right: solid var(--bg-color-0) 1px;
   padding: 10px;
 }
-
-footer .footer-item-layout {
+footer .footer-left-part .footer-item-layout {
   padding: 8px 16px;
   margin: 8px;
   height: fit-content;
 }
-
-footer .footer-item {
+footer .footer-left-part .footer-item-layout .footer-item {
   flex-direction: column;
-  background-color: var(--background-color);
+  background-color: var(--bg-color-0);
   align-items: center;
 }
-
-footer .footer-item * {
+footer .footer-left-part .footer-item-layout .footer-item * {
   display: flex;
 }
 
@@ -139,7 +136,5 @@ footer .has-link {
 footer .has-link:hover {
   outline: solid var(--hlt-color) 2px;
 }
-
-
 
 /*# sourceMappingURL=root.css.map */

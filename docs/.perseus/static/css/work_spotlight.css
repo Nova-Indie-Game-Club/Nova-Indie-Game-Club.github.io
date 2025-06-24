@@ -23,7 +23,7 @@
   height: 100%;
   box-sizing: border-box;
   /* border: 2px solid var(--core-color-0); */
-  background: var(--background-color);
+  background: var(--bg-color-0);
   box-shadow: 0px 0px 18px var(--shadow-color-0);
 }
 .work-spotlight .container .content .game-image {

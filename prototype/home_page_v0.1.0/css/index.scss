@@ -3,7 +3,7 @@
   --text-color-0: #3B3936;
   --text-color-5: #E2E2E2;
   --theme-color: #FFC71F;
-  --background-color: white;
+  --bg-color-0: white;
 
   --navi-height: 50px;
   --navi-left-margin: 2vw;
@@ -252,7 +252,7 @@ header {
     width: min(90%, var(--recent-works-width));
 
     margin: 0 auto;
-    background: var(--background-color);
+    background: var(--bg-color-0);
 
     .item {
       outline: var(--theme-color) 1px solid;
@@ -335,7 +335,7 @@ footer {
 
     .item{
       display: flex;
-      background: var(--background-color);
+      background: var(--bg-color-0);
       width: min(320px, 90%);
       height: fit-content;
       margin: 12px;

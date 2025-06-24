@@ -7,14 +7,11 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.79"
-futures = "0.3.30"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-async-std = { version = "1", features = ["attributes", "tokio1"] }
 tokio = { version = "1", features = ["full"]}
 reqwest = "0.11.24"
-notion-client = "0.1.9"
+notion-client = "1.0"
 chrono = "0.4.34"
 website_model ={ path = "../website_model"}
 scraper = "0.12"
-urlencoding = "2.1.3"

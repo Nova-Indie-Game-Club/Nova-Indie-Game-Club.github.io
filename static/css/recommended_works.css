@@ -1,14 +1,170 @@
-.main .recommended-works {
-  width: 100%;
-  margin: 52px auto;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-.main .recommended-works .title {
+.main .work-spotlight {
   display: flex;
-  margin: 30px auto;
-  width: 252.43px;
-  height: 65.83px;
+  justify-content: flex-start;
+  flex-direction: column;
+  height: 611px;
+  max-width: 594px;
+  padding: 16px;
+  background: var(--bg-image-noise);
+  border: var(--theme-color) 1px solid;
+  border-radius: 8px;
+  box-shadow: 8px 8px var(--theme-color-shadow-1), -8px -8px var(--theme-color-shadow-1);
+}
+.main .work-spotlight .container {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  height: 333.23px;
+  align-items: center;
+  justify-content: center;
+}
+.main .work-spotlight .container .content {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  /* border: 2px solid var(--core-color-0); */
+  background: var(--bg-color-0);
+  box-shadow: 0 0 18px var(--shadow-color-0);
+}
+.main .work-spotlight .container .content .game-image {
+  flex: none;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.main .work-spotlight .container .content .game-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.main .work-spotlight .container .content .pre-image {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.main .work-spotlight .container .content .current-image {
+  opacity: 1;
+  transform: translateX(0);
+}
+.main .work-spotlight .container .content .next-image {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.main .work-spotlight .gallery {
+  display: flex;
+  justify-content: flex-start;
+  width: 594px;
+  /* height: 63.2px; */
+  height: fit-content;
+  margin-top: 10.17px;
+  gap: 9.5px;
+}
+.main .work-spotlight .gallery .item {
+  width: 111px;
+  height: 62px;
+  box-shadow: 0 0 10px var(--shadow-color-0);
+  cursor: pointer;
+  transition-property: outline-color;
+  transition-duration: 0.3s;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+}
+.main .work-spotlight .gallery .item img {
+  border-radius: 2px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.main .work-spotlight .gallery .item:hover {
+  outline-color: var(--core-color-0);
+}
+.main .work-spotlight .author {
+  position: inherit;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: fit-content;
+  opacity: 1;
+  margin-top: 17.6px;
+}
+.main .work-spotlight .author p {
+  margin: 0;
+  font-family: Source Han Sans;
+  font-size: var(--font-size-bigger);
+  font-weight: bold;
+  line-height: normal;
+  letter-spacing: 0em;
+  font-variation-settings: "opsz" auto;
+  font-feature-settings: "kern" on;
+  color: var(--theme-color);
+}
+.main .work-spotlight .description {
+  position: inherit;
+  left: 0px;
+  top: 44px;
+  width: 100%;
+  height: 102px;
+  opacity: 1;
+  margin-top: 7px;
+  overflow: hidden;
+}
+.main .work-spotlight .description p {
+  margin: 0;
+  font-size: var(--font-size-normal);
+  color: var(--core-color-1);
+}
+.main .work-spotlight .links {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.main .work-spotlight .links .itch-link {
+  width: 102px;
+}
+.main .work-spotlight .links .steam-link {
+  width: 100px;
+}
+.main .work-spotlight .links .link {
+  position: relative;
+  height: 35px;
+  margin-right: 44px;
+  display: flex;
+  font-size: var(--font-size-bigger);
+  font-weight: bold;
+  line-height: normal;
+}
+.main .work-spotlight .links .link a {
+  width: 100%;
+  text-decoration: none;
+}
+.main .work-spotlight .links .link a .link-icon {
+  fill: var(--core-color-0);
+  transition: fill 0.15s ease-in;
+  display: inline-block;
+}
+.main .work-spotlight .links .link ::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0;
+  width: 99%;
+  border-bottom: 1px solid var(--core-color-4);
+  transition: all 0.15s;
+}
+.main .work-spotlight .links .link :hover {
+  color: var(--core-color-0);
+}
+.main .work-spotlight .links .link :hover::after {
+  border-bottom: 5px solid var(--core-color-0);
 }
 .main .recommended-works .core {
   display: flex;
@@ -21,16 +177,10 @@
   margin-left: 24px;
 }
 .main .recommended-works .core .select-area .upper-left-frame {
-  position: absolute;
-  height: 16.36%;
-  top: 0;
-  left: 0;
+  display: none;
 }
 .main .recommended-works .core .select-area .lower-right-frame {
-  position: absolute;
-  height: 16.36%;
-  bottom: 0;
-  right: 0;
+  display: none;
 }
 .main .recommended-works .core .select-area .options {
   width: 90%;
@@ -40,90 +190,61 @@
   left: 40px;
   display: flex;
   flex-direction: column;
-}
-.main .recommended-works .core .select-area .options .selection:hover * {
-  color: var(--core-color-1);
+  gap: 12px;
 }
 .main .recommended-works .core .select-area .options .selection {
   position: relative;
   width: 100%;
-  height: 104px;
+  padding: 16px;
   opacity: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
+  gap: 8px;
+  border-radius: 8px;
+  background: var(--bg-image-noise);
+  border: var(--theme-color) 1px solid;
 }
 .main .recommended-works .core .select-area .options .selection p {
   transition-property: all;
   transition-duration: 0.3s;
-}
-.main .recommended-works .core .select-area .options .selection .info {
-  position: inherit;
-  top: 21px;
-  height: 29.85%;
-  padding-left: 28px;
-  opacity: 1;
-  width: 90%;
-  margin-bottom: 10px;
-}
-.main .recommended-works .core .select-area .options .selection .info p {
-  width: 90%;
+  font-family: Source Han Sans;
+  line-height: normal;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   margin: 0;
-  font-family: Source Han Sans;
-  font-size: var(--font-size-small);
-  font-weight: normal;
-  line-height: normal;
-  letter-spacing: 0em;
   font-variation-settings: "opsz" auto;
   font-feature-settings: "kern" on;
-  color: var(--core-color-3);
+  color: var(--core-color-0);
+}
+.main .recommended-works .core .select-area .options .selection .info {
+  opacity: 1;
+}
+.main .recommended-works .core .select-area .options .selection .info p {
+  font-size: var(--font-size-small);
+  font-weight: normal;
 }
 .main .recommended-works .core .select-area .options .selection .game-name {
   position: relative;
-  top: 2px;
-  height: 52.24%;
-  padding-left: 28px;
   opacity: 1;
 }
 .main .recommended-works .core .select-area .options .selection .game-name p {
-  margin: 0;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  font-family: Source Han Sans;
-  font-size: 24px;
+  font-size: var(--font-size-big);
   font-weight: bold;
-  line-height: normal;
-  letter-spacing: 0em;
-  font-variation-settings: "opsz" auto;
-  font-feature-settings: "kern" on;
-  color: var(--core-color-3);
+  border-bottom: var(--core-color-4) 1px solid;
+  transition: padding-bottom 0.5s;
+  padding-bottom: 2px;
 }
 .main .recommended-works .core .select-area .options .selection .divide-line {
-  position: relative;
-  width: 90%;
-  height: 0;
-  opacity: 1;
-  border: 1px solid var(--core-color-4);
-}
-.main .recommended-works .core .select-area .options .selection .divide-line .rectangle {
-  position: absolute;
-  right: -2px;
-  top: -4.5px;
-  width: 9px;
-  height: 9px;
-  opacity: 1;
-  background-color: var(--core-color-4);
+  display: none;
 }
 .main .recommended-works .core .select-area .options .selection .last-line {
   visibility: hidden;
 }
-.main .recommended-works .core .select-area .options .selection:hover p {
-  color: var(--core-color-0);
+.main .recommended-works .core .select-area .options .selection:hover .game-name p {
+  border-bottom: var(--core-color-1) 4px solid;
 }
 
 /*# sourceMappingURL=recommended_works.css.map */

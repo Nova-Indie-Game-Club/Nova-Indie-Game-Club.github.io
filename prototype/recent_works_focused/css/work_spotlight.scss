@@ -10,7 +10,7 @@
     --core-color-5: #E2E2E2;
     --core-color-6: #EFEFEF;
     --theme-color: #FFC71F;
-    --background-color: white;
+    --bg-color-0: white;
     --url-color: #D82D33;
 
     --font-size-small: 14px;
@@ -48,7 +48,7 @@
             height: 100%;
             box-sizing: border-box;
             border: 2px solid var(--core-color-0);
-            background: var(--background-color);
+            background: var(--bg-color-0);
 
             .game-image {
                 flex: none;
@@ -197,11 +197,11 @@
             }
 
             :hover {
-                color: var(--background-color);
+                color: var(--bg-color-0);
                 background-color: var(--core-color-0);
 
                 .link-icon{
-                    fill: var(--background-color);
+                    fill: var(--bg-color-0);
                 }
             }
 

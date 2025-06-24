@@ -1,0 +1,1 @@
+sass -w static/css
