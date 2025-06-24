@@ -129,6 +129,7 @@ header {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+
       .option {
         width: 33.3%;
         background: var(--core-color-5);
@@ -176,9 +177,6 @@ header {
 }
 .recommended-works.section {
   .core {
-    * {
-      display: flex;
-    }
     .work-container {
       flex-direction: row;
       height: fit-content;
@@ -319,6 +317,7 @@ header {
     }
   }
 }
+
 .recent-works.section {
   .works-container {
     columns: 3 var(--recent-works-item-width);
@@ -326,6 +325,8 @@ header {
     width: min(90%, var(--recent-works-width));
     margin: 0 auto;
     .item {
+      --shadow-distance-neg: 0;
+      border-radius: 2px;
       background: var(--bg-color-0);
       outline: var(--theme-color) 1px solid;
       flex-direction: column;

@@ -171,9 +171,6 @@ header .navi .right .selected p {
   opacity: 1;
 }
 
-.recommended-works.section .core * {
-  display: flex;
-}
 .recommended-works.section .core .work-container {
   flex-direction: row;
   height: fit-content;
@@ -316,6 +313,8 @@ header .navi .right .selected p {
   margin: 0 auto;
 }
 .recent-works.section .works-container .item {
+  --shadow-distance-neg: 0;
+  border-radius: 2px;
   background: var(--bg-color-0);
   outline: var(--theme-color) 1px solid;
   flex-direction: column;

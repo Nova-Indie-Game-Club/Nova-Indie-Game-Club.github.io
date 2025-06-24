@@ -2,6 +2,7 @@
     --mask-color: rgb(255 255 255 / 70%);
     --mask-filter: blur(16px);
 }
+
 #recent-work-focused.disable{
     visibility: hidden;
     .work-spotlight{
@@ -66,5 +67,4 @@
         height: fit-content;
         // margin: auto auto;
     }
-
 }

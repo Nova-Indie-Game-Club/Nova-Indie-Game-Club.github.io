@@ -30,7 +30,7 @@ pub fn RecentWorkItem<'a, G: Html>(cx: Scope<'a>, props: RecentWorkItemProps<'a>
         templates::index::set_recent_work_focused_enable(true);
     };
     view!(cx,
-        div(class="item", on:click=on_click){
+        div(class="item theme-shadow-decoration", on:click=on_click){
             div(class="up-part"){
                 img(src=(statics(props.cover_path.as_str())), alt="Cover")
                 div(class="info"){
@@ -107,17 +107,15 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
             view! { cx,
                 WorkSpotlight(work_spotlight_props)
                 // Select Area
-                div(class="select-area"){
-                    SvgCode(class="upper-left-frame", code=svg::UPPER_LEFT_FRAME)
-                    SvgCode(class="lower-right-frame", code=svg::LOWER_RIGHT_FRAME)
+                div(class="selection-area"){
                     // Options
-                    div(class="options"){
+                    div(class="selections"){
                         Indexed(
                             iterable=select_items,
                             view= move |cx, it| {
                                 let index = it.index;
                                 view! { cx,
-                                    div(class="selection", on:click= move |_|{
+                                    div(class="selection theme-shadow-decoration", on:click= move |_|{
                                         game_index.set(index);
                                         if works.get().len() > 0 {
                                             work_spotlight_props.set_work(&works.get()[*game_index.get()])
@@ -128,7 +126,7 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
                                                 (format!("{}/{}", &it.author_text, &it.data_text))
                                             }
                                         }
-                                        div(class="game-name"){
+                                        div(class="game-name underline-clickable"){
                                             p(){
                                                 (it.name.clone())
                                             }
@@ -201,12 +199,12 @@ impl<'a> WorkSpotlightProps<'a> {
 pub fn WorkSpotlight<'a, G: Html>(cx: Scope<'a>, props: WorkSpotlightProps<'a>) -> View<G> {
     view! { cx,
     // Spotlight
-    div(class="work-spotlight"){
+    div(class="work-spotlight theme-shadow-decoration"){
         // Screenshots
         div(class="container"){
             div(class="content")
             {
-                div(class="game-image current_image"){
+                div(class="game-image current-image"){
                     img(src=(statics(props.focused_image.get().as_str())))
                 }
             }
@@ -252,11 +250,9 @@ pub fn WorkSpotlight<'a, G: Html>(cx: Scope<'a>, props: WorkSpotlightProps<'a>) 
             Indexed(
                 iterable=props.platforms,
                 view=|cx, it| view!{ cx,
-                    div(class="link"){
-                        a(href=&it.url, target="_blank"){
-                            (it.platform_type.display_name())
-                            SvgCode(class="link-icon", code=svg::LINK_ARROW)
-                        }
+                    a(href=&it.url, target="_blank", class="underline-clickable"){
+                        (it.platform_type.display_name())
+                        SvgCode(class="link-icon", code=svg::LINK_ARROW)
                     }
                 }
             )
