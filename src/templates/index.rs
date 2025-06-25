@@ -211,19 +211,19 @@ fn index_page<G: Html>(cx: Scope, state: &IndexPageStateRx) -> View<G> {
             Section(name="recommended-works".to_string(), title_path="assets/images/title_recommended_works.png".to_string()){
                 FocusedWorkPanel(works=state.recommended_works.get())
             }
-            Section(name="recent-works".to_string(),title_path="assets/images/title_recent_works.png".to_string()){
+            Section(name="recent-works".to_string(), title_path="assets/images/title_recent_works.png".to_string()){
                 div(class="works-container"){
                     (recent_work_items_view)
                 }
             }
-            Section(name="media".to_string(),title_path="assets/images/title_media.png".to_string()){
-                div{
-                    img(src=statics("assets/images/qr_code/wechat.jpeg"), alt="wechat")
-                    a(href="https://mp.weixin.qq.com/s/vgXY1kWc0qa-n7RPXlSmwA",target="_blank"){ "微信公众号" }
+            Section(name="media".to_string(), title_path="assets/images/title_media.png".to_string()){
+                a (class="item theme-shadow-decoration", href="https://mp.weixin.qq.com/s/vgXY1kWc0qa-n7RPXlSmwA", target="_blank") {
+                    img(src = statics("assets/images/qr_code/wechat.jpeg"), alt="wechat")
+                    div { "微信公众号" }
                 }
-                div{
-                    img(src=statics("assets/images/qr_code/bilibili.png"), alt="bilibili")
-                    a(href="https://space.bilibili.com/406914779",target="_blank"){ "Bilibili" }
+                a (class="item theme-shadow-decoration", href="https://space.bilibili.com/406914779",target="_blank") {
+                    img(src = statics("assets/images/qr_code/bilibili.png"), alt="bilibili")
+                    div { "Bilibili" }
                 }
             }
         }

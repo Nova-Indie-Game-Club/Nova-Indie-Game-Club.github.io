@@ -1,178 +1,7 @@
-.main .theme-shadow-decoration {
-  --shadow-distance: 8px;
-  --shadow-distance-neg: -8px;
-  box-shadow: var(--shadow-distance) var(--shadow-distance) var(--theme-color-shadow-1), var(--shadow-distance-neg) var(--shadow-distance-neg) var(--theme-color-shadow-1);
-}
-.main .underline-clickable {
-  text-decoration: none;
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  font-size: var(--font-size-big);
-  font-weight: bold;
-  padding-bottom: 4px;
-  --underline-thickness: 1px;
-  --underline-color: var(--core-color-4);
-}
-.main .underline-clickable::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 0;
-  width: 99%;
-  border-bottom: var(--underline-thickness) solid var(--underline-color);
-  transition: all 0.15s;
-}
-.main .underline-clickable:hover {
-  font-weight: bolder;
-}
-.main .underline-clickable:hover::after {
-  --underline-thickness: 4px;
-  --underline-color: var(--core-color-1);
-}
 .main .recommended-works .core {
   display: flex;
   justify-content: center;
   gap: 24px;
-}
-.main .recommended-works .core .work-spotlight {
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  height: 611px;
-  max-width: 594px;
-  padding: 16px;
-  background: var(--bg-image-noise);
-  border: var(--theme-color) 1px solid;
-  border-radius: 8px;
-}
-.main .recommended-works .core .work-spotlight .container {
-  position: relative;
-  margin: 0;
-  width: 100%;
-  height: 333.23px;
-  align-items: center;
-  justify-content: center;
-}
-.main .recommended-works .core .work-spotlight .container .content {
-  position: relative;
-  flex: none;
-  display: flex;
-  flex-wrap: nowrap;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  /* border: 2px solid var(--core-color-0); */
-  background: var(--bg-color-0);
-  box-shadow: 0 0 18px var(--shadow-color-0);
-}
-.main .recommended-works .core .work-spotlight .container .content .game-image {
-  flex: none;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-.main .recommended-works .core .work-spotlight .container .content .game-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 4px;
-}
-.main .recommended-works .core .work-spotlight .container .content .pre-image {
-  opacity: 0;
-  transform: translateX(-100%);
-}
-.main .recommended-works .core .work-spotlight .container .content .current-image {
-  opacity: 1;
-  transform: translateX(0);
-}
-.main .recommended-works .core .work-spotlight .container .content .next-image {
-  opacity: 0;
-  transform: translateX(100%);
-}
-.main .recommended-works .core .work-spotlight .gallery {
-  display: flex;
-  justify-content: flex-start;
-  width: 100%;
-  height: fit-content;
-  margin-top: 12px;
-  gap: 10px;
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-.main .recommended-works .core .work-spotlight .gallery .item {
-  box-shadow: 0 0 10px var(--shadow-color-0);
-  height: fit-content;
-  cursor: pointer;
-  transition-property: outline-color;
-  transition-duration: 0.3s;
-  outline: 2px solid transparent;
-  outline-offset: -2px;
-}
-.main .recommended-works .core .work-spotlight .gallery .item img {
-  border-radius: 2px;
-  height: 62px;
-  object-fit: cover;
-}
-.main .recommended-works .core .work-spotlight .gallery .item:hover {
-  outline-color: var(--core-color-0);
-}
-.main .recommended-works .core .work-spotlight .author {
-  position: inherit;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: fit-content;
-  opacity: 1;
-  margin-top: 17.6px;
-}
-.main .recommended-works .core .work-spotlight .author p {
-  margin: 0;
-  font-family: Source Han Sans;
-  font-size: var(--font-size-bigger);
-  font-weight: bold;
-  line-height: normal;
-  letter-spacing: 0em;
-  font-variation-settings: "opsz" auto;
-  font-feature-settings: "kern" on;
-  color: var(--theme-color);
-}
-.main .recommended-works .core .work-spotlight .description {
-  position: inherit;
-  left: 0px;
-  width: 100%;
-  height: 102px;
-  margin: 12px 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-.main .recommended-works .core .work-spotlight .description p {
-  margin: 0;
-  font-size: var(--font-size-normal);
-  color: var(--core-color-1);
-}
-.main .recommended-works .core .work-spotlight .links {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: 16px;
-}
-.main .recommended-works .core .work-spotlight .links a:hover {
-  color: var(--core-color-0);
-}
-.main .recommended-works .core .work-spotlight .links a .link-icon {
-  width: var(--font-size-normal);
-  height: var(--font-size-normal);
-  fill: var(--core-color-0);
-  transition: fill 0.15s ease-in;
-  display: inline-block;
 }
 .main .recommended-works .core .selection-area .selections {
   display: flex;
@@ -181,7 +10,7 @@
 }
 .main .recommended-works .core .selection-area .selections .selection {
   --shadow-distance: 6px;
-  --shadow-distance-neg: -6px;
+  --shadow-distance-neg: 0;
   position: relative;
   width: fit-content;
   padding: 16px;
@@ -192,11 +21,13 @@
   cursor: pointer;
   gap: 8px;
   border-radius: 8px;
-  background: var(--bg-image-noise);
-  border: var(--theme-color) 1px solid;
+  background-color: var(--bg-color-0);
+  outline: var(--theme-color) 1px solid;
+  transition: outline-color 0.5s;
 }
 .main .recommended-works .core .selection-area .selections .selection:hover {
   font-weight: bolder;
+  outline: var(--hlt-color) 2px solid;
 }
 .main .recommended-works .core .selection-area .selections .selection:hover .game-name::after {
   --underline-thickness: 5px;
@@ -226,6 +57,144 @@
   font-size: var(--font-size-big);
   font-weight: bold;
   padding-bottom: 2px;
+}
+
+.work-spotlight {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  height: 611px;
+  max-width: 594px;
+  padding: 16px;
+  background-color: var(--bg-color-0);
+  border: var(--theme-color) 1px solid;
+  border-radius: 8px;
+}
+.work-spotlight .container {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  height: 333.23px;
+  align-items: center;
+  justify-content: center;
+}
+.work-spotlight .container .content {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  /* border: 2px solid var(--core-color-0); */
+  background: var(--bg-color-0);
+  box-shadow: 0 0 18px var(--shadow-color-0);
+}
+.work-spotlight .container .content .game-image {
+  flex: none;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.work-spotlight .container .content .game-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.work-spotlight .container .content .pre-image {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.work-spotlight .container .content .current-image {
+  opacity: 1;
+  transform: translateX(0);
+}
+.work-spotlight .container .content .next-image {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.work-spotlight .gallery {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  height: fit-content;
+  margin-top: 12px;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.work-spotlight .gallery .item {
+  box-shadow: 0 0 10px var(--shadow-color-0);
+  height: fit-content;
+  cursor: pointer;
+  transition-property: outline-color;
+  transition-duration: 0.3s;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+}
+.work-spotlight .gallery .item img {
+  border-radius: 2px;
+  height: 62px;
+  object-fit: cover;
+}
+.work-spotlight .gallery .item:hover {
+  outline-color: var(--core-color-0);
+}
+.work-spotlight .author {
+  position: inherit;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: fit-content;
+  opacity: 1;
+  margin-top: 17.6px;
+}
+.work-spotlight .author p {
+  margin: 0;
+  font-family: Source Han Sans;
+  font-size: var(--font-size-bigger);
+  font-weight: bold;
+  line-height: normal;
+  letter-spacing: 0em;
+  font-variation-settings: "opsz" auto;
+  font-feature-settings: "kern" on;
+  color: var(--theme-color);
+}
+.work-spotlight .description {
+  position: inherit;
+  left: 0px;
+  width: 100%;
+  height: 102px;
+  margin: 12px 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.work-spotlight .description p {
+  margin: 0;
+  font-size: var(--font-size-normal);
+  color: var(--core-color-1);
+}
+.work-spotlight .links {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 16px;
+}
+.work-spotlight .links a:hover {
+  color: var(--core-color-0);
+}
+.work-spotlight .links a .link-icon {
+  width: var(--font-size-normal);
+  height: var(--font-size-normal);
+  fill: var(--core-color-0);
+  transition: fill 0.15s ease-in;
+  display: inline-block;
 }
 
 /*# sourceMappingURL=recommended_works.css.map */

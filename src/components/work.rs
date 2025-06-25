@@ -126,7 +126,7 @@ pub fn FocusedWorkPanel<G: Html>(cx: Scope, props: FocusedWorkPanelProps) -> Vie
                                                 (format!("{}/{}", &it.author_text, &it.data_text))
                                             }
                                         }
-                                        div(class="game-name underline-clickable"){
+                                        div(class="game-name"){
                                             p(){
                                                 (it.name.clone())
                                             }

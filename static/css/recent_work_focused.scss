@@ -18,6 +18,9 @@
     .work-spotlight{
         transform: translateY(0px);
         transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        padding: 24px;
+        border-radius: 16px;
+        background: linear-gradient(0deg, var(--theme-color-shadow-0), transparent), var(--bg-image-noise) repeat;
 
         .container{
             transition-duration: 0.5s;
@@ -65,6 +68,5 @@
         z-index: 12;
         width: fit-content;
         height: fit-content;
-        // margin: auto auto;
     }
 }

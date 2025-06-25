@@ -21,6 +21,42 @@
   border-right: var(--theme-color) 1px solid;
 }
 
+.theme-shadow-decoration {
+  --shadow-distance: 8px;
+  --shadow-distance-neg: -8px;
+  box-shadow: var(--shadow-distance) var(--shadow-distance) var(--theme-color-shadow-1), var(--shadow-distance-neg) var(--shadow-distance-neg) var(--theme-color-shadow-1);
+}
+
+.underline-clickable {
+  text-decoration: none;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  font-size: var(--font-size-big);
+  font-weight: bold;
+  padding-bottom: 4px;
+  --underline-thickness: 1px;
+  --underline-color: var(--core-color-4);
+}
+.underline-clickable::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0;
+  width: 99%;
+  border-bottom: var(--underline-thickness) solid var(--underline-color);
+  transition: all 0.15s;
+}
+.underline-clickable:hover {
+  font-weight: bolder;
+}
+.underline-clickable:hover::after {
+  --underline-thickness: 4px;
+  --underline-color: var(--core-color-1);
+}
+
 header {
   width: 100%;
   max-width: 100%;
@@ -76,6 +112,9 @@ header .navi .right .selected p {
 
 .cover {
   padding-top: 20vw;
+  background: linear-gradient(180deg, var(--theme-color-shadow-1), transparent 50%), url("/.perseus/static/assets/images/cover_background.png") no-repeat;
+  background-size: contain;
+  height: 90vh;
 }
 .cover .logo_title {
   display: flex;
@@ -92,6 +131,7 @@ header .navi .right .selected p {
   width: 222px;
 }
 .cover .background {
+  display: none;
   position: absolute;
   z-index: -1;
   top: 0;
@@ -99,15 +139,12 @@ header .navi .right .selected p {
   object-fit: contain;
 }
 
-.main {
-  padding-top: 20vh;
-}
 .main .section {
   width: 100%;
   margin: 0 auto;
   border-top: var(--theme-color) 1px solid;
   padding: var(--section-padding) 0;
-  background: linear-gradient(0deg, var(--theme-color-shadow-0), transparent), var(--bg-image-noise) repeat;
+  background: var(--bg-image-noise) repeat;
 }
 .main .section .title {
   display: flex;
@@ -363,20 +400,30 @@ header .navi .right .selected p {
   display: flex;
   flex-direction: row;
 }
-.media.section .core div {
+.media.section .core .item {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  border-radius: 4px;
   padding: 8px;
   margin: 0 12px;
-  border: var(--theme-color) 1px solid;
+  outline: var(--theme-color) 1px solid;
+  background-color: var(--bg-color-0);
+  text-decoration: none;
+  transition: outline-color 0.3s;
+  --shadow-distance-neg: 0;
 }
-.media.section .core div img {
+.media.section .core .item img {
   width: 200px;
   padding: 4px;
 }
-.media.section .core div a {
-  margin: 0;
-  text-align: center;
+.media.section .core .item:hover {
+  outline: var(--hlt-color) 2px solid;
+}
+.media.section .core .item:hover div {
+  --underline-thickness: 5px;
+  --underline-color: var(--core-color-1);
+  color: var(--core-color-0);
 }
 
 /*# sourceMappingURL=home.css.map */
