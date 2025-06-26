@@ -56,7 +56,31 @@
 .main .recommended-works .core .selection-area .selections .selection .game-name p {
   font-size: var(--font-size-big);
   font-weight: bold;
-  padding-bottom: 2px;
+}
+@media (max-width: 1000px) {
+  .main .recommended-works .core {
+    flex-direction: column;
+    align-items: center;
+  }
+  .main .recommended-works .core .selection-area {
+    width: 90%;
+  }
+  .main .recommended-works .core .selection-area .selections {
+    width: 100%;
+    gap: 12px;
+  }
+  .main .recommended-works .core .selection-area .selections .selection {
+    gap: 4px;
+    padding-top: 12px;
+    padding-bottom: 8px;
+    width: 100%;
+  }
+  .main .recommended-works .core .selection-area .selections .selection .info p {
+    font-size: var(--font-size-small);
+  }
+  .main .recommended-works .core .selection-area .selections .selection .game-name p {
+    font-size: var(--font-size-normal);
+  }
 }
 
 .work-spotlight {
@@ -64,7 +88,8 @@
   justify-content: flex-start;
   flex-direction: column;
   height: 611px;
-  max-width: 594px;
+  width: 600px;
+  max-width: 90%;
   padding: 16px;
   background-color: var(--bg-color-0);
   border: var(--theme-color) 1px solid;

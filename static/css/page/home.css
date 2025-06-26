@@ -12,6 +12,11 @@
   --bg-image-noise: url("/.perseus/static/assets/images/bg_noise.jpg");
   --selected-option-image: url("/.perseus/static/assets/images/navi_option_selected.png");
 }
+@media (max-width: 1000px) {
+  :root #root {
+    --content-width: 100vw;
+  }
+}
 
 #root {
   max-width: var(--content-width);
@@ -119,16 +124,16 @@ header .navi .right .selected p {
 .cover .logo_title {
   display: flex;
   flex-direction: column;
-  width: fit-content;
   margin: 0 auto;
+  width: 222px;
 }
 .cover .logo_title .logo {
   margin: 0 auto;
-  width: 125px;
+  width: 55%;
 }
 .cover .logo_title .title {
   margin: 20px auto;
-  width: 222px;
+  width: 100%;
 }
 .cover .background {
   display: none;
@@ -138,6 +143,18 @@ header .navi .right .selected p {
   width: var(--content-width);
   object-fit: contain;
 }
+@media (max-width: 1000px) {
+  .cover {
+    height: calc(50vw + 10vh);
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .cover .logo_title {
+    max-width: 50%;
+  }
+}
 
 .main .section {
   width: 100%;
@@ -146,11 +163,16 @@ header .navi .right .selected p {
   padding: var(--section-padding) 0;
   background: var(--bg-image-noise) repeat;
 }
+.main .section:last-child {
+  padding-bottom: calc(var(--section-padding) * 1.8);
+}
 .main .section .title {
   display: flex;
   margin: 32px auto;
   margin-top: 0;
   height: var(--section-title-height);
+  max-width: 90%;
+  object-fit: contain;
 }
 
 .about.section .title {
@@ -190,6 +212,11 @@ header .navi .right .selected p {
 }
 .about.section .core .text-container {
   height: 128px;
+}
+@media (max-width: 1000px) {
+  .about.section .core .text-container {
+    height: calc(320px - 20vw);
+  }
 }
 .about.section .core .text-container .text {
   position: relative;
@@ -399,6 +426,12 @@ header .navi .right .selected p {
   width: fit-content;
   display: flex;
   flex-direction: row;
+  gap: 24px;
+}
+@media (max-width: 1000px) {
+  .media.section .core {
+    flex-direction: column;
+  }
 }
 .media.section .core .item {
   display: flex;

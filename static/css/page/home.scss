@@ -10,6 +10,11 @@
   --recent-works-item-width: 280px;
   --focused-work-panel-main-width: min(720px, 80vw);
   --content-width: 90vw;
+  @media (max-width: 1000px) {
+    #root {
+      --content-width: 100vw;
+    }
+  }
   --bg-image-noise: url("/.perseus/static/assets/images/bg_noise.jpg");
   --selected-option-image: url("/.perseus/static/assets/images/navi_option_selected.png");
 }
@@ -133,17 +138,17 @@ header {
   .logo_title {
     display: flex;
     flex-direction: column;
-    width: fit-content;
     margin: 0 auto;
+    width: 222px;
 
     .logo {
       margin: 0 auto;
-      width: 125px;
+      width: 55%;
     }
 
     .title {
       margin: 20px auto;
-      width: 222px;
+      width: 100%;
     }
   }
 
@@ -154,6 +159,17 @@ header {
     top: 0;
     width: var(--content-width);
     object-fit: contain;
+  }
+
+  @media (max-width: 1000px) {
+    height: calc(50vw + 10vh);
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .logo_title {
+     max-width: 50%;
+    }
   }
 }
 
@@ -166,11 +182,17 @@ header {
     //background: linear-gradient(0deg, var(--theme-color-shadow-0), transparent), var(--bg-image-noise) repeat;
     background: var(--bg-image-noise) repeat;
 
+    &:last-child {
+      padding-bottom: calc(var(--section-padding) * 1.8);
+    }
+
     .title {
       display: flex;
       margin: 32px auto;
       margin-top: 0;
       height: var(--section-title-height);
+      max-width: 90%;
+      object-fit: contain;
     }
   }
 }
@@ -221,6 +243,10 @@ header {
     .text-container {
       height: 128px;
 
+      @media (max-width: 1000px) {
+        height: calc(320px - 20vw);
+      }
+
       .text {
         position: relative;
         top: 16px;
@@ -230,6 +256,7 @@ header {
         opacity: 0;
         transition: 0.05s all cubic-bezier(0.25, 1, 0.5, 1);
       }
+
 
       .text.active {
         transform: translateY(0);
@@ -470,6 +497,7 @@ header {
   }
 }
 
+
 /// 媒体部分
 .media.section {
   .core {
@@ -477,6 +505,11 @@ header {
     width: fit-content;
     display: flex;
     flex-direction: row;
+    gap: 24px;
+
+    @media (max-width: 1000px) {
+      flex-direction: column;
+    }
 
     .item {
       display: flex;

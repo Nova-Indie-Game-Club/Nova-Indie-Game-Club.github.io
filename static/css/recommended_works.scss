@@ -54,11 +54,9 @@
               color: var(--core-color-0);
             }
 
-            .info {
-              p {
-                font-size: var(--font-size-small);
-                font-weight: normal;
-              }
+            .info p {
+              font-size: var(--font-size-small);
+              font-weight: normal;
             }
 
             .game-name {
@@ -67,7 +65,33 @@
               p {
                 font-size: var(--font-size-big);
                 font-weight: bold;
-                padding-bottom: 2px;
+              }
+            }
+          }
+        }
+      }
+
+      @media (max-width: 1000px) {
+        flex-direction: column;
+        align-items: center;
+
+        .selection-area {
+          width: 90%;
+          .selections {
+            width: 100%;
+            gap: 12px;
+            .selection {
+              gap: 4px;
+              padding-top: 12px;
+              padding-bottom: 8px;
+              width: 100%;
+
+              .info p {
+                font-size: var(--font-size-small);
+              }
+
+              .game-name p {
+                font-size: var(--font-size-normal);
               }
             }
           }
@@ -83,7 +107,9 @@
   flex-direction: column;
 
   height: 611px;
-  max-width: 594px;
+  width: 600px;
+  max-width: 90%;
+
   padding: 16px;
   //background: var(--bg-image-noise);
   background-color: var(--bg-color-0);

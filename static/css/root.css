@@ -12,7 +12,7 @@
   --theme-color-shadow-1: #ffc71f55;
   --bg-color-0: white;
   --url-color: #d82d33;
-  --font-size-small: 14px;
+  --font-size-small: 12px;
   --font-size-normal: 16px;
   --font-size-big: 18px;
   --font-size-bigger: 24px;
@@ -32,7 +32,7 @@ body {
   background-color: var(--bg-color-0);
 }
 
-p {
+* {
   color: var(--core-color-0);
   font-size: var(--font-size-normal);
 }
