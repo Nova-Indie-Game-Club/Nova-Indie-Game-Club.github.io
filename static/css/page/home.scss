@@ -441,6 +441,7 @@ header {
     column-gap: 16px;
     width: min(90%, var(--recent-works-width));
     margin: 0 auto;
+    max-width: 70vw;
 
     .item {
       --shadow-distance-neg: 0;

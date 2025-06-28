@@ -6,35 +6,15 @@
 #recent-work-focused.disable {
   visibility: hidden;
 }
-#recent-work-focused.disable .work-spotlight * {
-  transform: translateY(600px);
-  transform: all none;
-}
 
 #recent-work-focused.enable {
   visibility: visible;
 }
 #recent-work-focused.enable .work-spotlight {
-  transform: translateY(0px);
   transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   padding: 24px;
   border-radius: 16px;
   background: linear-gradient(0deg, var(--theme-color-shadow-0), transparent), var(--bg-image-noise) repeat;
-}
-#recent-work-focused.enable .work-spotlight .container {
-  transition-duration: 0.5s;
-}
-#recent-work-focused.enable .work-spotlight .gallery {
-  transition-duration: 0.55s;
-}
-#recent-work-focused.enable .work-spotlight .author {
-  transition-duration: 0.6s;
-}
-#recent-work-focused.enable .work-spotlight .description {
-  transition-duration: 0.65s;
-}
-#recent-work-focused.enable .work-spotlight .links {
-  transition-duration: 0.7s;
 }
 
 #recent-work-focused {
