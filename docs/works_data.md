@@ -1,7 +1,7 @@
 # 添加作品、重建与发布
 
 本项目使用本地 TOML 和图片维护作品，由 Rust + Maud 生成静态网站，不再从 Notion 或游戏平台抓取数据。
-**以下命令均在仓库根目录运行。**
+**以下命令均在仓库根目录运行。** 模板、静态资源和样式表开发见 [开发与构建](development.md)。
 
 ## 1. 准备环境
 
@@ -125,6 +125,16 @@ dist/exported/static/assets/local-works/<id>/
 不要手动维护该输出目录，也不要将作品图片放到旧的 `static/assets/works/` 中。
 
 ## 5. 校验、重建与预览
+
+### 仅校验数据并准备图片
+
+```shell
+cargo run -p website_data
+```
+
+该命令校验作品库，并将引用的图片复制到 `static/assets/local-works/` 缓存，不生成网页。
+缓存已被 Git 忽略，不参与 `cargo dev` 的网页构建，无需手动维护或提交。
+日常更新也可以直接运行下文的 `cargo dev`，不必先执行这个独立命令。
 
 ### 运行测试
 
