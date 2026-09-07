@@ -1,0 +1,136 @@
+/* Native controls and static-rendered panels; no frontend framework required. */
+[hidden] {
+  display: none !important;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+button:focus-visible, a:focus-visible {
+  outline: 3px solid var(--core-color-0);
+  outline-offset: 4px;
+}
+
+button.option, button.selection, button.work-card, .gallery button.item {
+  border: 0;
+  padding: 0;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+button.option > span {
+  display: block;
+  text-align: center;
+  color: var(--core-color-0);
+}
+
+.about.section .core .text-container {
+  height: auto;
+  min-height: 128px;
+}
+
+.about.section .core .text-container .text {
+  height: auto;
+  top: 0;
+  margin-top: 16px;
+}
+
+header .navi .option, footer a.footer-item {
+  text-decoration: none;
+}
+
+.recommendation-panel {
+  width: 600px;
+  max-width: 90%;
+}
+
+.recommendation-panel > .work-spotlight {
+  width: 100%;
+  max-width: none;
+}
+
+.work-title {
+  margin: 0 0 12px;
+  font-size: var(--font-size-big);
+}
+
+.work-spotlight {
+  max-height: none;
+}
+
+.work-spotlight .description p {
+  white-space: pre-line;
+}
+
+.work-spotlight .links {
+  flex-wrap: wrap;
+}
+
+.gallery button.item {
+  flex-shrink: 0;
+  display: flex;
+  background: transparent;
+}
+
+.gallery button[aria-pressed="true"], .selection[aria-pressed="true"] {
+  outline: 2px solid var(--core-color-0) !important;
+}
+
+.selection .info > span {
+  font-size: var(--font-size-small);
+  font-weight: normal;
+}
+
+.selection .game-name > span {
+  font-size: var(--font-size-big);
+  font-weight: bold;
+}
+
+.work-card {
+  display: block;
+  width: 100%;
+  background: transparent;
+}
+
+.work-card .up-part, .work-card .title-text {
+  display: block;
+}
+
+.work-card .info > span {
+  font-size: var(--font-size-small);
+}
+
+.work-card .title-text > span {
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  color: var(--hlt-color);
+}
+
+footer a.footer-item {
+  display: block;
+}
+
+footer .footer-left-part {
+  max-width: 100%;
+}
+
+.about-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.about-page h1 {
+  font-size: 28px;
+}
+
+.about-page h2 {
+  font-size: 20px;
+}
+
+.about-page p {
+  line-height: 1.8;
+}

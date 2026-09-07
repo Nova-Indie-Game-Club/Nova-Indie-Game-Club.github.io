@@ -1,19 +1,21 @@
-use perseus::prelude::*;
-use sycamore::prelude::*;
+use maud::{html, Markup};
 
-fn about_page<G: Html>(cx: Scope) -> View<G> {
-    view!( cx,
-        p { "About." }
+pub fn render() -> Markup {
+    super::page(
+        "关于 Nova 独游社",
+        "../",
+        html! {
+            main.about-page {
+                a href="../" { "← 返回主页" }
+                h1 { "关于 Nova 独游社" }
+                @for (_, title, text) in super::content::ABOUT_SECTIONS {
+                    section {
+                        h2 { (title) }
+                        p { (text) }
+                    }
+                }
+            }
+            (crate::components::footer::render())
+        },
     )
-}
-
-#[engine_only_fn]
-fn head(cx: Scope) -> View<SsrNode> {
-    view!( cx,
-        title { "About" }
-    )
-}
-
-pub fn get_template<G: Html>() -> Template<G> {
-    Template::build("about").view(about_page).head(head).build()
 }

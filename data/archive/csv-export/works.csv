@@ -1,0 +1,34 @@
+﻿Name,SubName,Tag,GameJam,Introduce,AutoCollection,Author,Itch,Steam,GameCore,AuthorLink,Class,Cover,Homepage,NovaGameJam,Screenshot,SubmissionDate
+猫和边界可以改变的方块,Cat with blocks whose edges can be manipulated,"猫, 解谜",BOOOM,Cat with Blocks whose Edges can be Manipulated is a puzzle game about edge manipulation. You will play a cat that can change the edges of the blocks and solve various puzzles in the game world.,Itch,"Koiro,Raspirin",https://gloridifice.itch.io/cat-with-blocks,,,,Spotlight,UuBQjp.png,,None,"WHjdSM.png, z_AUYU.png","February 29, 2024"
+Time: Cardmancer,Time: Cardmancer,"动作, 策略",Ludum Dare,"Both the player and the enemy switch their actions(attack\defense) according to the timeline, however, please note that your next action is not directly determined by you, but is manipulated by a random timeline.",Itch," BW, Koiro, TrioDuck",https://akacmd.itch.io/time-cardmancer,,,,Normal,LQ31y2.png,,None,,"April 29, 2024"
+Triage Operator,Triage Operator,策略,MiniJam,"灾区救援工作中，给每一个伤员标记优先度是一件重要的事，它可以显著提升救援效率。在本游戏中，你操作一个无人机，检查伤员状况并为它们打上标签。
+不同救援优先度由高到低对应的标签颜色分别是：红色 -> 黄色 -> 绿色 -> 黑色",Itch,"Koiro, dyron503, Aspirin, FlowerGolden",https://gloridifice.itch.io/triage-operator,,,,Normal,QXs34.png,,None,,"April 29, 2024"
+Little Things,Little Things,点击,BOOOM,A little games collection game. Hope those little things can make you laugh.,Itch,"TT,Mowgli,Aspirin,Koiro",https://gloridifice.itch.io/little-things,,,,Normal,48XwD.png,,None,,"April 29, 2024"
+冰上嘎嘎,QUACK!!! on ICE,"解谜, 鸭子",Bevy Jam,"参加 Bevy Jam 4 🦀 在 9 天内制作的游戏
+
+🦆🦆🦆一个关于一群鸭子滑冰和吃面包的解谜游戏。
+
+一只鸭子，一个面包。 一堆鸭子！
+
+操作：
+- 鼠标点击：选择要滑动的鸭子
+- WASD/方向键：移动选中的鸭子
+- R：重置关卡
+- Z：撤销
+- []：跳过关卡 ",Itch,三重鸭,https://akacmd.itch.io/quack-on-ice,,https://www.gcores.com/games/116885,https://akacmd.itch.io/,Spotlight,XwfLF.png,,None,,"May 1, 2024"
+能不能不要再做推箱子游戏了!,Yet Another Sokoban Game?,"搞笑, 点击, 解谜, 鸭子",Global GameJam,"在 GGJ2024 线下上海站点 48h 游戏开发做的游戏，主题是 Make Me Laugh
+
+什么年代了，还在做传统推箱子？所以我们做了一个包含17个小游戏的合集，一关更比一关强，秘密武器更是带给你额外的惊喜
+
+不算逻辑解谜游戏。灵感来源主要是 This Is the Only Level",Itch,"三重鸭,Graviton,Kira铭少",https://akacmd.itch.io/yet-another-sokoban-game,,https://www.gcores.com/games/119829,,Spotlight,6rVQNi.png,,None,,"May 1, 2024"
+小石头人踏上旅程,Stoneman’s Adventure,解谜,CUSGA,"《小石头人踏上旅程》是一款3d解谜游戏，拥有结合了推箱子和一笔画的独特游戏玩法。一个小石头人在充满谜题和秘密的岛屿上展开冒险。
+
+生成石头，推动石头，搭建形状！
+
+游戏特色：
+- 充满可能性的游戏机制
+- 手工打造的有趣谜题
+- 用关卡引入层层递进的想法
+- 打破关卡隔阂的大地图
+- 放松优美的游戏配乐
+- 有可爱的鸭子 ",Itch,TrioDuck,https://akacmd.itch.io/stoneman-adventure,https://store.steampowered.com/app/2434860/Stonemans_Adventure/,,https://akacmd.itch.io/,Spotlight,M_g5Su_(1).png,,None,,"May 1, 2024"

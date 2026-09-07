@@ -1,5 +1,3 @@
-use std::str;
-
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
@@ -38,22 +36,6 @@ impl PlatformType {
             PlatformType::HomePage => "homepage".to_string(),
         }
     }
-
-    pub fn from_en_id(id: &str) -> Option<Self> {
-        if id == "Itch" {
-            return Some(PlatformType::Itch);
-        }
-        if id == "GameCore" {
-            return Some(PlatformType::GameCore);
-        }
-        if id == "Steam" {
-            return Some(PlatformType::Steam);
-        }
-        if id == "HomePage" {
-            return Some(PlatformType::HomePage);
-        }
-        return Option::None;
-    }
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
@@ -88,9 +70,7 @@ pub struct Work {
     /// assets pathes of screenshots.
     pub screenshots: Vec<String>,
     pub submission_date: DateTimeUtc,
-    pub last_edited_date: DateTimeUtc,
     pub class: Class,
-    pub auto_collection: Option<PlatformType>,
 }
 
 impl Work {

@@ -1,0 +1,33 @@
+# Edit this file and keep referenced images in this directory.
+id = "quack-on-ice"
+name = "冰上嘎嘎"
+sub_name = "QUACK!!! on ICE"
+submission_date = "2024-05-01"
+class = "Spotlight"
+tags = ["解谜", "鸭子"]
+gamejams = ["Bevy Jam"]
+nova_gamejams = []
+cover = "cover.png"
+screenshots = []
+
+introduce = """
+参加 Bevy Jam 4 🦀 在 9 天内制作的游戏
+
+🦆🦆🦆一个关于一群鸭子滑冰和吃面包的解谜游戏。
+
+一只鸭子，一个面包。 一堆鸭子！
+
+操作：
+- 鼠标点击：选择要滑动的鸭子
+- WASD/方向键：移动选中的鸭子
+- R：重置关卡
+- Z：撤销
+- []：跳过关卡 """
+
+authors = [
+  { name = "三重鸭", url = "https://akacmd.itch.io/" },
+]
+
+[platforms]
+itch = "https://akacmd.itch.io/quack-on-ice"
+gamecore = "https://www.gcores.com/games/116885"

@@ -2,7 +2,19 @@ dist/
 target/
 pkg/
 
+.idea
+.vscode
+
+# Generated from data/works during local data preparation or site export
+static/assets/local-works/
+
 # Ignore .DS_Store in MacOS
 .DS_Store
 **/.DS_Store
 .DS_Store?
+
+# agents
+.pi
+.omp
+.claude
+.codex

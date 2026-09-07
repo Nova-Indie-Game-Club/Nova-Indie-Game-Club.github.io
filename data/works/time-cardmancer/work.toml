@@ -1,0 +1,23 @@
+# Edit this file and keep referenced images in this directory.
+id = "time-cardmancer"
+name = "Time: Cardmancer"
+sub_name = "Time: Cardmancer"
+submission_date = "2024-04-29"
+class = "Normal"
+tags = ["动作", "策略"]
+gamejams = ["Ludum Dare"]
+nova_gamejams = []
+cover = "cover.png"
+screenshots = []
+
+introduce = """
+Both the player and the enemy switch their actions(attack\\defense) according to the timeline, however, please note that your next action is not directly determined by you, but is manipulated by a random timeline."""
+
+authors = [
+  { name = "BW" },
+  { name = "Koiro" },
+  { name = "TrioDuck" },
+]
+
+[platforms]
+itch = "https://akacmd.itch.io/time-cardmancer"

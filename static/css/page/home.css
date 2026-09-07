@@ -9,8 +9,8 @@
   --recent-works-item-width: 280px;
   --focused-work-panel-main-width: min(720px, 80vw);
   --content-width: 90vw;
-  --bg-image-noise: url("/.perseus/static/assets/images/bg_noise.jpg");
-  --selected-option-image: url("/.perseus/static/assets/images/navi_option_selected.png");
+  --bg-image-noise: url("../../assets/images/bg_noise.jpg");
+  --selected-option-image: url("../../assets/images/navi_option_selected.png");
 }
 @media (max-width: 1000px) {
   :root #root {
@@ -117,7 +117,7 @@ header .navi .right .selected p {
 
 .cover {
   padding-top: 20vw;
-  background: linear-gradient(180deg, var(--theme-color-shadow-1), transparent 50%), url("/.perseus/static/assets/images/cover_background.png") no-repeat;
+  background: linear-gradient(180deg, var(--theme-color-shadow-1), transparent 50%), url("../../assets/images/cover_background.png") no-repeat;
   background-size: contain;
   height: 90vh;
 }

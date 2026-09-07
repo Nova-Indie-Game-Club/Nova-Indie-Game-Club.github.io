@@ -1,0 +1,24 @@
+# Edit this file and keep referenced images in this directory.
+id = "little-things"
+name = "Little Things"
+sub_name = "Little Things"
+submission_date = "2024-04-29"
+class = "Normal"
+tags = ["点击"]
+gamejams = ["BOOOM"]
+nova_gamejams = []
+cover = "cover.png"
+screenshots = []
+
+introduce = """
+A little games collection game. Hope those little things can make you laugh."""
+
+authors = [
+  { name = "TT" },
+  { name = "Mowgli" },
+  { name = "Aspirin" },
+  { name = "Koiro" },
+]
+
+[platforms]
+itch = "https://gloridifice.itch.io/little-things"

@@ -15,8 +15,8 @@
       --content-width: 100vw;
     }
   }
-  --bg-image-noise: url("/.perseus/static/assets/images/bg_noise.jpg");
-  --selected-option-image: url("/.perseus/static/assets/images/navi_option_selected.png");
+  --bg-image-noise: url("../../assets/images/bg_noise.jpg");
+  --selected-option-image: url("../../assets/images/navi_option_selected.png");
 }
 
 #root {
@@ -131,7 +131,7 @@ header {
 
 .cover {
   padding-top: 20vw;
-  background: linear-gradient(180deg, var(--theme-color-shadow-1), transparent 50%), url("/.perseus/static/assets/images/cover_background.png") no-repeat;
+  background: linear-gradient(180deg, var(--theme-color-shadow-1), transparent 50%), url("../../assets/images/cover_background.png") no-repeat;
   background-size: contain;
   height: 90vh;
 

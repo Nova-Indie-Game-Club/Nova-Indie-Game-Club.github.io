@@ -1,0 +1,28 @@
+# Edit this file and keep referenced images in this directory.
+id = "yet-another-sokoban-game"
+name = "能不能不要再做推箱子游戏了!"
+sub_name = "Yet Another Sokoban Game?"
+submission_date = "2024-05-01"
+class = "Spotlight"
+tags = ["搞笑", "点击", "解谜", "鸭子"]
+gamejams = ["Global GameJam"]
+nova_gamejams = []
+cover = "cover.png"
+screenshots = []
+
+introduce = """
+在 GGJ2024 线下上海站点 48h 游戏开发做的游戏，主题是 Make Me Laugh
+
+什么年代了，还在做传统推箱子？所以我们做了一个包含17个小游戏的合集，一关更比一关强，秘密武器更是带给你额外的惊喜
+
+不算逻辑解谜游戏。灵感来源主要是 This Is the Only Level"""
+
+authors = [
+  { name = "三重鸭" },
+  { name = "Graviton" },
+  { name = "Kira铭少" },
+]
+
+[platforms]
+itch = "https://akacmd.itch.io/yet-another-sokoban-game"
+gamecore = "https://www.gcores.com/games/119829"

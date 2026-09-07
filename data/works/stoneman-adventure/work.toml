@@ -1,0 +1,32 @@
+# Edit this file and keep referenced images in this directory.
+id = "stoneman-adventure"
+name = "小石头人踏上旅程"
+sub_name = "Stoneman’s Adventure"
+submission_date = "2024-05-01"
+class = "Spotlight"
+tags = ["解谜"]
+gamejams = ["CUSGA"]
+nova_gamejams = []
+cover = "cover.png"
+screenshots = []
+
+introduce = """
+《小石头人踏上旅程》是一款3d解谜游戏，拥有结合了推箱子和一笔画的独特游戏玩法。一个小石头人在充满谜题和秘密的岛屿上展开冒险。
+
+生成石头，推动石头，搭建形状！
+
+游戏特色：
+- 充满可能性的游戏机制
+- 手工打造的有趣谜题
+- 用关卡引入层层递进的想法
+- 打破关卡隔阂的大地图
+- 放松优美的游戏配乐
+- 有可爱的鸭子 """
+
+authors = [
+  { name = "TrioDuck", url = "https://akacmd.itch.io/" },
+]
+
+[platforms]
+itch = "https://akacmd.itch.io/stoneman-adventure"
+steam = "https://store.steampowered.com/app/2434860/Stonemans_Adventure/"

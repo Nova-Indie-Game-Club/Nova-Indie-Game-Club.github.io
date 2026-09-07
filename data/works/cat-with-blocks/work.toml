@@ -1,0 +1,22 @@
+# Edit this file and keep referenced images in this directory.
+id = "cat-with-blocks"
+name = "猫和边界可以改变的方块"
+sub_name = "Cat with blocks whose edges can be manipulated"
+submission_date = "2024-02-29"
+class = "Spotlight"
+tags = ["猫", "解谜"]
+gamejams = ["BOOOM"]
+nova_gamejams = []
+cover = "cover.png"
+screenshots = ["screenshot-1.png", "screenshot-2.png"]
+
+introduce = """
+Cat with Blocks whose Edges can be Manipulated is a puzzle game about edge manipulation. You will play a cat that can change the edges of the blocks and solve various puzzles in the game world."""
+
+authors = [
+  { name = "Koiro" },
+  { name = "Raspirin" },
+]
+
+[platforms]
+itch = "https://gloridifice.itch.io/cat-with-blocks"

@@ -1,54 +1,60 @@
-name: Compile and Deploy Website
+name: Build and Deploy Website
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
+  pull_request:
+    branches: [master]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
-          fetch-depth: 0
+          components: rustfmt
 
-      # TODO: toolchain cache
+      - uses: Swatinem/rust-cache@v2
 
-      # Let's prepare our env
-      - name: Prepare toolchain
-        run: cargo install perseus-cli
+      - name: Check Formatting
+        run: cargo fmt --all --check
 
-      # Restore cache of build target
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}    
+      - name: Test Data and Static Generator
+        run: cargo test --workspace --locked
 
-      - name: Build and Export Website
-        run: perseus --wasm-opt-version version_118 export
+      - name: Check Browser Script
+        run: node --check static/js/site.js
 
-      - name: Upload Artifact
+      - name: Generate Static Website
+        run: cargo dev --release --locked
+
+      - name: Upload Pages Artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist/exported
 
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
