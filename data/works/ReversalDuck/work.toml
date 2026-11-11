@@ -1,0 +1,24 @@
+# Edit this file and keep referenced images in this directory.
+id = "reversal-duck"
+name = "ReversalDuck"
+sub_name = "ReversalDuck"
+submission_date = "2023-10-20"
+class = "Normal"
+tags = ["横板" , "鸭子"]
+gamejams = []
+nova_gamejams = ["Nova GameJam autumn 2023"]
+cover = "cover.png"
+screenshots = ["screenshot-1.png", "screenshot-2.png"]
+
+introduce = """
+Help！ ！The duck is hungry！
+Use special blocks to help the stubborn forward duck overcome obstacles and eat mushrooms. """
+
+authors = [
+  { name = "翁夫人", url = "https://ladyweng.itch.io/" },
+  { name = "脑脑", url = "https://water-wind.itch.io/" },
+  { name = "漓舟", url = "https://lizhouhx.itch.io/" },
+]
+
+[platforms]
+itch = "https://lizhouhx.itch.io/reversal-duck"

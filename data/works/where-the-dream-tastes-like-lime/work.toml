@@ -1,0 +1,28 @@
+# Edit this file and keep referenced images in this directory.
+id = "where-the-dream-tastes-like-lime"
+name = "好梦在何方"
+sub_name = "where-the-dream-tastes-like-lime"
+submission_date = "2026-02-14"
+class = "Spotlight"
+tags = ["解谜", "策略"]
+gamejams = ["萌芽GameJam 2026"]
+nova_gamejams = []
+cover = "cover.png"
+screenshots = ["screenshot-1.png", "screenshot-2.png", "screenshot-3.png", "screenshot-4.png", "screenshot-5.png"]
+
+introduce = """
+主角以最年轻的研究员身份加入坠入不可知计划，被院长在三个梦中提取并剥夺三种负面情绪，进行“天才剥离软弱情绪”的观察实验。
+
+被剥离三种情感的主角在短暂的怀念过去后，彻底陷入无尽的孤独，命途未卜。
+"""
+
+authors = [
+  { name = "壹六" },
+  { name = "宸北" },
+  { name = "呕吐特慢" },
+  { name = "小明" },
+  { name = "爱新觉罗话痨" },
+]
+
+[platforms]
+itch = "https://axjlhualao.itch.io/where-the-dream-tastes-like-lime"

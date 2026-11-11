@@ -1,0 +1,25 @@
+# Edit this file and keep referenced images in this directory.
+id = "mind-lock"
+name = "MindLock"
+sub_name = "MindLock"
+submission_date = "2025-05-20"
+class = "Spotlight"
+tags = ["解密" , "平台跳跃"]
+gamejams = []
+nova_gamejams = ["Nova GameJam spring 2025"]
+cover = "cover.png"
+screenshots = ["screenshot-1.png", "screenshot-2.png", "screenshot-3.png"]
+
+introduce = """
+MindLock是一款以“认知陷阱”为核心的平台跳跃解密游戏，通过颠覆性交互设计打破玩家对传统机制的惯性思维。关卡围绕文字游戏、规则反转、场景悖论等主题展开，每个关卡引入独立的反常识机制，迫使玩家不断重构解题逻辑。 """
+
+authors = [
+  { name = "呕吐特慢" },
+  { name = "明月" },
+  { name = "爱新觉罗话痨" },
+  { name = "句号" },
+  { name = "Kamianladia" },
+]
+
+[platforms]
+itch = "https://nanami-chiaki1.itch.io/mindlock"
