@@ -1,0 +1,24 @@
+# Edit this file and keep referenced images in this directory.
+id = "switch"
+name = "Switch!双人门"
+submission_date = "2025-11-28"
+class = "Normal"
+tags = ["解谜", "平台跳跃"]
+gamejams = []
+nova_gamejams = ["Nova GameJam autumn 2025"]
+cover = "cover.png"
+screenshots = ["screenshot-1.png", "screenshot-2.png", "screenshot-3.png"]
+
+introduce = """
+这是一个双人解密平台跳跃类游戏，通过各种门机关闯关，不同颜色的门之间会有不同的联系。
+请根据机关组合享受关卡吧。
+"""
+
+authors = [
+  { name = "FANEST" },
+  { name = "BomeZi" },
+  { name = "头像已丢失" },
+]
+
+[platforms]
+itch = "https://fanest.itch.io/switch"

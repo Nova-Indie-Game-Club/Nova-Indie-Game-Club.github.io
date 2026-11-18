@@ -1,0 +1,30 @@
+# Edit this file and keep referenced images in this directory.
+id = "gravity-door-adventure"
+name = "重力门大冒险"
+sub_name = "Gravity Door Adventure"
+submission_date = "2025-11-29"
+class = "Normal"
+tags = ["解谜", "平台跳跃"]
+gamejams = []
+nova_gamejams = ["Nova GameJam autumn 2025"]
+cover = "cover.png"
+screenshots = ["screenshot-1.png", "screenshot-2.png", "screenshot-3.png", "screenshot-4.png", "screenshot-5.png"]
+
+introduce = """
+猫猫不小心掉进了一个奇怪的房间里。不知为何，这里的门有着改变重力的魔法。于是猫猫踏上了冒险。
+
+【操作】
+A/D：左右移动
+K：跳跃；按住可跳得更高
+J：开关门/进入出口
+R：重新开始当前关卡
+Q：返回大厅
+"""
+
+authors = [
+  { name = "一只大智牛" },
+  { name = "几叶到寒" },
+]
+
+[platforms]
+itch = "https://an-intelligent-cow.itch.io/gravity-door-adventure"

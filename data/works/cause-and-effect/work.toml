@@ -1,0 +1,24 @@
+# Edit this file and keep referenced images in this directory.
+id = "cause-and-effect"
+name = "因果迷途"
+sub_name = "cause-and-effect"
+submission_date = "2026-05-20"
+class = "Normal"
+tags = ["点击", "解谜"]
+gamejams = []
+nova_gamejams = ["Nova GameJam spring 2026"]
+cover = "cover.png"
+screenshots = ["screenshot-1.png", "screenshot-2.png"]
+
+introduce = """
+一个走格子的解密游戏。
+"""
+
+authors = [
+  { name = "鲸羽" },
+  { name = "Squaroll" },
+  { name = "神烦狗" },
+]
+
+[platforms]
+itch = "https://fjh66628.itch.io/causeandeffect"
